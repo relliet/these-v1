@@ -20,6 +20,19 @@
 \usepackage{psfrag}
 
 
+\usepackage{textpos}
+\usepackage{graphicx}
+\usepackage{xcolor,colortbl}
+\usepackage{pgfgantt}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{xcolor,colortbl}
+
+\definecolor{bleu}{rgb}{0.2,0,0.2}
+\definecolor{macouleur}{rgb}{0.5,0.5,0.5}
+ \definecolor{greenz}{cmyk}{1.0,0,1.0,0.4}
+ \definecolor{purplez}{cmyk}{0.0,1.0,0.0,0.1}
+
 %% Theorem like
 \newtheorem{theorem}{Theorem}[chapter]
 \newtheorem{corollary}{Corollary}[chapter]
@@ -105,7 +118,7 @@ Note} #1} \vspace{0.1cm}}
 \pagenumbering{Roman} \thispagestyle{empty}
 \def \titres{\fbox{\parbox[c]{17cm}{\begin{center}
 {\bf \LARGE{
-Multistage Optimization }}\end{center}}}}
+Algorithmic Multistage Optimization }}\end{center}}}}
 
 \def \auteurs{{\Large Alexandre Teiller}}
 
@@ -131,7 +144,7 @@ Coordinateur: Bruno Escoffier and Euripide Bampis \\vspace{0.2cm}\\
 %\end{figure}
 \begin{center}
 
-$ $
+
 
 
     %\univ
@@ -193,8 +206,63 @@ $ $
 
 
 \chapterToc{Introduction}
-\chapterToc{Temporal optimisation, a state of the art}
+\chapterToc{Temporal optimization, a state of the art}
+In a classical combinatorial optimization problem, given an instance of a problem we seek a feasible solution optimizing the objective function. However, in many systems the input may change over the time and the solution has to be adapted to the input changes. Several approaches have been developed to take into account this temporal notion. In this first chapter, we will present the {\sc Multistage} framework, the temporal framework studied during the thesis and illustrate it with an example. We will then develop the other time based approaches of the literature, from the introduction of the notion to the different temporal researches branches studied nowadays.
+\sectionToc{Multistage optimization}
 
+Let us begin with an example. Consider a company owning a set $N=\{u_1,\ldots,u_n\}$ of production units. Each unit can be used or not; if $u_i$ is used, it spends an amount $w_i$ of a given resource (energy, raw material,...), and a generates a profit $p_i$. Given a bound $W$ on the global amount of available resources, the static {\sc Knapsack Problem} aims at determining a feasible solution that specifies the chosen units in order to maximize the total profit under the constraint that the total amount of the resource does not exceed the bound of $W$.
+
+\begin{figure}[h]
+\centering
+\begin{subfigure}[b]{0.4\textwidth}
+\begin{tabular}{|l|c|c|r|}
+  \hline
+   &$u_1$&$u_2$&$u_3$ \\
+  \hline
+ $w_{i}$ & $1$ & $1$ & $2$\\
+    \hline
+  $p_{i} $& $3$ & $1$ & $7$\\
+  \hline
+  $W$ & \multicolumn{2}{c}{\text{   }2} &\\
+  \hline
+\end{tabular}
+\end{subfigure}
+\begin{subfigure}[b]{0.4\textwidth}
+\begin{tabular}{|l|c|c|r|}
+  \hline
+   &$u_1$&$u_2$&$u_3$ \\
+  \hline
+ $w_{i}$ & $1$ & $2$ & $3$\\
+    \hline
+  $p_{i} $& $2$ & $5$ & $5$\\
+  \hline
+   $W$ & \multicolumn{2}{c}{\text{     }3} &\\
+  \hline
+\end{tabular}
+\end{subfigure}
+\caption{Two instances of the {\sc Knapsack} problem}
+\label{statickp}
+\end{figure}
+
+Two distinct instances of the {\sc Knapsack} problem are presented in the Figure \ref{statickp}. To get the optimal solution, one has to take in the left instance the production unit $u_3$, obtaining a profit of $7$ and using all the resources, called also capacity of the knapsack, i.e $2$. Otherwise, the profit would be lower or the amount $w_i$ of resources would exceed the global available resources. In the right instance, one has to take the units $u_1$ and $u_2$, obtaining a profit of $7$ and using again all the of the resources, i.e $3$.\\
+
+In a temporal setting and more precisely in the multistage setting, a company would have to decide a production plan over a time horizon $t=1,2,\ldots, T$, of, let us say, $T$ days. The company here needs to decide a production plan for each day of the time time horizon, given that data (such as prices, level of resources,...) usually change over time. This a typical situation, for instance, in energy production planning (like electricity production, where units can be nuclear reactors, wind or water turbines,...), or in data centers (where units are machines and the resource corresponds to the available energy). Moreover, in these examples, there is and extra cost to turn ON or OFF a unit like in the case of turning ON/OFF a reactor in electricity production (\cite{rottner2018combinatorial}), or a machine in a data center (\cite{DBLP:conf/spaa/2017}). Obviously, whenever a reactor is in the ON or OFF state, it is beneficial to maintain it at the same state for several consecutive time steps, in order to avoid the overhead costs of states changes. Therefore, the design of a production plan over a given time horizon has to take into account both the profits generated each day from the operation of the chosen units, as well as the potential transition profits from maintaining a unit at the same state for two consecutive days. Thus, in the {\sc Multistage} framework, instead of having only an instance of a problem and seeking a feasible solution optimizing its objective function, we have a sequence of instances of a problem, one for each time step and one is asked to seek a sequence of feasible solutions, one for each time step, reaching a trade-off between the optimality of the solutions and the stability of consecutive solutions.\\
+The problem can be formalized as follows. We have a given time horizon $t=1,2,\ldots,T$, and a sequence of knapsack instances $I_1, I_2, \ldots,I_T$, one for each time step, defined on a set of $n$ productions units, also called objets in the {\sc Knapsack} problem. In every time step $t$ we have to choose a feasible knapsack $S_t$ of $I_t$, which gives a \textit{knapsack profit}. Taking into account transitions costs, we measure the stability/similarity of two consecutive solutions $S_t$ and $S_{t+1}$ by identifying the objects for which the decision, to be picked or not, remains the same in $S_t$ and $S_{t+1}$, giving a \textit{transition profit}. We are asked to produce a sequence of solutions $S_1, S_2, \ldots, S_T$ so that the total \textit{knapsack profit} plus the overall \textit{transition profit} is maximized.\\
+
+If we look at the example of Figure \ref{statickp} and now consider both instances as a sequence of instances of a {\sc Multistage knapsack} problem with two time steps, the left instance being the instance at the time step $1$ and the right instance the one at the time step $2$. In order to compute a \textit{transition profit}, we need to introduce the notion of the bonus. Let us say that for this example, for each object, one gets a bonus $B=1$ if the object is taken or not taken for two consecutive time steps, i.e if the decision remains the same between time steps $t$ and $t+1$. Thus, the global \textit{transition profit} is equal to $B$ times the total number of decisions that remain the same between two consecutive time steps. For instance, if we take the objects of the static optimal solution, i.e object $u_3$ for the first time step and objects $u_1$ and $u_2$ for the second time step, the \textit{knapsack profit} is equal to $14$, $7$ at both time steps, but the value of the \textit{transition profit} is equal to $0$, none of the decisions remain the same, the object $u_1$ is taken only at time step $1$ whereas the objects $u_2$ and $u_3$ are taken only at the second time step, so we have a the global reward equal to $14$. The optimal solution consists of taking only the object $u_3$ at both time steps, getting a \textit{knapsack profit} equal to $7+5=12$ and all the \textit{transition profit}, as object $u_1$ and $u_2$ are not taken at both time steps and $u_3$ is taken at $t=1$ and $t=2$, i.e $3B = 3$ ; the global
+reward is equal to $12+3=15$.\\
+
+off line \\
+online\\
+k-lookahead\\
+
+def subset max et subset min puis parler résultats et présenter autres articles avec leurs applications
+
+
+
+
+
+\sectionToc{Temporal optimization, some other approaches}
 \cite{gj}
 
 
