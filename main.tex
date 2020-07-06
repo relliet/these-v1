@@ -1,0 +1,284 @@
+\documentclass[a4paper]{book}
+
+
+%% Mise en page
+\addtolength{\hoffset}{-0.8cm} \addtolength{\textwidth}{2.8cm}
+\addtolength{\voffset}{-1.4cm} \addtolength{\textheight}{3.3cm}
+\addtolength{\evensidemargin}{-1.9cm}
+
+%% Packages
+%\usepackage[french]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage{theorem}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{multirow}
+\usepackage[sectionbib]{natbib}
+%\usepackage{multibib}
+\usepackage{graphicx}
+\usepackage{pstricks}
+\usepackage{psfrag}
+
+
+%% Theorem like
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{corollary}{Corollary}[chapter]
+\newtheorem{lemma}{Lemma}[chapter]
+\newcommand{\prf}{\noindent{\bf Proof.} }
+%\newcommand{\prfsk}{\noindent{\bf Eléments de preuve.} }
+\newcommand{\eprf}{\bbox}
+\newcommand{\bbox}{\vrule height7pt width4pt depth1pt}
+
+
+%% Blbio
+%\newcites{s}{Travaux personnels}
+%\newcites{v}{Autres travaux}
+%% bibtex s.aux
+
+%% Newcommand
+\newcounter{Question}
+\newcommand{\question}[1]{\addtocounter{Question}{1} \vspace{0.2cm} \noindent {\it {\bf
+(Q\arabic{Question})} #1} \vspace{0.2cm}}
+
+\newcommand{\note}[1]{\vspace{0.1cm}\hspace{-2cm} \noindent {\it {\bf
+Note} #1} \vspace{0.1cm}}
+
+\newcommand{\chapterToc}[1]{\chapter*{\numberline{} #1} \addcontentsline{toc}{chapter}{#1} \markboth{#1}{}}
+\newcommand{\sectionToc}[1]{\section*{#1} \addcontentsline{toc}{section}{#1} \markboth{#1}{}}
+
+
+%%%% probleme %%%
+\newcommand{\SAT}{{\sc Sat}}
+\newcommand{\kSAT}{$k$-{\sc Sat}}
+\newcommand{\kprimSAT}{$k'$-{\sc Sat}}
+\newcommand{\troisSAT}{$3$-{\sc Sat}}
+\newcommand{\MinSAT}{{\sc Min SAT}}
+\newcommand{\MaxSAT}{{\sc Max SAT}}
+\newcommand{\MaxtroisSAT}{{\sc Max 3-SAT}}
+\newcommand{\MaxkSAT}{{\sc Max} $k$-{\sc Sat}}
+\newcommand{\MinkSAT}{{\sc Min} $k$-{\sc Sat}}
+\newcommand{\is}{{\sc Max Independent Set}}
+\newcommand{\ds}{{\sc Min Dominating Set}}
+\newcommand{\ids}{{\sc Min Independent Dominating Set}}
+\newcommand{\vc}{{\sc Min Vertex Cover}}
+\newcommand{\cvc}{{\sc Min Connected Vertex Cover}}
+\newcommand{\scv}{{\sc Min Set Cover}}
+\newcommand{\eds}{{\sc Min Edge Dominating Set}}
+\newcommand{\bw}{{\sc Min Bandwidth}}
+\newcommand{\uc}{{\sc Max Unused Colors}}
+\newcommand{\edc}{{\sc Existing Dominating Clique}}
+\newcommand{\mdc}{{\sc Min Dominating Clique}}
+\newcommand{\dc}{{\sc Dominating Clique}}
+\newcommand{\madc}{{\sc Max Dominating Clique}}
+\newcommand{\tsp}{{\sc Min Traveling Salesman}}
+\newcommand{\fes}{{\sc Min Feedback Edge Set}}
+\newcommand{\colo}{{\sc Min Coloring}}
+\newcommand{\troiscolo}{3-{\sc Coloring}}
+\newcommand{\st}{{\sc Min Steiner Tree}}
+\newcommand{\cd}{{\sc Capacitated Domination}}
+\newcommand{\tb}{{\sc Topological Bandwidth}} %% voir \citev{Marx08}
+\newcommand{\troishs}{{\sc 3-Hitting Set}}
+\newcommand{\hset}{{\sc Hitting Set}}
+\newcommand{\pvc}{{\sc Partial Vertex Cover}} %% voir \citev{Marx08}
+%%
+\newcommand{\maxkcover}{{\sc Max} $k$-{\sc Cover}} %% comme un set cover mais il
+% faut trouver les k ensembles qui couvrent le plus d'elements.
+
+%%%% opti %%%%
+\newcommand{\opt}{{\it opt}}
+
+%%%% classes %%%
+\newcommand{\np}{{\it NP}}
+\newcommand{\fpt}{{\it FPT}}
+\newcommand{\xp}{{\it XP}}
+\newcommand{\p}{{\it P}}
+\newcommand{\snp}{{\it SNP}}
+\newcommand{\npo}{{\it NPO}}
+\newcommand{\wun}{{\it W[1]}}
+\newcommand{\wdeux}{{\it W[2]}}
+\newcommand{\wi}{{\it W[i]}}
+\newcommand{\mun}{{\it M[1]}}
+\newcommand{\ppad}{{\it PPAD}}
+\newcommand{\pls}{{\it PLS}}
+
+\begin{document}
+\pagenumbering{Roman} \thispagestyle{empty}
+\def \titres{\fbox{\parbox[c]{17cm}{\begin{center}
+{\bf \LARGE{
+Multistage Optimization }}\end{center}}}}
+
+\def \auteurs{{\Large Alexandre Teiller}}
+
+%\def \univ{{\bf {\Large Universitt}}}
+
+\def \direc{Bruno Escoffier, Euripide Bampis}
+
+\def \jury{
+{\large
+%\begin{center}
+\begin{tabular}{ll}
+Coordinateur: Bruno Escoffier and Euripide Bampis \\vspace{0.2cm}\\
+\end{tabular}}
+}
+
+%\vspace{-4cm}
+
+
+%\vspace{-3.5cm}
+
+%\begin{figure}[r]
+%\includegraphics[width=3cm]{lamsade.eps}
+%\end{figure}
+\begin{center}
+
+$ $
+
+
+    %\univ
+
+    \vspace{0.3cm}
+
+   % \ufr
+
+    \vspace{3cm}
+%     \begin{tabular}{ll}
+%    \includegraphics[width=0.10\textwidth]{lamsade} & %
+%    \hspace{5cm} uioifd%\includegraphics[clip,height=1cm]{numero} %
+%    \end{tabular}
+%%
+%\begin{figure}[h]
+%\begin{center}
+%\includegraphics[height=3cm]{logos.eps}
+%\end{center}
+%\end{figure}
+    {\Large {\it  }}
+
+    \vspace{1cm}
+
+    \titres
+
+    \vspace{1cm}
+
+    {\large{\it by}}
+
+\vspace{0.6cm}
+
+    \auteurs
+
+    \vspace{0.8cm}
+
+
+
+    \vspace{0.6cm}
+
+
+
+\end{center}
+
+    \vspace{1.5cm}
+
+    %\jury aa
+
+
+
+
+
+
+
+
+
+
+\tableofcontents
+
+
+
+\chapterToc{Introduction}
+\chapterToc{Temporal optimisation, a state of the art}
+
+\cite{gj}
+
+
+
+A survey on combinatorial optimization in dynamic environments Paschos\\
+\sectionToc{online}
+regularization\\
+competitive ratio\\
+
+Competitive Analysis via Regularization
+Niv Buchbinder Shahar Chen Joseph (Seffi) Naor\\
+
+book : \\
+Online Algorithms
+The State of the Art\\
+
+Online Optimization jaillet \\
+
+\sectionToc{online learning}
+prediction? randomization\\
+N. Cesa-Bianchi and G. Lugosi. Prediction, learning, and games. Cambridge University Press, 2006\\
+
+Unified Algorithms for Online Learning and Competitive Analysis
+Niv Buchbinder
+\\
+
+\sectionToc{Online stochastic combinatorial optimization}
+
+
+\sectionToc{reoptimization}
+
+book : \\
+On the Hardness of Reoptimization Hans-Joachim Böckenhauer\\
+
+
+\sectionToc{dynamic parameterized complexity}
+Reoptimization of Parameterized Problems Hans-Joachim Bockenhauer\\
+
+
+\sectionToc{multistage}
+Changing Bases: Multistage Optimization for Matroids and Matchings
+Anupam Gupta Kunal Talwar Udi Wieder\\
+
+Facility Location in Evolving Metrics David Eisenstat Claire Mathieu Nicolas Schabanel\\
+
+Fair resource allocation over time
+Evripidis Bampis\\
+
+
+
+Multistage Vertex Cover
+Till Fluschnik\\
+
+Approximating Multistage Matching Problems
+Markus Chimani\\
+
+Multistage Graph Problems on a Global Budget
+Klaus Heeger\\
+
+Multistage s-t Path: Confronting Similarity with
+Dissimilarity in Temporal Graphs
+Till Fluschnik\\
+
+LP-based algorithms for multistage minimization
+problems
+Evripidis Bampis\\
+
+Multistage Committee Election
+Robert Bredereck\\
+
+
+
+
+On the Tradeoff between Stability and Fit
+EDITH COHEN\\
+
+Temporal Matching 
+Julien Baste\\
+
+\pagenumbering{arabic}
+
+%\sectionToc{Contenu de ce document}
+\bibliographystyle{apalike}
+\bibliography{biblio}
+
+
+\end{document}
