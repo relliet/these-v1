@@ -37,6 +37,7 @@
 \newtheorem{theorem}{Theorem}[chapter]
 \newtheorem{corollary}{Corollary}[chapter]
 \newtheorem{lemma}{Lemma}[chapter]
+\newtheorem{definition}{Definition}
 \newcommand{\prf}{\noindent{\bf Proof.} }
 %\newcommand{\prfsk}{\noindent{\bf Eléments de preuve.} }
 \newcommand{\eprf}{\bbox}
@@ -246,11 +247,78 @@ Let us begin with an example. Consider a company owning a set $N=\{u_1,\ldots,u_
 
 Two distinct instances of the {\sc Knapsack} problem are presented in the Figure \ref{statickp}. To get the optimal solution, one has to take in the left instance the production unit $u_3$, obtaining a profit of $7$ and using all the resources, called also capacity of the knapsack, i.e $2$. Otherwise, the profit would be lower or the amount $w_i$ of resources would exceed the global available resources. In the right instance, one has to take the units $u_1$ and $u_2$, obtaining a profit of $7$ and using again all the of the resources, i.e $3$.\\
 
-In a temporal setting and more precisely in the multistage setting, a company would have to decide a production plan over a time horizon $t=1,2,\ldots, T$, of, let us say, $T$ days. The company here needs to decide a production plan for each day of the time time horizon, given that data (such as prices, level of resources,...) usually change over time. This a typical situation, for instance, in energy production planning (like electricity production, where units can be nuclear reactors, wind or water turbines,...), or in data centers (where units are machines and the resource corresponds to the available energy). Moreover, in these examples, there is and extra cost to turn ON or OFF a unit like in the case of turning ON/OFF a reactor in electricity production (\cite{rottner2018combinatorial}), or a machine in a data center (\cite{DBLP:conf/spaa/2017}). Obviously, whenever a reactor is in the ON or OFF state, it is beneficial to maintain it at the same state for several consecutive time steps, in order to avoid the overhead costs of states changes. Therefore, the design of a production plan over a given time horizon has to take into account both the profits generated each day from the operation of the chosen units, as well as the potential transition profits from maintaining a unit at the same state for two consecutive days. Thus, in the {\sc Multistage} framework, instead of having only an instance of a problem and seeking a feasible solution optimizing its objective function, we have a sequence of instances of a problem, one for each time step and one is asked to seek a sequence of feasible solutions, one for each time step, reaching a trade-off between the optimality of the solutions and the stability of consecutive solutions.\\
+In a temporal setting and more precisely in the multistage setting, a company would have to decide a production plan over a time horizon $t=1,2,\ldots, T$, of, let us say, $T$ days. The company here needs to decide a production plan for each day of the time time horizon, given that data (such as prices, level of resources,...) usually change over time. This a typical situation, for instance, in energy production planning (like electricity production, where units can be nuclear reactors, wind or water turbines,...), or in data centers (where units are machines and the resource corresponds to the available energy). Moreover, in these examples, there is and extra cost to turn ON or OFF a unit like in the case of turning ON/OFF a reactor in electricity production (\cite{rottner2018combinatorial}), or a machine in a data center (\cite{DBLP:conf/spaa/2017}). Obviously, whenever a reactor is in the ON or OFF state, it is beneficial to maintain it at the same state for several consecutive time steps, in order to avoid the overhead costs of states changes. Therefore, the design of a production plan over a given time horizon has to take into account both the profits generated each day from the operation of the chosen units, as well as the potential \textit{transition profits} from maintaining a unit at the same state for two consecutive days. Thus, in the {\sc Multistage} framework, instead of having only an instance of a problem and seeking a feasible solution optimizing its objective function, we have a sequence of instances of a problem, one for each time step and one is asked to seek a sequence of feasible solutions, one for each time step, reaching a trade-off between the optimality of the solutions and the stability of consecutive solutions.\\
 The problem can be formalized as follows. We have a given time horizon $t=1,2,\ldots,T$, and a sequence of knapsack instances $I_1, I_2, \ldots,I_T$, one for each time step, defined on a set of $n$ productions units, also called objets in the {\sc Knapsack} problem. In every time step $t$ we have to choose a feasible knapsack $S_t$ of $I_t$, which gives a \textit{knapsack profit}. Taking into account transitions costs, we measure the stability/similarity of two consecutive solutions $S_t$ and $S_{t+1}$ by identifying the objects for which the decision, to be picked or not, remains the same in $S_t$ and $S_{t+1}$, giving a \textit{transition profit}. We are asked to produce a sequence of solutions $S_1, S_2, \ldots, S_T$ so that the total \textit{knapsack profit} plus the overall \textit{transition profit} is maximized.\\
 
 If we look at the example of Figure \ref{statickp} and now consider both instances as a sequence of instances of a {\sc Multistage knapsack} problem with two time steps, the left instance being the instance at the time step $1$ and the right instance the one at the time step $2$. In order to compute a \textit{transition profit}, we need to introduce the notion of the bonus. Let us say that for this example, for each object, one gets a bonus $B=1$ if the object is taken or not taken for two consecutive time steps, i.e if the decision remains the same between time steps $t$ and $t+1$. Thus, the global \textit{transition profit} is equal to $B$ times the total number of decisions that remain the same between two consecutive time steps. For instance, if we take the objects of the static optimal solution, i.e object $u_3$ for the first time step and objects $u_1$ and $u_2$ for the second time step, the \textit{knapsack profit} is equal to $14$, $7$ at both time steps, but the value of the \textit{transition profit} is equal to $0$, none of the decisions remain the same, the object $u_1$ is taken only at time step $1$ whereas the objects $u_2$ and $u_3$ are taken only at the second time step, so we have a the global reward equal to $14$. The optimal solution consists of taking only the object $u_3$ at both time steps, getting a \textit{knapsack profit} equal to $7+5=12$ and all the \textit{transition profit}, as object $u_1$ and $u_2$ are not taken at both time steps and $u_3$ is taken at $t=1$ and $t=2$, i.e $3B = 3$ ; the global
 reward is equal to $12+3=15$.\\
+
+The example introduces the {\sc Knapsack} problem in its multistage configuration. This problem is the main subject of the second chapter where we will develop its particularities and properties.\\
+
+Let us now define formally a class of problems, the Subset Maximisation Problems and then its multistage version.
+
+\begin{definition}
+
+\emph{(Subset Maximization Problems.)} A Subset Maximization problem $\cal P$ is a combinatorial optimization problem whose instances $I=(N,p,\mathcal{F})$ consist of
+\begin{itemize}
+    \item A ground set $N$;
+    \item A set $\mathcal{F}\subseteq 2^N$ of feasible solutions such that $\emptyset\in\mathcal{F}$;
+    \item A non-negative weight $p(S)$ for every $S \in \mathcal{F}$.
+\end{itemize}
+The goal is to find $S^*\in \mathcal{F}$ such that $p(S^*)=\max\{p(S):S\in\mathcal{F}\}$.
+\end{definition}
+This is a very general class of problems, including the maximization \emph{Subset Selection} problems studied by Pruhs and Woeginger in (\cite{Pruhs}) (they only considered linear objective functions). It contains for instance graph problems where $N$ is the set of vertices (as in any maximization induced subgraph problem verifying some property) or the set of edges (as in  matching problems). It also contains classical set problems (knapsack, maximum 3-dimensional matching,\dots), and more generally 0-1 linear programs (with non negative profits in the objective function).
+Given a problem in the previous class, we are interested in its multistage version.
+The stability over time of a solution sequence is classically captured by considering a \textit{transition cost} when a modification is made in the solution. Here, dealing with maximization problems, we will consider a transition {\it bonus} $B$ for taking into account the similarity of two consecutive solutions.
+In what follows, we will use the term object to denote an element of $N$ (so an object can be a vertex of a graph, or an edge,\dots, depending on the underlying problem). 	%\textcolor{red}{Kevin: were we assuming anywhere now that $\emptyset$ is feasible?}
+\begin{definition}
+\emph{(Multistage Subset Maximization Problems.)} In a Multistage Subset Maximization problem $\cal P$, we are given
+\begin{itemize}
+\item a number of steps $T \in \mathbb{N}$, a set $N$ of $n$ objects;
+\item for any $t \in T$, an instance $I_t$ of the optimization problem. We will denote:
+\begin{itemize}
+\item $p_{t}$ the objective (profit) function at time $t$
+\item $\mathcal{F}_t\in 2^N$ the set of feasible solutions at time $t$
+\end{itemize} 
+%\item For each $t$: $C_t$ the capacity of knapsack at time $t$
+\item $B \in \mathbb{R^{+}}$ a given \textit{transition profit}. 
+\item the value of a solution sequence $\mathcal{S}=(S_1,\dots,S_T)$ is $$f(\mathcal{S})=\sum_{t=1}^T p_t(S_t) + \sum_{t=1}^{T-1} b(S_t,S_{t+1})$$
+where $b(S_t,S_{t+1})$ is the transition bonus for the solution between time steps $t$ and $t+1$. We will use the term {\it profit} for $ p_t(S_t)$, {\it bonus} for the transition bonus $b(S_t,S_{t+1})$, and {\it value} of a solution $\mathcal{S}$ for $f(\mathcal{S})$;
+\item the goal is to determine a solution sequence of maximum value. 
+\end{itemize}
+\end{definition}
+
+The definition above defined formally a general class of maximization problems. It is possible to define in a similar way a general class of minimization problems, the main difference is that in a minimization problem, we don't consider a bonus and a \textit{} but a cost and a \textit{transition cost} induced by changing our decisions between two consecutive time steps.
+
+In order to go further in the development of the multistage framework, we need to talk about temporal settings. Three settings are widely known and studied in the literature:
+\begin{enumerate}
+    \item the \emph{off-line} setting: one has a complete knowledge of the instance over the time horizon (this was the case of the example of Figure \ref{statickp} where we know the whole sequence of instances of the {\sc Multistage Knapsack} problem)
+    \item the \emph{on-line} setting: at a time step $t$, one only knows the data for today, i.e we have no information regarding the instances at time steps $t+1,\ldots,T$. (another definition where one has also the knowledge of the instance at time $t+1$ is present in the literature). In our definition, we also assume that we know the number $T$ of time steps of the time horizon (another version also exists where this latter point is not known). The \emph{on-line} setting will be develop later in the chapter as it is a extensively studied case of temporal optimization.
+    \item the \emph{k-lookahead} setting: at a time step $t$, one knows the data for today and the next $k$ days. This setting is tightly linked to the \emph{on-line} case as it is often used when no results can be obtained in the \emph{on-line} case. In our definition, we again assume that one knows the total number of time steps $T$ of the time horizon. (As in the \emph{on-line} setting, different versions regarding the knowledge of either the time step $t+1,\ldots,k$ and $T$ exist in the literature).
+\end{enumerate}
+
+The third chapter deals with Multistage Subset Maximization Problems in the \emph{on-line} and \emph{k-lookahead} settings. \\
+
+The multistage framework presented here follows the direction presented fairly recenlty by \cite{Gupta} and \cite{Eisenstat}.\\
+In \cite{Gupta}, they studied the {\sc multistage matroid maintenance} problem, problem with some costs induced by changing decisions at some time steps on some edges and with an application quite similar to the one presented in our example. As a special case, the problem can be seen as a natural multistage version of the {\sc Spanning tree} problem, i.e one is aked to maintain a {\sc spanning tree} of a given graph at each time step.  They looked at both the \emph{on-line} and \emph{off-line} versions of the problem and gave logarithmic approximation algorithms in both cases using some LP-rounding, randomized algorithms and matroid techniques (see \cite{vazirani2013approximation} for details on approximation algorithms). They improved a result from \cite{buchbinder2012unified} and \cite{buchbinder2014competitive} who looked at a fractional version and later a more general version of the problem. They also showed that the {\sc perfect matching} problem in a multistage framework, a.k.a {\sc perfect matching maintenance}, becomes surprisingly inapproximable, even in the \emph{off-line} case. To do so, they did a reduction from the {\sc 3-colorability} problem, known to be NP-hard (see \cite{gj} for a definition of NP-hardness) in graph with bounded degrees, and more precisely with maximum degree 4. (\cite{guruswami2004hardness}). This last negative result is the first observation of the hardness induced by the multistage framework. Indeed, problems considered easy, i.e polynomial solvable or easily approximable, in their static form become really hard in this framework, even for limited instances, in the \emph{off-line} case and for a small number of time steps.\\
+In \cite{Eisenstat}, they addressed the {\sc facility location }problem in the multistage framework. The application underlying the study of this problem is another example of a possible application and need of stability in the decisions making among a time horizon. Indeed, in our era, a huge amount of data are collected on social networks and their studies are more and more important. These networks quickly evolve in time and it is thus important to be able to analyze such data in a dynamic environment. Even though the {\sc facility location} problem have been widely studied in temporal settings, the notion of stability was not properly looked at. Taking into account this stability, here represented by clients moving or not between a set of facilities, paying an opening cost for the whole time horizon or paying some opening cost for each time step for every opened facility, gives the possibility to understand better clients behaviours. It thus offers better results in realistic situations giving stable group partition of the network. They proposed a logarithmic approximation for the problem and gave a matching inapproximability result in restricted instances respecting the triangle inequalities, with only one client, two possible positions and a fixed opening cost, i.e once paid, the facility remains open for the whole time horizon. These instances admit a constant approximation ratio in the static framework. \\
+In \cite{an2017dynamic}, they treated the left open question in \cite{Eisenstat} and presented a constant factor approximation algorithm using LP-rounding techniques for the version of the problem where opening cost are paid \textit{hourly}.\\
+The negative result on the {\sc perfect matching maintenance} was improved a few years later in \cite{bampis2018multistage}. Indeed, in \cite{Gupta}, it was shown that the problem was innaproximable for instances with as least $8$ time steps but the question for less time steps and for specific instances such as bipartite graph was left open. \cite{bampis2018multistage} addressed this open question and proved that the problem is hard to approximate. Then, they showed other negative results. Even the metric version of the problem where the triangle inequalities are satisfied, called {\sc minimum multistage perfect matching}, is APX-hard i.e t does not have a PTAS (a formal definition of a PTAS is given in the first chapter) but in the case where the number of time steps was equal to $2$ or $3$, they presented a constant approximation ratio. Finally, they also showed that the problem in its maximization version, with the complementary objective function, was also APX-hard even though it has a constant approximation ratio. \\
+In \cite{bampis2018fair}, the authors looked at the {\sc max min fair allocation} problem, corresponding to a multistage version of the {\sc Santa klaus} problem. They studied the problem in the \emph{off-line}, \emph{on-line} and \emph{1-lookahead} settings and for different kind of evolving instances. The notion of different kind of evolving instances is crucial in temporal optimization and will be developed in the third chapter. They showed that in its \emph{off-line} version, the problem is much harder than its static version. It becomes NP-hard even for simple instances without restriction whereas theses instances are trivially solved in the static version of the problem (instances where the static set of feasible solutions over the time horizon, i.e in this case instances where the set of resources and agents are the same during the whole time horizon and every resource can be allocated to any agent). Regarding the \emph{on-line} version of the problem, they proposed a constant competitive ratio for instances without restriction using an approximation algorithm for the static case as a subroutine. For instances where the feasible set of solution can change between different time steps, they showed that the problem has no bounded competitive ratio in the \emph{on-line} setting. Finally, they looked at the \emph{1-lookahead} version of the problem, in the same instance evolving setting and proposed a constant approximation algorithm using again a approximation algorithm for the static case as a subroutine. \\
+In \cite{fluschnik2019multistage}, a multistage version of the {\sc Vertex cover} problem is studied. They thus looked at the problem in temporal graphs, i.e graphs with a fixed set of vertices but with a set of edges evolving during the time horizon. Temporal graphs are very well studied in temporal optimization and we will be presented more into details further in this chapter. The {\sc multistage vertex cover} problem differs a bit from the other multistage problems we presented before. Indeed, whereas the problems presented before share the notion of \textit{transition profit} or \textit{transition cost}, assuring that the solution does not change too much over the time horizon, there is no   with the multistage 
+
+
+
+
+\clearpage
+several ways to define the evolution of datas and transition bonus 
+
+offline,online develop later in the chapter,k-lookahead
+ 
+
+
+different types of transition bonus/cost
+The example introduces the notion of stability/similarity and \textit{transition cost}. This latter point makes some classic combinatorial optimization problems much harder than...
 
 off line \\
 online\\
@@ -263,7 +331,7 @@ def subset max et subset min puis parler résultats et présenter autres article
 
 
 \sectionToc{Temporal optimization, some other approaches}
-\cite{gj}
+
 
 
 
@@ -271,6 +339,7 @@ A survey on combinatorial optimization in dynamic environments Paschos\\
 \sectionToc{online}
 regularization\\
 competitive ratio\\
+
 
 Competitive Analysis via Regularization
 Niv Buchbinder Shahar Chen Joseph (Seffi) Naor\\
@@ -280,7 +349,7 @@ Online Algorithms
 The State of the Art\\
 
 Online Optimization jaillet \\
-
+\sectionToc{incremental setting?}
 \sectionToc{online learning}
 prediction? randomization\\
 N. Cesa-Bianchi and G. Lugosi. Prediction, learning, and games. Cambridge University Press, 2006\\
@@ -342,6 +411,11 @@ EDITH COHEN\\
 Temporal Matching 
 Julien Baste\\
 
+\chapterToc{Multistage Knapsack Problem}
+
+define PTAS
+\chapterToc{Online Multistage Subset Maximisation Problems}
+\chapterToc{Target-based computer-assisted orchestration: a theoretical analysis}
 \pagenumbering{arabic}
 
 %\sectionToc{Contenu de ce document}
