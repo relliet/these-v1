@@ -267,41 +267,32 @@ reward is equal to $12+3=15$.\\
 
 The example introduces the {\sc Knapsack} problem in its multistage configuration. This problem is the main subject of the second chapter where we will develop its particularities and properties.\\
 
-Let us now define formally a class of problems, the Subset Maximisation Problems and then its multistage version.
-
-\begin{definition}
-
-\emph{(Subset Maximization Problems.)} A Subset Maximization problem $\cal P$ is a combinatorial optimization problem whose instances $I=(N,p,\mathcal{F})$ consist of
-\begin{itemize}
-    \item A ground set $N$;
-    \item A set $\mathcal{F}\subseteq 2^N$ of feasible solutions such that $\emptyset\in\mathcal{F}$;
-    \item A non-negative weight $p(S)$ for every $S \in \mathcal{F}$.
-\end{itemize}
-The goal is to find $S^*\in \mathcal{F}$ such that $p(S^*)=\max\{p(S):S\in\mathcal{F}\}$.
-\end{definition}
-This is a very general class of problems, including the maximization \emph{Subset Selection} problems studied by Pruhs and Woeginger in (\cite{Pruhs}) (they only considered linear objective functions). It contains for instance graph problems where $N$ is the set of vertices (as in any maximization induced subgraph problem verifying some property) or the set of edges (as in  matching problems). It also contains classical set problems (knapsack, maximum 3-dimensional matching,\dots), and more generally 0-1 linear programs (with non negative profits in the objective function).
-Given a problem in the previous class, we are interested in its multistage version.
-The stability over time of a solution sequence is classically captured by considering a \textit{transition cost} when a modification is made in the solution. Here, dealing with maximization problems, we will consider a transition {\it bonus} $B$ for taking into account the similarity of two consecutive solutions.
-In what follows, we will use the term object to denote an element of $N$ (so an object can be a vertex of a graph, or an edge,\dots, depending on the underlying problem). 	%\textcolor{red}{Kevin: were we assuming anywhere now that $\emptyset$ is feasible?}
-\begin{definition}
-\emph{(Multistage Subset Maximization Problems.)} In a Multistage Subset Maximization problem $\cal P$, we are given
+Let us now give a formal definition of an optimization problem in its multistage version. 
+\begin{definition}{(\emph{Multistage Optimization problem})} In a Multistage Optimization problem $\cal P$, we are given
 \begin{itemize}
 \item a number of steps $T \in \mathbb{N}$, a set $N$ of $n$ objects;
 \item for any $t \in T$, an instance $I_t$ of the optimization problem. We will denote:
 \begin{itemize}
-\item $p_{t}$ the objective (profit) function at time $t$
+\item $p_{t}$ the objective (profit/cost for maximization/minimization problems) function at time $t$
 \item $\mathcal{F}_t\in 2^N$ the set of feasible solutions at time $t$
 \end{itemize} 
 %\item For each $t$: $C_t$ the capacity of knapsack at time $t$
-\item $B \in \mathbb{R^{+}}$ a given \textit{transition profit}. 
+\item $S_t$ a solution at a time step $t \in T$
+\item $b(S_t,S_{t+1})$ the transition (bonus/cost for maximization/minimization problems) function between two solutions at consecutive time steps 
 \item the value of a solution sequence $\mathcal{S}=(S_1,\dots,S_T)$ is $$f(\mathcal{S})=\sum_{t=1}^T p_t(S_t) + \sum_{t=1}^{T-1} b(S_t,S_{t+1})$$
-where $b(S_t,S_{t+1})$ is the transition bonus for the solution between time steps $t$ and $t+1$. We will use the term {\it profit} for $ p_t(S_t)$, {\it bonus} for the transition bonus $b(S_t,S_{t+1})$, and {\it value} of a solution $\mathcal{S}$ for $f(\mathcal{S})$;
-\item the goal is to determine a solution sequence of maximum value. 
+We will use the term {\it profit}/cost for $ p_t(S_t)$ for maximization/minimization problems, transition {\it bonus}/cost for the transition bonus/transition cost $b(S_t,S_{t+1})$ for maximization/minimization problems, and {\it value} of a solution $\mathcal{S}$ for $f(\mathcal{S})$;
+\item the goal is to determine a solution sequence of maximum/minimum value for maximization/minimization problems. 
 \end{itemize}
+
+
+
 \end{definition}
 
-The definition above defined formally a general class of maximization problems in a multistage setting. It is possible to define in a similar way a general class of multistage minimization problems, the main difference is that in a minimization problem, we don't consider a bonus but a cost and a \textit{transition cost} induced by changing our decisions between two consecutive time steps.
+The definition presented above is of the few possible ways to define a problem in a multistage version. Indeed, here the global objective function consists of the sum of the profit/cost function and the transition bonus/cost.\\ This definition is quite arbitrary but seemed relevant for the problems encountered during the thesis. Moreover, it follows the original definition of the multistage framework presented in \cite{Gupta} and in \cite{Eisenstat}. It is in fact possible to define the objective function this way when one is able to compare the profit/cost function value and transition bonus/cost function value. For example, it is possible in the previously introduced applications, energy production planning or in data centers problems, the cost of the production  and turning cost of switching ON/OFF a reactor/server are directly comparable.\\
+Another way of defining a global objective function for a problem in its multistage version is with a multi-objective function. Indeed, we will see later in this section that for some problems such as the {\sc vertex cover} problem, a multistage version of a problem was introduced where  
+one is asked to minimize a number of selected nodes (the classical {\sc vertex cover} problem objective function) and also to minimize the number of modifications regarding the selected subset of nodes for two consecutive time steps. In some cases it is relevant to bound the number of changes between two consecutive time steps or even to bound them on the whole time horizon. \\
 
+This latter point gives us the opportunity to talk about another choice made during the thesis.
 In order to go further in the development of the multistage framework, we need to talk about some temporal settings on the knowledge of the data over the time horizon. Three settings are widely known and studied in the literature:
 \begin{enumerate}
     \item the \emph{off-line} setting: one has a complete knowledge of the instance over the time horizon (this was the case of the example of Figure \ref{statickp} where we know the whole sequence of instances of the {\sc Multistage Knapsack} problem)
@@ -419,6 +410,41 @@ MINIMUM SPANNING TREES, WITH APPLICATIONS*\\
 
 define PTAS
 \chapter{Online Multistage Subset Maximisation Problems}
+Let us now define formally a class of problems, the Subset Maximisation Problems and then its multistage version.
+
+\begin{definition}
+
+\emph{(Subset Maximization Problems.)} A Subset Maximization problem $\cal P$ is a combinatorial optimization problem whose instances $I=(N,p,\mathcal{F})$ consist of
+\begin{itemize}
+    \item A ground set $N$;
+    \item A set $\mathcal{F}\subseteq 2^N$ of feasible solutions such that $\emptyset\in\mathcal{F}$;
+    \item A non-negative weight $p(S)$ for every $S \in \mathcal{F}$.
+\end{itemize}
+The goal is to find $S^*\in \mathcal{F}$ such that $p(S^*)=\max\{p(S):S\in\mathcal{F}\}$.
+\end{definition}
+This is a very general class of problems, including the maximization \emph{Subset Selection} problems studied by Pruhs and Woeginger in (\cite{Pruhs}) (they only considered linear objective functions). It contains for instance graph problems where $N$ is the set of vertices (as in any maximization induced subgraph problem verifying some property) or the set of edges (as in  matching problems). It also contains classical set problems (knapsack, maximum 3-dimensional matching,\dots), and more generally 0-1 linear programs (with non negative profits in the objective function).
+Given a problem in the previous class, we are interested in its multistage version.
+The stability over time of a solution sequence is classically captured by considering a \textit{transition cost} when a modification is made in the solution. Here, dealing with maximization problems, we will consider a transition {\it bonus} $B$ for taking into account the similarity of two consecutive solutions.
+In what follows, we will use the term object to denote an element of $N$ (so an object can be a vertex of a graph, or an edge,\dots, depending on the underlying problem). 	%\textcolor{red}{Kevin: were we assuming anywhere now that $\emptyset$ is feasible?}
+\begin{definition}
+\emph{(Multistage Subset Maximization Problems.)} In a Multistage Subset Maximization problem $\cal P$, we are given
+\begin{itemize}
+\item a number of steps $T \in \mathbb{N}$, a set $N$ of $n$ objects;
+\item for any $t \in T$, an instance $I_t$ of the optimization problem. We will denote:
+\begin{itemize}
+\item $p_{t}$ the objective (profit) function at time $t$
+\item $\mathcal{F}_t\in 2^N$ the set of feasible solutions at time $t$
+\end{itemize} 
+%\item For each $t$: $C_t$ the capacity of knapsack at time $t$
+\item $B \in \mathbb{R^{+}}$ a given \textit{transition profit}. 
+\item the value of a solution sequence $\mathcal{S}=(S_1,\dots,S_T)$ is $$f(\mathcal{S})=\sum_{t=1}^T p_t(S_t) + \sum_{t=1}^{T-1} b(S_t,S_{t+1})$$
+where $b(S_t,S_{t+1})$ is the transition bonus for the solution between time steps $t$ and $t+1$. We will use the term {\it profit} for $ p_t(S_t)$, {\it bonus} for the transition bonus $b(S_t,S_{t+1})$, and {\it value} of a solution $\mathcal{S}$ for $f(\mathcal{S})$;
+\item the goal is to determine a solution sequence of maximum value. 
+\end{itemize}
+\end{definition}
+
+The definition above defined formally a general class of maximization problems in a multistage setting. It is possible to define in a similar way a general class of multistage minimization problems, the main difference is that in a minimization problem, we don't consider a bonus but a cost and a \textit{transition cost} induced by changing our decisions between two consecutive time steps.
+
 \chapter{Target-based computer-assisted orchestration: a theoretical analysis}
 \pagenumbering{arabic}
 
