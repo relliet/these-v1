@@ -215,12 +215,12 @@ Coordinateur: Bruno Escoffier and Euripide Bampis \\vspace{0.2cm}\\
 
 
 In a classical optimization problem, given an instance, one is asked to find a feasible solution optimizing an objective function. The feasibility of a solution is defined by a set of constraints applied to, depending on the nature of the problem, nodes, edges, precedence and so on for graphs, objects for packing problems...\\ A vast amount of optimization problems are known to be NP-hard (\cite{gj}), i.e not polynomially solvable and the complexity theory literature is based upon a central hypothesis, P$\ne$NP, stating that no polynomial algorithm can solved an NP-hard problem. The hardness of those problems make real world applications and implementations really difficult or even impossible. It is then naturally that about 30 years ago approximation algorithms were introduced. Those algorithms give some solutions in reasonable time, more precisely in polynomial time, even if they are not optimal. The quality of a solution outputed by such an algorithm is defined by a ratio, comparing its solution to the optimal solution. In most of the cases, this ratio consists of a constant multiplicative factor, inferior to $1$ for maximization problems and superior to $1$ for minimization problems, guaranteed or not. \\
-In parallel of the development of the approximation approach, the temporal approach was elaborated. The idea leading to its introduction was motivated by the same concern, being able to emulate real world problems and solve them, optimally or not. Indeed, we presented for the multistage framework in the previous section some examples where a temporal approach is needed. In contrast of the fairly recent multistage framework, a lot of different temporal approaches have been developed, most of them since the early 1980's, responding to different applications and needs. \\
+In parallel of the development of the approximation approach, the temporal approach was elaborated. The idea leading to its introduction was motivated by the same concern, being able to emulate real world problems and solve them, optimally or not. Indeed, we present for the multistage framework in the next section some examples where a temporal approach is needed. In contrast of the fairly recent multistage framework, a lot of different temporal approaches have been developed, most of them since the early 1980's, responding to different applications and needs. \\
 We will first develop the multistage optimization, main topic of the thesis, illustrate it with an example and present the actual state of the art of the framework. \\
 We will then focus on a few other optimization frameworks with evolving data, being extensively studied and/or sharing some properties with the multistage one. \\
 \section{Multistage optimization}
 \subsection{Introduction and definition of the multistage framework}
-In the multistage framework, instead of finding a feasible solution optimizing the problem's objective function, on a time horizon with some time steps, one is asked given a set of instance, one for each time step, to find a set of feasible solutions, one for each time step, optimizing the objective function.
+In the multistage framework, instead of finding a feasible solution optimizing the problem's objective function, one is asked given a set of instances, on a time horizon one for each time step, to find a set of feasible solutions, also one for each time step, optimizing the objective function.
 
 First, let us illustrate this approach with an example. Consider a company owning a set $N=\{u_1,\ldots,u_n\}$ of production units. Each unit can be used or not; if $u_i$ is used, it spends an amount $w_i$ of a given resource (energy, raw material,...), and a generates a profit $p_i$. Given a bound $W$ on the global amount of available resources, the static {\sc Knapsack Problem} aims at determining a feasible solution that specifies the chosen units in order to maximize the total profit under the constraint that the total amount of the resource does not exceed the bound of $W$.
 
@@ -268,39 +268,68 @@ reward is equal to $12+3=15$.\\
 The example introduces the {\sc Knapsack} problem in its multistage configuration. This problem is the main subject of the second chapter where we will develop its particularities and properties.\\
 
 Let us now give a formal definition of an optimization problem in its multistage version. 
-\begin{definition}{(\emph{Multistage Optimization problem})} In a Multistage Optimization problem $\cal P$, we are given
+\begin{definition}{\emph{(Multistage Optimization problem).}} In a Multistage Optimization problem $\cal P$, we are given
 \begin{itemize}
 \item a number of steps $T \in \mathbb{N}$, a set $N$ of $n$ objects;
 \item for any $t \in T$, an instance $I_t$ of the optimization problem. We will denote:
 \begin{itemize}
-\item $p_{t}$ the objective (profit/cost for maximization/minimization problems) function at time $t$
+\item $p_{t}$ the objective (profit/cost for resp. maximization/minimization problems) function at time $t$
 \item $\mathcal{F}_t\in 2^N$ the set of feasible solutions at time $t$
 \end{itemize} 
 %\item For each $t$: $C_t$ the capacity of knapsack at time $t$
 \item $S_t$ a solution at a time step $t \in T$
-\item $b(S_t,S_{t+1})$ the transition (bonus/cost for maximization/minimization problems) function between two solutions at consecutive time steps 
+\item $b(S_t,S_{t+1})$ the transition (bonus/cost for resp. maximization/minimization problems) function between two solutions at consecutive time steps 
 \item the value of a solution sequence $\mathcal{S}=(S_1,\dots,S_T)$ is $$f(\mathcal{S})=\sum_{t=1}^T p_t(S_t) + \sum_{t=1}^{T-1} b(S_t,S_{t+1})$$
-We will use the term {\it profit}/cost for $ p_t(S_t)$ for maximization/minimization problems, transition {\it bonus}/cost for the transition bonus/transition cost $b(S_t,S_{t+1})$ for maximization/minimization problems, and {\it value} of a solution $\mathcal{S}$ for $f(\mathcal{S})$;
-\item the goal is to determine a solution sequence of maximum/minimum value for maximization/minimization problems. 
+We will use the term {\it profit}/cost for $ p_t(S_t)$ for resp. maximization/minimization problems, transition {\it bonus}/cost for the transition bonus/transition cost $b(S_t,S_{t+1})$ for resp. maximization/minimization problems, and {\it value} of a solution $\mathcal{S}$ for $f(\mathcal{S})$;
+\item the goal is to determine a solution sequence of maximum/minimum value for resp. maximization/minimization problems. 
 \end{itemize}
 
 
 
 \end{definition}
 
-The definition presented above is of the few possible ways to define a problem in a multistage version. Indeed, here the global objective function consists of the sum of the profit/cost function and the transition bonus/cost.\\ This definition is quite arbitrary but seemed relevant for the problems encountered during the thesis. Moreover, it follows the original definition of the multistage framework presented in \cite{Gupta} and in \cite{Eisenstat}. It is in fact possible to define the objective function this way when one is able to compare the profit/cost function value and transition bonus/cost function value. For example, it is possible in the previously introduced applications, energy production planning or in data centers problems, the cost of the production  and turning cost of switching ON/OFF a reactor/server are directly comparable.\\
-Another way of defining a global objective function for a problem in its multistage version is with a multi-objective function. Indeed, we will see later in this section that for some problems such as the {\sc vertex cover} problem, a multistage version of a problem was introduced where  
-one is asked to minimize a number of selected nodes (the classical {\sc vertex cover} problem objective function) and also to minimize the number of modifications regarding the selected subset of nodes for two consecutive time steps. In some cases it is relevant to bound the number of changes between two consecutive time steps or even to bound them on the whole time horizon. \\
+The definition presented above is of the few possible ways to define a problem in a multistage version.\\
 
-This latter point gives us the opportunity to talk about another choice made during the thesis.
-In order to go further in the development of the multistage framework, we need to talk about some temporal settings on the knowledge of the data over the time horizon. Three settings are widely known and studied in the literature:
+Indeed, here the global objective function consists of the sum of the profit/cost function and the transition bonus/cost.\\ This definition is quite arbitrary but seemed relevant for the problems encountered during the thesis. Moreover, it follows the original definition of the multistage framework presented in \cite{Gupta} and in \cite{Eisenstat}. It is in fact possible to define the objective function this way when one is able to compare the profit/cost function value and transition bonus/cost function value. For example, it is possible in the previously introduced applications, energy production planning or in data centers problems, the cost of the production  and turning cost of switching ON/OFF a reactor/server are directly comparable.\\
+Another way of defining a global objective function for a problem in its multistage version is with a multi-objective function. Indeed, we will see later in this section that for some problems such as the {\sc vertex cover} problem, a multistage version of a problem was introduced where  
+one is asked to minimize a number of selected nodes (the classical {\sc vertex cover} problem objective function) and in the same time to minimize the number of modifications regarding the selected subset of nodes for two consecutive time steps. In some cases it is also relevant to bound the number of changes between two consecutive time steps or even to bound them on the whole time horizon. \\
+
+This latter point on the objective function is one aspect subject to differ between several definition of the framework, depending on the nature of the problem studied. \\
+Another aspect is the way data may evolve during the time horizon. There are indeed different possibilities of data evolution.
+\begin{definition}
+\emph{(Types of data evolution.)}
+\begin{itemize}
+\item \emph{Static Set of Feasible Solutions (SSFS):}  the structure of feasible solutions remains the same: $\mathcal{F}_t=\mathcal{F}$ for all $t \in T$. On the presented {\sc multistage knapsack} problem example, this would be the case if only the profits change over the time horizon, i.e the weights and capacity stay the same between all time steps and thus a solution feasible at a time step is feasible on the whole time horizon.
+
+\item \emph{General Evolution (GE):}  any modification in the input sequence is possible. Both the profits and the set of feasible solutions may change over time. In this latter model, for the {\sc multistage knapsack problem}, profits, weights of objects and the capacity of the bag may change over time; for maximum independent set edges in the graph may change,\dots   
+\end{itemize}
+\end{definition}
+
+In the third chapter, we will present some results for a class of problems called the {\sc Multistage Subset Maximization} problems (a formal definition will be given in the corresponding chapter) and study these problems in terms of their different types of data evolution. \\
+
+Then, another key point in the definition of a problem in its multistage version is the definition of the transition bonus/cost (maximization/minimization version respectively) function.\\
+There are two natural ways to define the transition bonus/cost in the case where the transition bonus/cost function is part of the objective function. We will see that these two ways of measuring the stability induce some differences in the results one can get. 
+
+
+\begin{definition}
+\emph{(Types of transition bonus/cost.)}
+We can define the transition bonus/cost as:
+\begin{itemize}
+    \item \emph{Intersection Bonus/Cost:}  in this case the bonus/cost is proportional to the number of objects in the solution at time $t$ that remain in it at time $t+1$. In the previous example, the value of the bonus would be inferior, indeed we would get a bonus only for the object taken at both time steps but not for the objects not taken at both time steps.
+    \item \emph{Hamming Bonus/Cost:} here we get the bonus/cost for each object for which the decision (to be in the solution or not) is the same between time steps $t$ and $t+1$. In other words, the bonus/cost is proportional to $|N|$ minus the number of modifications (Hamming distance) in the solutions. The \emph{Hamming Bonus} was presented previously in the {\sc multistage knapsack} problem example where we got some bonus for both objects taken and not taken at both time steps.
+\end{itemize}
+\end{definition}
+
+In the case where the global objective function is a Multiple-criteria function, another way of defining the bonus/cost is possible, as said previously one can be asked to bound the number of changes made between two time steps in its decision.\\
+
+Finally, in order to go further in the development of the multistage framework and present the current state of the art of the multistage framework, we need to present different temporal settings on the knowledge of the data over the time horizon. Three settings are widely known and studied in the literature:
 \begin{enumerate}
-    \item the \emph{off-line} setting: one has a complete knowledge of the instance over the time horizon (this was the case of the example of Figure \ref{statickp} where we know the whole sequence of instances of the {\sc Multistage Knapsack} problem)
+    \item the \emph{off-line} setting: one has a complete knowledge of the instance over the time horizon (this was the case of the example of Figure \ref{statickp} where we know the whole sequence of instances of the {\sc Multistage Knapsack} problem, it would the case for the electricity planning problem where one is asked to find a solution given a predicted fixed data set, a musical application will be developed in the fourth chapter in this setting when one has a given data set over a time horizon)
     \item the \emph{on-line} setting: at a time step $t$, one only knows the data for today, i.e we have no information regarding the instances at time steps $t+1,\ldots,T$. (another definition where one has also the knowledge of the instance at time $t+1$ is present in the literature). In our definition, we also assume that we know the number $T$ of time steps of the time horizon (another version also exists where this latter point is not known). The \emph{on-line} setting will be develop later in the chapter as it is a extensively studied case of temporal optimization.
     \item the \emph{k-lookahead} setting: at a time step $t$, one knows the data for today and the next $k$ days. This setting is tightly linked to the \emph{on-line} case as it is often used when no results can be obtained in the \emph{on-line} case. In our definition, we again assume that one knows the total number of time steps $T$ of the time horizon. (As in the \emph{on-line} setting, different versions regarding the knowledge of either the time step $t+1,\ldots,k$ and $T$ exist in the literature).
 \end{enumerate}
 
-The third chapter deals with Multistage Subset Maximization Problems in the \emph{on-line} and \emph{k-lookahead} settings. \\
+The third chapter deals with {\sc Multistage Subset Maximization} problems in the \emph{on-line} and \emph{k-lookahead} settings and also regarding the possible different types of data evolution and transition bonus functions. \\
 
 \subsection{State of the art}
 
