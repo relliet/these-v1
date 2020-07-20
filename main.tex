@@ -217,10 +217,10 @@ Coordinateur: Bruno Escoffier and Euripide Bampis \\vspace{0.2cm}\\
 In a classical optimization problem, given an instance, one is asked to find a feasible solution optimizing an objective function. The feasibility of a solution is defined by a set of constraints applied to, depending on the nature of the problem, nodes, edges, precedence and so on for graphs, objects for packing problems...\\ A vast amount of optimization problems are known to be NP-hard (see \cite{gj} for a definition of NP-hardness), i.e not polynomially solvable and the complexity theory literature is based upon a central hypothesis, P$\ne$NP, stating that no polynomial algorithm can solved an NP-hard problem. The hardness of those problems make real world applications and implementations really difficult or even impossible. It is then naturally that about 30 years ago approximation algorithms were introduced. Those algorithms give some solutions in reasonable time, more precisely in polynomial time, even if they are not optimal. The quality of a solution outputed by such an algorithm is defined by a ratio, comparing its solution to the optimal solution. In most of the cases, this ratio consists of a constant multiplicative factor, inferior to $1$ for maximization problems and superior to $1$ for minimization problems, guaranteed or not. \\
 In parallel of the development of the approximation approach, the temporal approach was elaborated. The idea leading to its introduction was motivated by the same concern, being able to emulate real world problems and solve them, optimally or not. Indeed, we present for the multistage framework in the next section some examples where a temporal approach is needed. In contrast of the fairly recent multistage framework, a lot of different temporal approaches have been developed, most of them since the early 1980's, responding to different applications and needs. \\
 We will first develop the multistage optimization, main topic of the thesis, illustrate it with an example and present the actual state of the art of the framework. \\
-We will then focus on a few other optimization frameworks with evolving data, being extensively studied and/or sharing some properties with the multistage one. \\
+We will then focus on a few other optimization frameworks with evolving data, being extensively studied and/or sharing some properties with the multistage one. 
 \section{Multistage optimization}
 \subsection{Introduction and definition of the multistage framework}
-In the multistage framework, instead of finding a feasible solution optimizing the problem's objective function, one is asked given a set of instances, on a time horizon one for each time step, to find a set of feasible solutions, also one for each time step, optimizing the objective function.
+In the multistage framework, instead of finding a feasible solution optimizing the problem's objective function, given a time horizon and a set of instances, one for each time step, one is asked to find a set of feasible solutions, one for each time step, optimizing the objective function.
 
 First, let us illustrate this approach with an example. Consider a company owning a set $N=\{u_1,\ldots,u_n\}$ of production units. Each unit can be used or not; if $u_i$ is used, it spends an amount $w_i$ of a given resource (energy, raw material,...), and a generates a profit $p_i$. Given a bound $W$ on the global amount of available resources, the static {\sc Knapsack Problem} aims at determining a feasible solution that specifies the chosen units in order to maximize the total profit under the constraint that the total amount of the resource does not exceed the bound of $W$.
 
@@ -393,9 +393,6 @@ In \cite{bampis2018fair}, the authors addressed this problem. They studied the p
 The {\sc over-time max min fair allocation} problem is the only multistage problem presented in the literature up to our knowledge addressing a multistage maximization problem, all presented multistage problems are minimizing problems. We will develop in the second and third chapter of this document a study on a large class of multistage maximization problems called the {\sc Multistage Subset Maximization} problems and a special \textit{off-line} study on the {\sc multistage knapsack problem}.
 
 
-
-
-
 \subsubsection{Parameterized multistage studies}
 Let us now develop the different definition on the global objective function of a multistage problem presented in the previous section. In the following problems the global objective function is a multi-objective function. Indeed, whereas the problems presented before share the notion of \textit{transition profit} or \textit{transition cost}, ensuring that the solution does not change too much over the time horizon, here the stability is a represented by a bound over the number of changes in a decision one can make between two time steps. Let us illustrate this function more precisely with the {\sc vertex cover} problem.
 
@@ -410,7 +407,7 @@ In \cite{fluschnik2019multistage}, a multistage version of the {\sc Vertex cover
 In \cite{heeger2019multistage}, the authors also looked at the multistage framework in the parametrized version, with a constraint on the number of allowed modifications in the solutions selected in two consecutive time steps. A contrario to the one presented before where the constraint was local, they introduced a global constraint with a bound on the number total of modifications. They introduced the {\sc global multistage vertex cover} problem and proved that it is FPT by the upperbound of the size of the solution and by the number of time steps but W[1]-hard parametrized by the upperbound only. \\
 The authors also addressed a global multistage version of the {\sc min cut} problem giving some W[1]-harndess results. They finally highlighted that some polynomial-time solvable problems are harder, computationnaly speaking, in a global multistage framework than global multistage NP-hard problem. 
 
-\subsubsection{s-t Path}
+\subsubsection{s-t Path problem}
 In the {\sc s-t Path} problem, given a directed weighted graph containing two nodes $s$ and $t$, one is asked to find the shortest path between $s$ and $t$.\\
 In the multistage version of the problem, the {\sc multistage s-t path problem}, given a temporal graph with the same vertex set but with changing edges over the time horizon, one is asked to find a minimum path between $s$ and $t$ in the temporal graph so that it is as stable as possible. The stability here is represented by a bound on the number of authorized modifications between two time steps, either on the vertex or on the edges. 
 
@@ -430,23 +427,38 @@ We presented the current state of the multistage framework. This setting is fair
 The vast majority of the problems studied in the framework are minimization multistage problems. This one was of the reason that motivated us to focus ourselves on maximization problems. As said previously, we studied a large class of maximization problems in different settings and this will be detailed in the second and third chapter of this document.
 
 
+\alex{mettre a jour biblio de l'etat de l'art avec dblp}\\
 \section{Some other approaches}
 
-We will develop here different branches of researches taking into account optimization problems with evolving data sets. We will see that some of them are very studied in the literature and that some others are closely linked to the multistage framework. For each temporal approach presented, we will focus on the similarities and differences from the multistage framework.
+As said in the introduction of this chapter, optimization in dynamic environment gathers a wide variety of researches branches. They were, for most of them, developed in the last 30 years in parallel of the approximation approach, feeding one another continuously.\\
+We will develop here different branches of researches taking into account optimization problems with evolving data sets. We will see that some of them are very studied in the literature and that some others are closely linked to the multistage framework. For each temporal approach presented, we will focus on the similarities and differences from the multistage framework. 
+
+\subsectionToc{Reoptimization}
+We will first develop the reoptimization paradigm. For a more complete survey on reoptimization, see (\cite{boria2011survey}) from which we were strongly inspired to design this section.  The notion was introduced in \cite{Schaffter97} where a scheduling problem was addressed and later developed in \cite{archetti2003reoptimizing} in which the authors addressed the {\sc travelling salesman} problem, a very well know NP-hard problem, and considered two distinct steps. In a first step, an algorithm gives an optimal or approximate solution for a NP-hard problem in a static framework. The reoptimization focuses on the second step where the instance is perturbed, i.e vertex or edge deletions for graph problems, changing values for numerical problems$\ldots$ one is then asked to maintain the optimality/approximation ratio of the solution. Note that the perturbation in the reoptimization context is small, i.e only one vertex or edge is deleted for a graph problem$\ldots$ \\
+This two steps give direct property for problem in their reoptimization version. Indeed, the result of NP-hardness of a problem holds in the reoptimization framework, otherwise one could solve any NP-hard problem using reoptimization algorithms and starting from an empty instance. However, some problems are known to be hard to approximate in their static version and becomes APX or even admits a PTAS in the reoptimization framework (it is the case for example for the {\sc max independ set} problem). This is why the majority of the results presented in this framework concern approximation algorithms. More generally, two kinds of results can be achieved for NP-hard problems in their reoptimization version:
+\begin{itemize}
+    \item the reoptimization algorithm gives with a better running time  an optimal or approximate solution as good as the solutions given by the best known algorithm for the problem in its staic version 
+    \item the reoptimization algorithm gives in polynomial time a better approximation ratio than the best one known for the problem in its classic static version
+\end{itemize}
+
+A reoptimization algorithm is thus closely linked to the multistage framework, as it has to maintain a certain quality in the solution. To do so, one has to look at the solution already found and try to adapt this one for the new instance. This often implies keeping a huge part of the solution in the new instance and thus keeping the solution stable. The main differences with the multistage framework are:
+\begin{itemize}
+    \item the instances modifications appear locally and affect only one object or constraint at each time step
+    \item one has to use the solution found at the previous time step and to find another solution locally without taking into account in its value the solution value for the previous time step
+\end{itemize} 
 
 
 
-\alex{racourcir}\\
-In an optimization problem, as said previously, given an instance, or a set of instances, one is asked to find a feasible solution, or a set of feasible solutions, optimizing an objective function. The feasibility is defined by a set of constraints applied to, depending on the nature of the problem, nodes, edges, precedence... for graphs, objects for packing problems...\\ A vast amount of optimization problems are known to be NP-hard, i.e not polynomially solvable and the complexity theory literature is based upon a central hypothesis, P$\ne$NP, stating that no polynomial algorithm can solved an NP-hard problem. The hardness of those problems make real world applications and implementations really difficult or even impossible. It is then naturally that about 30 years ago approximation algorithms were introduced. Those algorithms give some solutions in reasonable time, more precisely in polynomial time, even if they are not optimal. The quality of a solution outputed by such an algorithm is defined by a ratio, comparing its solution to the optimal solution. In most of the cases, this ratio consists of a constant multiplicative factor, inferior to $1$ for maximization problems and superior to $1$ for minimization problems, guaranteed or not. \\
-In parallel of the development of the approximation approach, the temporal approach was elaborated. The idea leading to its introduction was motivated by the same concern, being able to emulate real world problems and solve them, optimally or not. Indeed, we presented for the multistage framework in the previous section some examples where a temporal approach is needed. In contrast of the fairly recent multistage framework, a lot of different temporal approaches have been developed, most of them since the early 1980's, responding to different applications and needs. We will focus on a few of them, being extensively studied and/or sharing some properties with the multistage one. \\
+
+\begin{ex}
+Train scheduling \\
+In a train station, an algorithm has to find a distribution over a time period for trains to its platforms, so that the corresponding schedule problem is optimized. It is relevant here to consider spending a lot of computing time in order to output the best possible solution. However, in real world situations, some perturbations and problems can occur, malfunction of a train, breakdown$\ldots$, implying the infeasibility of the presented solution. In this case, considering spending a lot of time to find a new optimal solution from scratch is not pertinent and a simple adaptation of the previous optimal solution would be way more beneficial. Indeed, here one can use some reoptimization algorithm and output a solution in a short amount of time, i.e in polynomial time, based on the previous one.
+
+\end{ex}
+
 
 \textbf{Fully dynamic and reoptimization algorithms}\\
-We will here present the fully dynamic and reoptimization algorithms. A more complete survey on these approaches is presented in \cite{boria2011survey} which our development is based on. At first and before the proper elaboration of the concept of reoptimization, fully dynamic algorithms were studied. Those algorithms mainly focused on some polynomial problem like the {\sc min spanning tree} (\cite{frederickson1985data}) and the {\sc shortest path} problem (\cite{even1985updating}). They were applied on data structures and were designed to maintain the optimality of a solution on instances subject to some perturbations. The reoptimization notion was later introduced in \cite{archetti2003reoptimizing}. The authors addressed the {\sc travelling salesman} problem, a very well know NP-hard problem, and considered two distinct steps. In a first step, an algorithm gives an optimal or approximate solution for a NP-hard problem in a static framework. The reoptimization focuses on the second step where the instance is perturbed, i.e vertex or edge deletions for graph problems, changing values for numerical problems ... one is then asked to maintain the optimality/approximation ratio of the solution. \\
-This two steps give direct property for problem in their reoptimization version. Indeed, the result of NP-hardness of a problem holds in the reoptimization framework. However, some problems are known to be hard to approximate in their static version and becomes APX or even admits a PTAS in the reoptimization framework (it is the case for example for the {\sc max independ set} problem). This is why the majority of the results presented in this framework concern approximation algorithm. More generally, two kinds of results can be achieved for NP-hard problems in their reoptimization version. Either the algorithm achieve to
-stable resultat \\
-mfcs refs \\
-deux points de paschos\\
-complexite amortie ?? \\
+We will here present the fully dynamic and reoptimization algorithms. A more complete survey on these approaches is presented in \cite{boria2011survey} which our development is based on. At first and before the proper elaboration of the concept of reoptimization, fully dynamic algorithms were studied. Those algorithms mainly focused on some polynomial problem like the {\sc min spanning tree} (\cite{frederickson1985data}) and the {\sc shortest path} problem (\cite{even1985updating}). They were applied on data structures and were designed to maintain the optimality of a solution on instances subject to some perturbations. 
 
  
 
@@ -501,6 +513,7 @@ DATA STRUCTURES FOR ON-LINE UPDATING OF
 MINIMUM SPANNING TREES, WITH APPLICATIONS*\\
 
 \alex{temporal spirachis, existence de chemins, flow}\\
+
 \chapter{Multistage Knapsack Problem}
 
 define PTAS
