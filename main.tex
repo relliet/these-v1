@@ -122,7 +122,7 @@ Note} #1} \vspace{0.1cm}}
 %\pagenumbering{Roman} \thispagestyle{empty}
 \def \titres{\fbox{\parbox[c]{17cm}{\begin{center}
 {\bf \LARGE{
-Algorithmic Multistage Optimization }}\end{center}}}}
+Algorithmic aspects of Multistage Optimization }}\end{center}}}}
 
 \def \auteurs{{\Large Alexandre Teiller}}
 
@@ -214,13 +214,14 @@ Coordinateur: Bruno Escoffier and Euripide Bampis \\vspace{0.2cm}\\
 
 
 
-In a classical optimization problem, given an instance, one is asked to find a feasible solution optimizing an objective function. The feasibility of a solution is defined by a set of constraints applied to, depending on the nature of the problem, nodes, edges, precedence and so on for graphs, objects for packing problems...\\ A vast amount of optimization problems are known to be NP-hard (see \cite{gj} for a definition of NP-hardness), i.e not polynomially solvable and the complexity theory literature is based upon a central hypothesis, P$\ne$NP, stating that no polynomial algorithm can solved an NP-hard problem. The hardness of those problems make real world applications and implementations really difficult or even impossible. It is then naturally that about 30 years ago approximation algorithms were introduced. Those algorithms give some solutions in reasonable time, more precisely in polynomial time, even if they are not optimal. The quality of a solution outputed by such an algorithm is defined by a ratio, comparing its solution to the optimal solution. In most of the cases, this ratio consists of a constant multiplicative factor, inferior to $1$ for maximization problems and superior to $1$ for minimization problems, guaranteed or not. \\
-In parallel of the development of the approximation approach, the temporal approach was elaborated. The idea leading to its introduction was motivated by the same concern, being able to emulate real world problems and solve them, optimally or not. Indeed, we present for the multistage framework in the next section some examples where a temporal approach is needed. In contrast of the fairly recent multistage framework, a lot of different temporal approaches have been developed, most of them since the early 1980's, responding to different applications and needs. \\
-We will first develop the multistage optimization, main topic of the thesis, illustrate it with an example and present the actual state of the art of the framework. \\
-We will then focus on a few other optimization frameworks with evolving data, being extensively studied and/or sharing some properties with the multistage one. 
+In a classical optimization problem, given an instance, one is asked to find a feasible solution optimizing an objective function. The feasibility of a solution is defined by a set of constraints applied to, depending on the nature of the problem, nodes, edges, precedence and so on for graphs, objects for packing problems...\\ A vast amount of optimization problems are known to be NP-hard (see \cite{gj} for a definition of NP-hardness), i.e not polynomially solvable if P$\ne$NP, which is the central hypothesis of the complexity theory. The hardness of those problems make real world applications and implementations really difficult or even impossible. It is then naturally that about 30 years ago approximation algorithms were introduced. Those algorithms give some solutions in reasonable time, more precisely in polynomial time, even if they are not optimal. The quality of a solution outputed by such an algorithm is defined by a ratio, comparing its solution to the optimal solution. To be more precise, the ratio is represented, in most of the cases, of the division between the approximate solution as the numerator and the optimal solution as the denominator, superior or inferior to $1$, if the problem is a minimization or a maximization problem respectively.\\
+Beyond the complexity issues, some real world problems naturally induce some difficulties regarding their own data. Indeed, in some cases, one only has a partial knowledge of the problem data or in some other cases the data will be brought to evolve over time. To deal with these kind of temporal difficulties, a lot of approaches have been developed, most of them since the early 1980's, responding to different applications and needs. \\
+We will first develop the multistage optimization, main topic of the thesis, illustrate it with an example and give its definition in Section \ref{multiintro}. Then we will present the actual state of the art of the framework in Section \ref{multisota}. \\
+We will next focus on a few other optimization frameworks coping with evolving data, being extensively studied and/or sharing some properties with the multistage one in Section \ref{tempsota}. 
 \section{Multistage optimization}
-\subsection{Introduction and definition of the multistage framework}
-In the multistage framework, instead of finding a feasible solution optimizing the problem's objective function, given a time horizon and a set of instances, one for each time step, one is asked to find a set of feasible solutions, one for each time step, optimizing the objective function.
+\subsection{Introduction and definition of the multistage framework}\label{multiintro}
+
+In the multistage framework, a decision maker is given a time horizon and a sequence of instances of a problem, one for each time step, he needs to solve. To do so, one needs to build a sequence of solutions, i.e a set of feasible solutions, one for each time step, optimizing the objective function of the problem. 
 
 First, let us illustrate this approach with an example. Consider a company owning a set $N=\{u_1,\ldots,u_n\}$ of production units. Each unit can be used or not; if $u_i$ is used, it spends an amount $w_i$ of a given resource (energy, raw material,...), and a generates a profit $p_i$. Given a bound $W$ on the global amount of available resources, the static {\sc Knapsack Problem} aims at determining a feasible solution that specifies the chosen units in order to maximize the total profit under the constraint that the total amount of the resource does not exceed the bound of $W$.
 
@@ -258,7 +259,7 @@ First, let us illustrate this approach with an example. Consider a company ownin
 
 Two distinct instances of the {\sc Knapsack} problem are presented in the Figure \ref{statickp}. To get the optimal solution, one has to take in the left instance the production unit $u_3$, obtaining a profit of $7$ and using all the resources, called also capacity of the knapsack, i.e $2$. Otherwise, the profit would be lower or the amount $w_i$ of resources would exceed the global available resources. In the right instance, one has to take the units $u_1$ and $u_2$, obtaining a profit of $7$ and using again all the of the resources, i.e $3$.\\
 
-In a temporal setting and more precisely in the multistage setting, a company would have to decide a production plan over a time horizon $t=1,2,\ldots, T$, of, let us say, $T$ days. The company here needs to decide a production plan for each day of the time time horizon, given that data (such as prices, level of resources,...) usually change over time. This a typical situation, for instance, in energy production planning (like electricity production, where units can be nuclear reactors, wind or water turbines,...), or in data centers (where units are machines and the resource corresponds to the available energy). Moreover, in these examples, there is and extra cost to turn ON or OFF a unit like in the case of turning ON/OFF a reactor in electricity production (\cite{rottner2018combinatorial}), or a machine in a data center (\cite{DBLP:conf/spaa/2017}). Obviously, whenever a reactor is in the ON or OFF state, it is beneficial to maintain it at the same state for several consecutive time steps, in order to avoid the overhead costs of states changes (even if it is important to note that the problem in real situations is much more complicated). Therefore, the design of a production plan over a given time horizon has to take into account both the profits generated each day from the operation of the chosen units, as well as the potential \textit{transition profits} from maintaining a unit at the same state for two consecutive days. Thus, in the {\sc Multistage} framework, instead of having only an instance of a problem and seeking a feasible solution optimizing its objective function, we have a sequence of instances of a problem, one for each time step and one is asked to seek a sequence of feasible solutions, one for each time step, reaching a trade-off between the optimality of the solutions and the stability of consecutive solutions.\\
+In a temporal setting and more precisely in the multistage setting we focus on this thesis, a company would have to decide a production plan over a time horizon $t=1,2,\ldots, T$, of, let us say, $T$ days. The company here needs to decide a production plan for each day of the time time horizon, given that data (such as prices, level of resources,...) usually change over time. This a typical situation, for instance, in energy production planning (like electricity production, where units can be nuclear reactors, wind or water turbines,...), or in data centers (where units are machines and the resource corresponds to the available energy). Moreover, in these examples, there is and extra cost to turn ON or OFF a unit like in the case of turning ON/OFF a reactor in electricity production (\cite{rottner2018combinatorial}), or a machine in a data center (\cite{DBLP:conf/spaa/2017}). Obviously, whenever a reactor is in the ON or OFF state, it is beneficial to maintain it at the same state for several consecutive time steps, in order to avoid the overhead costs of states changes (even if it is important to note that the problem in real situations is much more complicated). Therefore, the design of a production plan over a given time horizon has to take into account both the profits generated each day from the operation of the chosen units, as well as the potential \textit{transition profits} from maintaining a unit at the same state for two consecutive days. Thus, in the {\sc Multistage} framework, instead of having only an instance of a problem and seeking a feasible solution optimizing its objective function, we have a sequence of instances of a problem, one for each time step and one is asked to seek a sequence of feasible solutions, one for each time step, reaching a trade-off between the optimality of the solutions and the stability of consecutive solutions.\\
 The problem can be formalized as follows. We have a given time horizon $t=1,2,\ldots,T$, and a sequence of knapsack instances $I_1, I_2, \ldots,I_T$, one for each time step, defined on a set of $n$ productions units, also called objects in the {\sc Knapsack} problem. In every time step $t$ we have to choose a feasible knapsack $S_t$ of $I_t$, which gives a \textit{knapsack profit}. Taking into account transitions costs, we measure the stability/similarity of two consecutive solutions $S_t$ and $S_{t+1}$ by identifying the objects for which the decision, to be picked or not, remains the same in $S_t$ and $S_{t+1}$, giving a \textit{transition profit}. We are asked to produce a sequence of solutions $S_1, S_2, \ldots, S_T$ so that the total \textit{knapsack profit} plus the overall \textit{transition profit} is maximized.\\
 There are a lot of other applications where it is beneficial to use a multistage framework. One of them is the {\sc facility location} problem, which we will develop later in this section. Another one is a musical application called the target-based computer-assisted orchestration. We will focus on this latter application in details in the last chapter of the document.\\
 
@@ -267,31 +268,44 @@ reward is equal to $12+3=15$.\\
 
 The example introduces the {\sc Knapsack} problem in its multistage configuration. This problem is the main subject of the second chapter where we will develop its particularities and properties.\\
 
+Before going forward in the presentation of the multistage framework, let us give a formal definition of a combinatorial optimization problem.
+
+\begin{definition}{\emph{(Combinatorial Optimization problem)}} In a Combinatorial Optimization problem $\cal P$, given some instances $I = (N, \mathcal{F})$  consisting of
+\begin{itemize}
+    \item a ground set $N$;
+    \item $\mathcal{F}\in 2^N$ a set of feasible solutions of the problem 
+\end{itemize}
+one needs to find $S^* \in \mathcal{F}$ optimizing an objective function
+\end{definition}
+
+
+
 Let us now give a formal definition of an optimization problem in its multistage version. 
-\begin{definition}{\emph{(Multistage Optimization problem).}} In a Multistage Optimization problem $\cal P$, we are given
+\begin{definition}{\emph{(Multistage Optimization problem).}} In a Multistage Optimization problem, given 
 \begin{itemize}
-\item a number of steps $T \in \mathbb{N}$, a set $N$ of $n$ objects;
-\item for any $t \in T$, an instance $I_t$ of the optimization problem. We will denote:
+\item a combinatorial optimization problem $\cal P$ 
+\item a number $T \in \mathbb{N}$ of time steps;
+\item for any $t \in T$, an instance $I_t$ of the optimization problem $\cal P$. We will denote:
 \begin{itemize}
-\item $p_{t}$ the objective (profit/cost for resp. maximization/minimization problems) function at time $t$
+
 \item $\mathcal{F}_t\in 2^N$ the set of feasible solutions at time $t$
 \end{itemize} 
 %\item For each $t$: $C_t$ the capacity of knapsack at time $t$
-\item $S_t$ a solution at a time step $t \in T$
-\item $b(S_t,S_{t+1})$ the transition (bonus/cost for resp. maximization/minimization problems) function between two solutions at consecutive time steps 
-\item the value of a solution sequence $\mathcal{S}=(S_1,\dots,S_T)$ is $$f(\mathcal{S})=\sum_{t=1}^T p_t(S_t) + \sum_{t=1}^{T-1} b(S_t,S_{t+1})$$
-We will use the term {\it profit}/cost for $ p_t(S_t)$ for resp. maximization/minimization problems, transition {\it bonus}/cost for the transition bonus/transition cost $b(S_t,S_{t+1})$ for resp. maximization/minimization problems, and {\it value} of a solution $\mathcal{S}$ for $f(\mathcal{S})$;
-\item the goal is to determine a solution sequence of maximum/minimum value for resp. maximization/minimization problems. 
+
+\item For each $t=1, \ldots, T-1$ a function $b(S_t,S_{t+1})$ associating to each couple of feasible solutions $S_t \in \mathcal{F}_t$ and $S_{t+1} \in \mathcal{F}_{t+1}$ the transition bonus/cost for resp. maximization/minimization problems between two solutions at consecutive time steps 
 \end{itemize}
-
-
+With $S_t \in \mathcal{F}_t$ a feasible solution at a time step $t \in T$ and $\mathcal{S}=(S_1,\dots,S_T)$ a sequence of feasible solutions over the time horizon, the objective function is the value of a solution sequence $\mathcal{S}$: $$f(\mathcal{S})=\sum_{t=1}^T p_t(S_t) + \sum_{t=1}^{T-1} b(S_t,S_{t+1})$$
+We will use the term {\it profit}/cost for $ p_t(S_t)$ for resp. maximization/minimization problems, transition {\it bonus}/cost for the transition bonus/transition cost $b(S_t,S_{t+1})$ for resp. maximization/minimization problems, and {\it value} of a solution $\mathcal{S}$ for $f(\mathcal{S})$;
+The goal is to determine a solution sequence of maximum/minimum value for resp. maximization/minimization problems. 
 
 \end{definition}
 
+If we look back at the {\sc multistage knapsack} problem example. The \textit{profit} function $p_t(S_t)$ would be the \textit{knapsack profit} for $t=1,2$, with $S_t$ a solution at a time step $t$. The \textit{transition} function, here a \textit{bonus} function, would be $b(S_1,S_{2})=|(S_1\cap S_2) \cup (N\setminus S_1 \cap N\setminus S_2)|$. The goal is then to maximize the sum $p_1(S_1)+p_2(S_2)+b(S_1,S_{2})$.
+
 The definition presented above is of the few possible ways to define a problem in a multistage version.\\
 
-Indeed, here the global objective function consists of the sum of the profit/cost function and the transition bonus/cost.\\ This definition is quite arbitrary but seemed relevant for the problems encountered during the thesis. Moreover, it follows the original definition of the multistage framework presented in \cite{Gupta} and in \cite{Eisenstat}. It is in fact possible to define the objective function this way when one is able to compare the profit/cost function value and transition bonus/cost function value. For example, it is possible in the previously introduced applications, energy production planning or in data centers problems, the cost of the production  and turning cost of switching ON/OFF a reactor/server are directly comparable.\\
-Another way of defining a global objective function for a problem in its multistage version is with a multi-objective function. Indeed, we will see later in this section that for some problems such as the {\sc vertex cover} problem, a multistage version of a problem was introduced where  
+Indeed, here the global objective function consists of the sum of the \textit{profit/cost} function and the \textit{transition} bonus/cost.\\ This definition is quite arbitrary but seemed relevant for the problems encountered during the thesis. Moreover, it follows the original definition of the multistage framework presented in \cite{Gupta} and in \cite{Eisenstat}. It is in fact possible to define the objective function this way when one is able to compare the profit/cost function value and transition bonus/cost function value. For example, it is possible in the previously introduced applications, energy production planning or in data centers problems, the cost of the production  and turning cost of switching ON/OFF a reactor/server are directly comparable.\\
+Another way of defining a multistage version is with a multi-objective approach. Indeed, we will see later in this section that for some problems such as the {\sc vertex cover} problem, a multistage version of a problem was introduced where  
 one is asked to minimize a number of selected nodes (the classical {\sc vertex cover} problem objective function) and in the same time to minimize the number of modifications regarding the selected subset of nodes for two consecutive time steps. In some cases it is also relevant to bound the number of changes between two consecutive time steps or even to bound them on the whole time horizon. \\
 
 This latter point on the objective function is one aspect subject to differ between several definition of the framework, depending on the nature of the problem studied. \\
@@ -308,6 +322,10 @@ Another aspect is the way data may evolve during the time horizon. There are ind
 In the third chapter, we will present some results for a class of problems called the {\sc Multistage Subset Maximization} problems (a formal definition will be given in the corresponding chapter) and study these problems in terms of their different types of data evolution. \\
 
 Then, another key point in the definition of a problem in its multistage version is the definition of the transition bonus/cost (maximization/minimization version respectively) function.\\
+Several ways exist 
+
+Je pense que c'est trop tôt pour mettre cette définition. Elle porte uniquement sur les subset problems, alors que la on est a un niveau plus général. J'aurais juste insisté sur le fait qu'on peut avoir différentes manières de définir un coût de transition/un bonus de transition. Sur un problème de facility location par exemple, on peut avoir des coûts d'ouverture de facility et/ou des coûts de réaffectation des clients.
+Tu peux éventuellement dire qu'on étudiera deux types de bonus de transition dans le chapitre ...
 There are two natural ways to define the transition bonus/cost in the case where the transition bonus/cost function is part of the objective function. We will see that these two ways of measuring the stability induce some differences in the results one can get. 
 
 
@@ -324,14 +342,14 @@ In the case where the global objective function is a Multiple-criteria function,
 
 Finally, in order to go further in the development of the multistage framework and present the current state of the art of the multistage framework, we need to present different temporal settings on the knowledge of the data over the time horizon. Three settings are widely known and studied in the literature:
 \begin{enumerate}
-    \item the \emph{off-line} setting: one has a complete knowledge of the instance over the time horizon (this was the case of the example of Figure \ref{statickp} where we know the whole sequence of instances of the {\sc Multistage Knapsack} problem, it would the case for the electricity planning problem where one is asked to find a solution given a predicted fixed data set, a musical application will be developed in the fourth chapter in this setting when one has a given data set over a time horizon)
-    \item the \emph{on-line} setting: at a time step $t$, one only knows the data for today, i.e we have no information regarding the instances at time steps $t+1,\ldots,T$. (another definition where one has also the knowledge of the instance at time $t+1$ is present in the literature). In our definition, we also assume that we know the number $T$ of time steps of the time horizon (another version also exists where this latter point is not known). The \emph{on-line} setting will be develop later in the chapter as it is a extensively studied case of temporal optimization.
-    \item the \emph{k-lookahead} setting: at a time step $t$, one knows the data for today and the next $k$ days. This setting is tightly linked to the \emph{on-line} case as it is often used when no results can be obtained in the \emph{on-line} case. In our definition, we again assume that one knows the total number of time steps $T$ of the time horizon. (As in the \emph{on-line} setting, different versions regarding the knowledge of either the time step $t+1,\ldots,k$ and $T$ exist in the literature).
+    \item the \emph{offline} setting: one has a complete knowledge of the instance over the time horizon (this was the case of the example of Figure \ref{statickp} where we know the whole sequence of instances of the {\sc Multistage Knapsack} problem, it would the case for the electricity planning problem where one is asked to find a solution given a predicted fixed data set, a musical application will be developed in the fourth chapter in this setting when one has a given data set over a time horizon)
+    \item the \emph{online} setting: at a time step $t$, one only knows the data for today, i.e we have no information regarding the instances at time steps $t+1,\ldots,T$. (another definition where one has also the knowledge of the instance at time $t+1$ is present in the literature). In our definition, we also assume that we know the number $T$ of time steps of the time horizon (another version also exists where this latter point is not known). The \emph{online} setting will be develop later in the chapter as it is a extensively studied case of temporal optimization.
+    \item the \emph{k-lookahead} setting: at a time step $t$, one knows the data for today and the next $k$ days. This setting is tightly linked to the \emph{online} case as it is often used when no results can be obtained in the \emph{online} case. In our definition, we again assume that one knows the total number of time steps $T$ of the time horizon. (As in the \emph{online} setting, different versions regarding the knowledge of either the time step $t+1,\ldots,k$ and $T$ exist in the literature).
 \end{enumerate}
 
-The third chapter deals with {\sc Multistage Subset Maximization} problems in the \emph{on-line} and \emph{k-lookahead} settings, the possible different types of data evolution and transition bonus functions. 
+The third chapter deals with {\sc Multistage Subset Maximization} problems in the \emph{online} and \emph{k-lookahead} settings, the possible different types of data evolution and transition bonus functions. 
 
-\subsection{State of the art}
+\subsection{State of the art}\label{multisota}
 
 In this section, we will cover the current state of the art of the multistage framework. To do so and for the sake of clarity, we will present it problem by problem. We will give a definition of the problem, develop their approaches and current results.\\
 The multistage framework defined formally in the previous section follows the direction presented fairly recently by \cite{Gupta} and \cite{Eisenstat} who covered different problems.
@@ -340,7 +358,7 @@ The multistage framework defined formally in the previous section follows the di
 In the static {\sc matching} problem, given a graph, we need to find a set of edges with no vertices in common. A {\sc matching} is called a {\sc perfect matching} if all vertices of a graph are in the set of the selected edges.\\ 
 In its multistage version, the perfection version of the problem is called the {\sc perfect matching maintenance} and consists of keeping the perfect macthing property over the time horizon, i.e at each time step, while the cost function and cost value for adding new elements is subject to change during the time horizon.\\
 
-In \cite{Gupta}, they showed that the {\sc perfect matching maintenance} problem becomes surprisingly inapproximable, even in the \emph{off-line} case. To do so, they did a reduction from the {\sc 3-colorability} problem, known to be NP-hard in graph with bounded degrees, and more precisely with maximum degree 4 (\cite{guruswami2004hardness}). This last negative result is the first observation of the hardness induced by the multistage framework. Indeed, the majority of the problems studied for now and considered easy, i.e polynomial solvable or easily approximable, in their static form become really hard in this framework, even for limited restricted instances, in the \emph{off-line} case and for a small number of time steps.\\
+In \cite{Gupta}, they showed that the {\sc perfect matching maintenance} problem becomes surprisingly inapproximable, even in the \emph{offline} case. To do so, they did a reduction from the {\sc 3-colorability} problem, known to be NP-hard in graph with bounded degrees, and more precisely with maximum degree 4 (\cite{guruswami2004hardness}). This last negative result is the first observation of the hardness induced by the multistage framework. Indeed, the majority of the problems studied for now and considered easy, i.e polynomial solvable or easily approximable, in their static form become really hard in this framework, even for limited restricted instances, in the \emph{offline} case and for a small number of time steps.\\
 
 The negative result on the {\sc perfect matching maintenance} was improved a few years later in \cite{bampis2018multistage}. Indeed, in \cite{Gupta}, it was shown that the problem was innaproximable for instances with as least $8$ time steps but the question for less time steps and for specific instances such as bipartite graph was left open. \cite{bampis2018multistage} addressed this open question and proved that the problem is hard to approximate. Then, they showed other negative results. Even the metric version of the problem where the triangle inequalities are satisfied, called {\sc minimum multistage perfect matching}, is APX-hard i.e does not have a PTAS (a formal definition of a PTAS is given in the second chapter). However, in the case where the number of time steps it equal to $2$ or $3$, they presented a constant approximation ratio. Finally, they also showed that the problem in its maximization version, with the complementary objective function, was also APX-hard even though it has a constant approximation ratio. \\
 
@@ -364,17 +382,17 @@ In the {\sc spanning tree} problem, one is asked to find a tree $A$ in a directe
 In its multistage version, given a set of instances of a directed graph and a number $T$ of time steps, we need to find a subset of spanning trees $A_t $ for $t \in T$, one for each time step, such that it is minimal. For each time step, we pay the price for the tree, as in the classical static version of the problem and also $|A_t \setminus A_{t-1} |$ for the modification of edges between two consecutive time steps. \\
 
 
-In \cite{Gupta}, they studied the {\sc multistage matroid maintenance} problem, problem with some costs induced by changing decisions at some time steps on some edges and with an application quite similar to the one presented in our example. As a special case, the problem can be seen as a natural multistage version of the {\sc Spanning tree} problem.  They looked at both the \emph{on-line} and \emph{off-line} versions of the problem and gave logarithmic approximation algorithms in both cases using some LP-rounding, randomized algorithms and matroid techniques (see \cite{vazirani2013approximation} for details on approximation algorithms). They improved a result from \cite{buchbinder2012unified} and \cite{buchbinder2014competitive} who looked at a fractional version and later a more general version of the problem. 
+In \cite{Gupta}, they studied the {\sc multistage matroid maintenance} problem, problem with some costs induced by changing decisions at some time steps on some edges and with an application quite similar to the one presented in our example. As a special case, the problem can be seen as a natural multistage version of the {\sc Spanning tree} problem.  They looked at both the \emph{online} and \emph{offline} versions of the problem and gave logarithmic approximation algorithms in both cases using some LP-rounding, randomized algorithms and matroid techniques (see \cite{vazirani2013approximation} for details on approximation algorithms). They improved a result from \cite{buchbinder2012unified} and \cite{buchbinder2014competitive} who looked at a fractional version and later a more general version of the problem. 
 
 
 
 
 
 \subsubsection{List Update problem}
-In the {\sc list update} problem, given a set of items with values corresponding to their distances to the head of a track, a set of requests (these requests can be in the \textit{off-line} or in the \textit{on-line} settings) and a constraint on a fixed position for each item at each time step, one has to give for each item an affection to a position in the track for the whole time horizon minimizing the cost of all the requests. \\
+In the {\sc list update} problem, given a set of items with values corresponding to their distances to the head of a track, a set of requests (these requests can be in the \textit{offline} or in the \textit{online} settings) and a constraint on a fixed position for each item at each time step, one has to give for each item an affection to a position in the track for the whole time horizon minimizing the cost of all the requests. \\
 In a multistage version of a closed variant of the problem, called the {\sc dynamic minimum linear arrangement} problem, there is no constraint on the position of an item at the beginning of each time step and one has to pay a cost for moving an item from one position to another between two time steps, measuring this way the stability of the solution.\\
 
-In \cite{olver2018itinerant}, the authors studied this multistage problem in both the \emph{off-line} setting, presenting a polylogarithmic approximation algorithm, and the  \emph{on-line} setting, giving a logarithmic lower bound on the competitive ratio of any randomized algorithm against an oblivious adversary. 
+In \cite{olver2018itinerant}, the authors studied this multistage problem in both the \emph{offline} setting, presenting a polylogarithmic approximation algorithm, and the  \emph{online} setting, giving a logarithmic lower bound on the competitive ratio of any randomized algorithm against an oblivious adversary. 
 
 \subsubsection{Discrete minimization problems}
 Here we won't present the problem in its static and its multistage version as the results concern a lot of different discrete minimization problems. The idea is to highlight the possibility of using some LP-rounding techniques in a multistage framework.\\
@@ -388,9 +406,9 @@ They also showed that a known result in the static framework assuring both probl
 In the {\sc santa claus} problem, also called {\sc max min fair allocation} problem, given a set of resources and agents, one is asked to find an allocation of resources to agents such that the value of the \textit{worts-off} agent, i.e with the minimal subset of resources, is maximum. \\
 The problem in the multistage framework, called the {\sc over-time max min fair allocation} problem, in addition of sharing the same objective as its static version, has a \textit{transition revenue} evaluating the stability of solutions between two consecutive time steps. Indeed, one has a bonus for keeping the same decision over the time horizion, i.e here corresponding to resources remaining on the a same agent for two consecutive time steps. The global objective function sums these two objectives.\\
 
-In \cite{bampis2018fair}, the authors addressed this problem. They studied the problem in the \emph{off-line}, \emph{on-line} and \emph{1-lookahead} settings and for different kind of evolving instances. The study of different kind of evolving instances is crucial in temporal optimization and will be developed in the third chapter. They showed that in its \emph{off-line} version, the problem is much harder than its static version. It becomes NP-hard even for simple instances without restriction whereas these instances are trivially solved in the static version of the problem (instances where the static set of feasible solutions over the time horizon, i.e in this case instances where the set of resources and agents are the same during the whole time horizon and every resource can be allocated to any agent). Regarding the \emph{on-line} version of the problem, they proposed a constant competitive ratio for instances without restriction using an approximation algorithm for the static case as a subroutine. For instances where the feasible set of solution can change between different time steps, they showed that the problem has no bounded competitive ratio in the \emph{on-line} setting. Finally, they looked at the \emph{1-lookahead} version of the problem, in the same instance evolving setting and proposed a constant approximation algorithm using again a approximation algorithm for the static case as a subroutine. \\
+In \cite{bampis2018fair}, the authors addressed this problem. They studied the problem in the \emph{offline}, \emph{online} and \emph{1-lookahead} settings and for different kind of evolving instances. The study of different kind of evolving instances is crucial in temporal optimization and will be developed in the third chapter. They showed that in its \emph{offline} version, the problem is much harder than its static version. It becomes NP-hard even for simple instances without restriction whereas these instances are trivially solved in the static version of the problem (instances where the static set of feasible solutions over the time horizon, i.e in this case instances where the set of resources and agents are the same during the whole time horizon and every resource can be allocated to any agent). Regarding the \emph{online} version of the problem, they proposed a constant competitive ratio for instances without restriction using an approximation algorithm for the static case as a subroutine. For instances where the feasible set of solution can change between different time steps, they showed that the problem has no bounded competitive ratio in the \emph{online} setting. Finally, they looked at the \emph{1-lookahead} version of the problem, in the same instance evolving setting and proposed a constant approximation algorithm using again a approximation algorithm for the static case as a subroutine. \\
 
-The {\sc over-time max min fair allocation} problem is the only multistage problem presented in the literature up to our knowledge addressing a multistage maximization problem, all presented multistage problems are minimizing problems. We will develop in the second and third chapter of this document a study on a large class of multistage maximization problems called the {\sc Multistage Subset Maximization} problems and a special \textit{off-line} study on the {\sc multistage knapsack problem}.
+The {\sc over-time max min fair allocation} problem is the only multistage problem presented in the literature up to our knowledge addressing a multistage maximization problem, all presented multistage problems are minimizing problems. We will develop in the second and third chapter of this document a study on a large class of multistage maximization problems called the {\sc Multistage Subset Maximization} problems and a special \textit{offline} study on the {\sc multistage knapsack problem}.
 
 
 \subsubsection{Parameterized multistage studies}
@@ -428,23 +446,25 @@ The vast majority of the problems studied in the framework are minimization mult
 
 
 \alex{mettre a jour biblio de l'etat de l'art avec dblp}\\
-\section{Some other approaches}
+\section{Some other approaches} \label{tempsota}
 
 As said in the introduction of this chapter, optimization in dynamic environment gathers a wide variety of researches branches. They were, for most of them, developed in the last 30 years in parallel of the approximation approach, feeding one another continuously.\\
 We will develop here different branches of researches taking into account optimization problems with evolving data sets. We will see that some of them are very studied in the literature and that some others are closely linked to the multistage framework. For each temporal approach presented, we will focus on the similarities and differences from the multistage framework. 
 
-\subsectionToc{Reoptimization}
-We will first develop the reoptimization paradigm. For a more complete survey on reoptimization, see (\cite{boria2011survey}) from which we were strongly inspired to design this section.  The notion was introduced in \cite{Schaffter97} where a scheduling problem was addressed and later developed in \cite{archetti2003reoptimizing} in which the authors addressed the {\sc travelling salesman} problem, a very well know NP-hard problem, and considered two distinct steps. In a first step, an algorithm gives an optimal or approximate solution for a NP-hard problem in a static framework. The reoptimization focuses on the second step where the instance is perturbed, i.e vertex or edge deletions for graph problems, changing values for numerical problems$\ldots$ one is then asked to maintain the optimality/approximation ratio of the solution. Note that the perturbation in the reoptimization context is small, i.e only one vertex or edge is deleted for a graph problem$\ldots$ \\
-This two steps give direct property for problem in their reoptimization version. Indeed, the result of NP-hardness of a problem holds in the reoptimization framework, otherwise one could solve any NP-hard problem using reoptimization algorithms and starting from an empty instance. However, some problems are known to be hard to approximate in their static version and becomes APX or even admits a PTAS in the reoptimization framework (it is the case for example for the {\sc max independ set} problem). This is why the majority of the results presented in this framework concern approximation algorithms. More generally, two kinds of results can be achieved for NP-hard problems in their reoptimization version:
+\alex{citer paschos au début et pas dans tous les para}\\
+
+\subsection{Reoptimization}
+We will first develop the reoptimization paradigm. For a more complete survey on reoptimization, see (\cite{boria2011survey}) from which we were strongly inspired to design this section.  The notion was introduced in \cite{Schaffter97} where a scheduling problem was addressed and later developed in \cite{archetti2003reoptimizing} in which the authors addressed the {\sc travelling salesman} problem, a very well know NP-hard problem. In both articles, two distinct steps were considered. In a first step, an algorithm gives an optimal or approximate solution for a NP-hard problem in a static framework. The reoptimization focuses on the second step where the instance is perturbed, i.e vertex or edge deletions for graph problems, changing values for numerical problems$\ldots$ one is then asked to maintain the optimality/approximation ratio of the solution. Note that the perturbation in the reoptimization context is small, i.e only one vertex or edge is deleted for a graph problem$\ldots$ \\
+These two steps give direct property for problem in their reoptimization version. Indeed, the result of NP-hardness of a problem holds in the reoptimization framework, otherwise one could solve any NP-hard problem using reoptimization algorithms and starting from an empty instance. However, some problems are known to be hard to approximate in their static version and becomes APX or even admits a PTAS in the reoptimization framework (it is the case for example for the {\sc max independ set} problem). This is why the majority of the results presented in this framework concern approximation algorithms. More generally, two kinds of results can be achieved for NP-hard problems in their reoptimization version:
 \begin{itemize}
-    \item the reoptimization algorithm gives with a better running time  an optimal or approximate solution as good as the solutions given by the best known algorithm for the problem in its staic version 
-    \item the reoptimization algorithm gives in polynomial time a better approximation ratio than the best one known for the problem in its classic static version
+    \item the reoptimization algorithm gives with a better running time an optimal or approximate solution as good as the solutions given by the best known algorithm for the problem in its staic version 
+    \item the reoptimization algorithm gives in polynomial time a better approximation ratio than the best one known for the problem in its static version
 \end{itemize}
 
-A reoptimization algorithm is thus closely linked to the multistage framework, as it has to maintain a certain quality in the solution. To do so, one has to look at the solution already found and try to adapt this one for the new instance. This often implies keeping a huge part of the solution in the new instance and thus keeping the solution stable. The main differences with the multistage framework are:
+A reoptimization algorithm is thus closely linked to the multistage framework, as it has to maintain a certain quality in the solution. To do so, one has to look at the solution already found and try to adapt it for the new instance. This often implies keeping a huge part of the solution in the new instance and thus keeping the solution stable. The main differences with the multistage framework are:
 \begin{itemize}
     \item the instances modifications appear locally and affect only one object or constraint at each time step
-    \item one has to use the solution found at the previous time step and to find another solution locally without taking into account in its value the solution value for the previous time step
+    \item one has to use the solution found at the previous time step to find another solution locally without taking into account in its value the solution value for the previous time step. Thus the solution is local for every time step.
 \end{itemize} 
 
 
@@ -452,67 +472,175 @@ A reoptimization algorithm is thus closely linked to the multistage framework, a
 
 \begin{ex}
 Train scheduling \\
-In a train station, an algorithm has to find a distribution over a time period for trains to its platforms, so that the corresponding schedule problem is optimized. It is relevant here to consider spending a lot of computing time in order to output the best possible solution. However, in real world situations, some perturbations and problems can occur, malfunction of a train, breakdown$\ldots$, implying the infeasibility of the presented solution. In this case, considering spending a lot of time to find a new optimal solution from scratch is not pertinent and a simple adaptation of the previous optimal solution would be way more beneficial. Indeed, here one can use some reoptimization algorithm and output a solution in a short amount of time, i.e in polynomial time, based on the previous one.
+In a train station, an algorithm has to find a distribution over a time period for trains to its platforms, so that the corresponding schedule problem is optimized. It is relevant here to consider spending a lot of computing time in order to output the best possible solution. However, in real world situations, some perturbations and problems can occur, malfunction of a train, breakdown$\ldots$, affecty the feasibility and quality of the presented solution. In this case, considering spending a lot of time seeking for a new optimal solution from scratch is not pertinent and a simple adaptation of the previous optimal solution would be way more beneficial. Indeed, here, dealing with only one perturbation at a time, one can use some reoptimization algorithm and output a solution in a short amount of time, i.e in polynomial time, based on the previous solution.
+
+\end{ex}
+
+\subsection{Online optimization}
+Let us now address the theory of \emph{online} algorithms. We already discussed it briefly in the previous section and will develop it more into details. A complete survey, which we based ourselves on, is presented in \cite{albers1997ptima}.\\
+The central idea behind a lot of frameworks dealing with evolving environments is the ignorance of the decision maker regarding the behaviour of the problem instances over a future time period. It emphasizes the fact that pure \emph{offline} analysis is often not very realistic and can not be applied directly to a vast amount of real world applications. In an \emph{online} setting, one has only a partial knowledge of the problem instance, the instance will be unveiled step by step over a given time horizon and the algorithm needs to output a solution not knowing the data of the future instances. It is important to notice that once a decision is made by an \emph{online} algorithm it can not be changed when new data is revealed, it contrasts here with reoptimization algorithms for example that are allowed to modify their decisions during the time horizon. \\
+While the study of the \emph{online} theory began in the end of the seventies, in \cite{SleatorT85} the authors addressed the main particularity of online algorithms: comparing the \emph{online} solution and the \emph{offline} optimal solution. This analysis was later given the name of competitive analysis in \cite{KarlinMRS88}, with a ratio for the \emph{online algorithm} called the competitive ratio. The \emph{offline} optimal solution is computed with a full knowledge of the instances over the whole time horizon. This ratio is given in the worst case scenario and one is looking for a tight ratio, i.e no competitive algorithms can do better.\\
+A way to deal with bad competitive ratios (some problems are not even competitive in the \emph{online} setting) is the \emph{k-lookahead} setting, introduced previously, where at a time step, one knows the data for today and the next $k$ day.\\
+Another approach leading to better competitive results is the use of randomness. Indeed, random \emph{online} algorithms are very studied in the \emph{online} theory. Their competitive ratio are defined according to an adversary, that does not necessary have a full knowledge of the decisions made by the random \emph{online} algorithm.\\
+Three adversary variants are extensively looked at:
+\begin{itemize}
+    \item the oblivious adversary: the adversary knows the random \emph{online} algorithm but has to generate its decisions over the whole time horizon without knowing the decisions made by the random \emph{online} algorithm 
+    \item the adaptive \emph{online} adversary: the adversary knows the random \emph{online} algorithm and has access to the decisions made by the random \emph{online} algorithm in the previous time steps
+    \item the adaptive \emph{offline} adversary: the adversary knows the \emph{online} algorithm and will answer optimally against the random \emph{online} algorithm at the end of the time horizon (in this scenario, randomized algorithms do not improve the competitive ratio)  
+\end{itemize}
+Let us now, to conclude this \emph{online} presentation, talk about \emph{online} learning algorithms. The study of these algorithms is quite recent and share some concepts with the multistage framework. \\
+An \emph{online} learning algorithm, given a set of feasible decisions and an adversary, makes an action iteratively inducing some loss/reward for each decisions (made either by the algorithm or the adversary). The goal of such an algorithm is to minimize the regrets represented by the difference between the decision made by the algorithm and the optimal \emph{offline} solution. The similarity with the multistage framework is its objective function, i.e the regret, being a difference between two sums on a time horizon, one for the cost induced by the decision made on a time step and the other one representing the optimal \emph{offline} solution, sharing the notion of minimizing an accumulative cost step by step. Multiple problems have been studied in this framework such as routing problems in \cite{AwerbuchK08}, some min-max discrete problems in \cite{corr/abs-1907-05944}, in \cite{buchbinder2012unified} that were the first to study a variant of the multistage framework (see previous section) the authors studied some online learning tree problems, $\ldots$, to cite a few of them.\\
+
+
+
+\begin{ex}
+Ski rental problem\\
+As a toy example, let us present the {\sc ski rental} problem where one has two options for his winter holidays: 
+\begin{itemize}
+    \item pay $1$ per day to rent skis
+    \item buy the skis $10$
+\end{itemize}
+The online principle behind this example is that the decision maker can't predict the future conditions or complications he can get during a journey and thus does not know the number of days he will want to rent some skis. If the person is skiing less than $10$ days it would be beneficial to only rent the skis, otherwise it would be best to buy them. This is the optimal algorithm for this problem, in a deterministic setting, getting a competitive ratio equals to $1.9$ in the worst case scenario.  \\
+As we said previously, it is possible to get a better competitive ratio by using some random \emph{online} algorithm. Indeed, using random techniques, one can get a $\frac{e}{e-1}$-competitive algorithm. See \cite{KarlinMMO90} for a detailed presentation of this example. 
+\end{ex}
+
+
+\subsection{Stochastic Optimization}
+
+In this section, we will present another way to deal with evolving environments with the study of the Stochastic Optimization theory. See again \cite{boria2011survey} for a more complete survey on the paradigm. This approach addresses the uncertainty with the introduction of probabilities in the problems definition. Once again, it is not possible for the decision maker to have a complete knowledge of the problem instances.\\
+The stochastic optimization community first focused on problems with a probability distribution on the problem parameters, i.e the weights of edges for graph problems, the bound constraints for linear problems $\ldots$, but with a fixed structures, i.e with a fixed set of nodes/edges for graph problems, fixed constraints for linear programming problems,$\ldots$. The study of problems with this approach began a long time ago. In \cite{beardwood1959shortest} authors looked at the {\sc TSP} problem where probabilities were applied to the node positions. Later, in \cite{Frieze85}, authors also addressed path problems under this presented configuration, looking at the {\sc spanning tree} problem with probabilities applied to the weights of the edges. \\
+It was in \cite{jaillet1985probabilistic} that was addressed a new way of using probabilities in optimization problems (this approach is the most studied these days, focusing in his thesis on the {\sc TSP} problem. This time, the probabilities were not applied on parameters on fixed elements of the problem but on the presence or absence of the elements themselves. Indeed, for example, a probability distribution was applied to the existence or not of nodes, edges for graph problems, of constraints for linear programming problems,$\ldots$ This technique is much more useful in real world situations.\\
+Soon after, in the thesis of \cite{bertsimas1988probabilistic}, again with the same approach, the notion of \textit{a priori} optimization was presented. (See also \cite{BertsimasJO90} for a detailed paper on \textit{a priori} optimization). 
+\\Let us develop this technique on graph problems, we'll see that it shares some properties with the reoptimization techniques presented before. When dealing with \textit{a priori} optimization, one is given a graph with probabilities on its nodes and an \textit{a priori} solution $f$ on an initial instance of the graph. 
+One is ask to find an updating method, that from the \textit{a priori} solution is able to update to any possible feasible solution for all possible instances, i.e instances composed of all the combinations of presence/absence of nodes following the probability distribution, such that the average cost (for minimization problems) on all instances is minimum. This updating method has to be done in reasonable computational time. In this case and in real world applications, it can be beneficial, for the average value to be minimum, and that the solutions stay as stable as possible over all the feasible solutions, echoing the multistage framework. \\
+
+\begin{ex}
+We will illustrate stochastic optimization with an example of the {\sc TSP} problem.\\
+A company needs to deliver some products in different cities and wish to be as quick as possible. This problem can indeed be modeled as a {\sc TSP} problem. In a graph, where cities are represented by nodes and roads between two cities by weighted edges, the weights being the distance between two cities. One then needs to find a shortest path, going through all of the cities once and getting back to its original city. \\
+Let us suppose now that the company has some knowledge on the traffic and possible accidents occurring each day. It would associate probabilities to the values of the distances between two cities, i.e probabilities on the values of edges of the graph. The weight of the edges being a parameter of the graph, this problem would be solved using the first strategy presented in this stochastic optimization presentation. \\
+Let us this time suppose that the company knows that, sometimes, some products will not need to be delivered in some cities. Thus, the company would associate this time probabilities to cities, corresponding to probabilities on the presence or not of nodes of the graph. To solve this variant, one needs to use the second presented stochastic strategy. Indeed, in order to be as efficient as possible, it is interesting for the company to develop an updating method from \textit{a priori} optimization and thus being sure to adapt efficiently its decisions and deliveries and to remain stablex. 
+\end{ex}
+
+\subsection{Dynamic algorithms }
+Let us now present the studies on dynamic algorithms. We chose to present this framework after the \textit{online} and reoptimization ones, these latter being restrictive cases of the more general dynamic setting. \\
+Indeed, in a dynamic setting, that we will present on graph problems (a complete study of the dynamic graph problems are addressed in \cite{99/EppsteinGI99}), one is ask to give an algorithm able to maintain the quality of a solution as the graph evolves locally. The algorithm also has to be more efficient than computing a solution of the new instance from scratch. This local evolution of the graph can be anything, from insertions or deletions of nodes and edges to changes in the edges weights, that can all happen simultaneously. This contrasts with the reoptimization setting, being a restrictive case of the dynamic setting, where only one local modification occurs between two time steps.\\
+The graph's evolution in dynamic setting results in the \textit{update} of its underlying data structure. Actually, in dynamic algorithms, one is interesting in being able to \textit{update} and maintain a given data structure on a new instance efficiently, i.e faster than computing a new solution with a static algorithm. A \textit{query}, using this data structure, will then be asked when the decision maker wants to solve the problem. Note that dynamic algorithm always start with trivial instances, i.e cliques or independent set for graph problems $\ldots$ Less formally, when a solution is taken, the instance is modified. \\
+The fact that one needs to build a solution iteratively with the progressive unveiling of the instances, each time a solution is chosen a perturbation occurs, echoes the online setting, being a restrictive case of the dynamic setting. The main difference here is that in the dynamic setting, one can completely change its decision on previous time steps, which is not allowed in online algorithms where, once a decision is taken we can not change it afterwards.\\
+As a quick example of the \textit{update} and \textit{query} procedures, we can mention the problem of the {\sc minimum spanning tree} solved by sorting a list of elements. The \textit{update} procedure will remove an element of the list or add the element at its sorted position, for insertions or deletions of elements in a new instance respectively, assuring the data structure to be a sorted list of elements. The \textit{query} procedure will then only need to output a solution based on the sorted list with its underlying data structure, which is faster than sorting the list for each new instance and then finding a shortest path using this list. \\
+While presenting the dynamic setting, we need to introduce quickly the notion of amortized complexity. Indeed, in the precedent frameworks and examples and in all the rest of thesis, we presented some complexity results that were all in the worst case scenario. In dynamic algorithms, the amortized complexity is often looked at, being the complexity one needs to compute a solution on average over all the different time steps. Indeed, in this framework, it is more relevant to analyze the complexity of the \textit{update} and \textit{query} procedures, on an average at each time step, and not to look at the complexity of solving an instance every time from scratch.\\
+The results one seeks to obtain with dynamic algorithms differ for polynomial solvable and NP-hard problems.
+\begin{itemize}
+    \item for polynomial solvable problems, it is possible to find an optimal solution efficiently. Thus, in the dynamic setting literature, authors did not looked at improving the solution values but presented faster ways of maintaining the optimal solution while the instances were subject to perturbations, improving the complexity. \\
+    A lot of work has been done on tree and path problems, with the first results in the dynamic setting presented in (\cite{frederickson1985data}), looking at the {\sc min spanning tree} problem and in (\cite{even1985updating}), addressing the {\sc shortest path} problem.
+    
+    \item for NP-hard problems, in a dynamic setting, one seeks an approximation algorithm giving the same ratio as the static approximation one and such that the approximate solution is computed faster than if the static algorithm was used. Less results were found for those problem in a dynamic setting. This negative observation is due to the fact of seeking to obtain an approximation ratio from an approximate solution. Indeed, the data structure is guarantying a certain approximation ratio and thus the \textit{update} procedure is applied to an approximate and not optimal solution, making it hard to hold some properties in most of the cases. \\
+    The {\sc vertex cover} problem was studied in \cite{IvkovicL93} and the {\sc bin packing} problem in \cite{2IvkovicL93} to name two of them.
+    
+    
+\end{itemize}
+
+\begin{ex}
+
+
+As the \textit{online} and reoptimization settings are restricted cases of the dynamic setting, we will not present any new toy example but illustrate this setting with the previous examples:
+\begin{itemize}
+    \item regarding the example presented in the  reoptimization introduction, several perturbations can be taken into account between two time steps
+    \item regarding the example presented in the \textit{online} introduction, one can choose to change its decision after some time steps if some perturbations occur
+\end{itemize}
 
 \end{ex}
 
 
-\textbf{Fully dynamic and reoptimization algorithms}\\
-We will here present the fully dynamic and reoptimization algorithms. A more complete survey on these approaches is presented in \cite{boria2011survey} which our development is based on. At first and before the proper elaboration of the concept of reoptimization, fully dynamic algorithms were studied. Those algorithms mainly focused on some polynomial problem like the {\sc min spanning tree} (\cite{frederickson1985data}) and the {\sc shortest path} problem (\cite{even1985updating}). They were applied on data structures and were designed to maintain the optimality of a solution on instances subject to some perturbations. 
 
- 
 
-A survey on combinatorial optimization in dynamic environments Paschos\\
+dynamic parameterized complexity
+Dynamic Graph Algorithms Giuseppe F. Italiano\\
+when a solution is taken the instance, edges or vertices change \\
+DATA STRUCTURES FOR online UPDATING OF
+MINIMUM SPANNING TREES, WITH APPLICATIONS*\\
+
+
+
+
+\subsection{Temporal graphs}
+\alex{temporal spiross, existence de chemins, flow}\\
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\clearpage
+\textbf{reoptimization}
 amortized complexity
 
-\subsectionToc{reoptimization}
-
-book : \\
+book: \\
 On the Hardness of Reoptimization Hans-Joachim Böckenhauer\\
 
 On the Tradeoff between Stability and Fit
-EDITH COHEN : "Two hugely popular models are metrical task systems, where the goal is to maximize average fit per average change [Borodin et al. 1992] and regret minimization used in decision theory."\\ 
-
-
-\subsectionToc{online}
-optima 54 Susanne Albers\\
-regularization\\
-competitive ratio\\
-
-
-Competitive Analysis via Regularization
-Niv Buchbinder Shahar Chen Joseph (Seffi) Naor\\
-
-book : \\
-Online Algorithms
-The State of the Art\\
-
-Online Optimization jaillet \\
-\subsectionToc{incremental setting?}
-\subsectionToc{online learning}
-Buchbinder et al. [14] and Buchbinder, Chen and Naor [13] considered also a multistage model and studied the re- lation between the online learning and competitive analysis frameworks, mostly for fractional optimization problems.\\     
-prediction? randomization\\
-N. Cesa-Bianchi and G. Lugosi. Prediction, learning, and games. Cambridge University Press, 2006\\
-
-Unified Algorithms for Online Learning and Competitive Analysis
-Niv Buchbinder
-\\
-
-\subsectionToc{Online stochastic combinatorial optimization}
+EDITH COHEN: "Two hugely popular models are metrical task systems, where the goal is to maximize average fit per average change [Borodin et al. 1992] and regret minimization used in decision theory."\\ 
 
 
 
-\subsectionToc{dynamic parameterized complexity}
-Reoptimization of Parameterized Problems Hans-Joachim Bockenhauer\\
 
-\subsectionToc{temporal/dynamic graphs}
 
-Dynamic Graph Algorithms Giuseppe F. Italiano\\
-when a solution is taken the instance, edges or vertices change \\
-DATA STRUCTURES FOR ON-LINE UPDATING OF
-MINIMUM SPANNING TREES, WITH APPLICATIONS*\\
 
-\alex{temporal spirachis, existence de chemins, flow}\\
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \chapter{Multistage Knapsack Problem}
 
