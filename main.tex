@@ -259,15 +259,36 @@ Coordinateur: Bruno Escoffier and Euripide Bampis \\vspace{0.2cm}\\
 
 
 \chapterToc{Introduction}
+
+
 \chapter{Optimization with temporal aspects, a state of the art}
+\section{Combinatorial optimization preliminaries}
+In the first section of this chapter, we will present some fundamental definitions and notions of combinatorial optimization used during the thesis. We will define a certain terminology and vocabulary for the entire document. First and foremost, we will address the complexity theory with its classes and techniques, then, we will develop the notion of approximation algorithms. 
 
 
 
-In a classical optimization problem, given an instance, one is asked to find a feasible solution optimizing an objective function. The feasibility of a solution is defined by a set of constraints applied to, depending on the nature of the problem, nodes, edges, precedence and so on for graphs, objects for packing problems...\\ A vast amount of optimization problems are known to be NP-hard (see \cite{gj} for a definition of NP-hardness), i.e not polynomially solvable if P$\ne$NP, which is the central hypothesis of the complexity theory. The hardness of those problems make real world applications and implementations really difficult or even impossible. It is then naturally that about 30 years ago approximation algorithms were introduced. Those algorithms give some solutions in reasonable time, more precisely in polynomial time, even if they are not optimal. The quality of a solution outputed by such an algorithm is defined by a ratio, comparing its solution to the optimal solution. To be more precise, the ratio is represented, in most of the cases, of the division between the approximate solution as the numerator and the optimal solution as the denominator, superior or inferior to $1$, if the problem is a minimization or a maximization problem respectively.\\
+
+\subsection{A brief introduction of the complexity theory}
+In a classical optimization problem, given an instance, one is asked to find a feasible solution optimizing an objective function. The feasibility of a solution is defined by a set of constraints applied to, depending on the nature of the problem, nodes, edges, precedence and so on for graphs, objects for packing problems... \\ 
+All optimization problems have equivalent and can be defined as decision problems. Those problems are defined this time by a set of instances and a question. Then, given an instance in the whole set of instances, one is asked to find if the answer of the question with this instance is yes or no, often presented as $1$ and $0$ respectively. \\
+
+An algorithm, based on Turing machines that we won't present here, is used to solve either the optimization problem or the decision problem. We call the \textit{time complexity} of a problem the number of steps one has to go through in order to run the algorithm.    
+ 
+ A vast amount of optimization problems are known to be NP-hard (see \cite{gj} for a definition of NP-hardness), i.e not polynomially solvable if P$\ne$NP, which is the central hypothesis of the complexity theory. The hardness of those problems make real world applications and implementations really difficult or even impossible. It is then naturally that about 30 years ago approximation algorithms were introduced. Those algorithms give some solutions in reasonable time, more precisely in polynomial time, even if they are not optimal. The quality of a solution outputed by such an algorithm is defined by a ratio, comparing its solution to the optimal solution. To be more precise, the ratio is represented, in most of the cases, of the division between the approximate solution as the numerator and the optimal solution as the denominator, superior or inferior to $1$, if the problem is a minimization or a maximization problem respectively.\\
+P, NP, reduction karp, garey johnson, 
+\subsection{Approximation notions}
+Algo facteur constant SOL/OPT pour pb np difficile np complet
+Ptas sinon 
+fptas
+borne asymptomatique 
+technique scaling knapsack 
+technique unique variable fractionnaire kp encore 
+
+
+\section{Multistage optimization}
 Beyond the complexity issues, some real world problems naturally induce some difficulties regarding their own data. Indeed, in some cases, one only has a partial knowledge of the problem data or in some other cases the data will be brought to evolve over time. To deal with these kind of temporal difficulties, a lot of approaches have been developed, most of them since the early 1980's, responding to different applications and needs. \\
 We will first develop the multistage optimization, main topic of the thesis, illustrate it with an example and give its definition in Section \ref{multiintro}. Then we will present the actual state of the art of the framework in Section \ref{multisota}. \\
 We will next focus on a few other optimization frameworks coping with evolving data, being extensively studied and/or sharing some properties with the multistage one in Section \ref{tempsota}. 
-\section{Multistage optimization}
 \subsection{Introduction and definition of the multistage framework}\label{multiintro}
 
 In the multistage framework, a decision maker is given a time horizon and a sequence of instances of a problem, one for each time step, he needs to solve. To do so, one needs to build a sequence of solutions, i.e a set of feasible solutions, one for each time step, optimizing the objective function of the problem. 
