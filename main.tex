@@ -270,19 +270,76 @@ In the first section of this chapter, we will present some fundamental definitio
 
 \subsection{A brief introduction of the complexity theory}
 In a classical optimization problem, given an instance, one is asked to find a feasible solution optimizing an objective function. The feasibility of a solution is defined by a set of constraints applied to, depending on the nature of the problem, nodes, edges, precedence and so on for graphs, objects for packing problems... \\ 
-All optimization problems have equivalent and can be defined as decision problems. Those problems are defined this time by a set of instances and a question. Then, given an instance in the whole set of instances, one is asked to find if the answer of the question with this instance is yes or no, often presented as $1$ and $0$ respectively. \\
+All optimization problems have equivalent and can be defined as decision problems. Those problems are defined this time by a set of instances and a question. Then, given an instance in the whole set of instances, one is asked to find if the answer of the question with this instance is yes or no, often also presented as $1$ and $0$ respectively. \\
 
-An algorithm, based on Turing machines that we won't present here, is used to solve either the optimization problem or the decision problem. We call the \textit{time complexity} of a problem the number of steps one has to go through in order to run the algorithm.    
- 
- A vast amount of optimization problems are known to be NP-hard (see \cite{gj} for a definition of NP-hardness), i.e not polynomially solvable if P$\ne$NP, which is the central hypothesis of the complexity theory. The hardness of those problems make real world applications and implementations really difficult or even impossible. It is then naturally that about 30 years ago approximation algorithms were introduced. Those algorithms give some solutions in reasonable time, more precisely in polynomial time, even if they are not optimal. The quality of a solution outputed by such an algorithm is defined by a ratio, comparing its solution to the optimal solution. To be more precise, the ratio is represented, in most of the cases, of the division between the approximate solution as the numerator and the optimal solution as the denominator, superior or inferior to $1$, if the problem is a minimization or a maximization problem respectively.\\
-P, NP, reduction karp, garey johnson, 
-\subsection{Approximation notions}
-Algo facteur constant SOL/OPT pour pb np difficile np complet
-Ptas sinon 
-fptas
-borne asymptomatique 
-technique scaling knapsack 
-technique unique variable fractionnaire kp encore 
+An algorithm, based on Turing machines that we won't present here, is used to solve either the optimization problem or the decision problem. We call the \textit{time complexity} of a problem the number of steps one has to go through in order to run the algorithm. Space is another type of resource addressed in complexity theory defined by the \textit{space complexity}, being the space in memory an algorithm needs to run. We focus extensively in the \textit{time complexity} in this thesis (we will sometimes use the term complexity of a problem and will be referring in this case to its \textit{time complexity}).\\
+That being defined, we can introduce two central classes of problem of the complexity theory. 
+The first one is called the class \textbf{P}. (The following definitions of this section are for most of them taken from \cite{escoffier2005approximation} which we reefer the reader to for a more detailed introduction on complexity classes and approximation algorithms and techniques)
+\begin{definition}{\emph{(The complexity class of problems \textbf{P}) }}\\
+The complexity class \emph{\textbf{P}} of problems is defined as the set of all decision problems solvable in polynomial time by a deterministic Turing machine.
+\end{definition}
+
+Less formally, the class \textbf{P} is composed by all the problems considered solvable in polynomial time. We will encounter quite a lot of problems belonging to this class in the next sections. It is important to notice that polynomial time is for most of the cases equivalent to "useable" in real world applications. However, a large amount of problems are not known to be in the class \textbf{P}, i.e we don't know any polynomial time algorithm able to solve them.  \\
+
+This observation leads us to introduce the the second central class of problem, called the complexity class \textbf{NP} of problems.
+\begin{definition}{\emph{(The complexity class of problems \textbf{NP})}}\\
+The complexity class \emph{\textbf{NP}} of problems is defined as the set of all decision problems for which it is possible to verify for a given solution if the answer to the decision problem question is yes or no.
+\end{definition}
+
+The class \textbf{NP} gathers a large amount of problems, in addition to all the problems of the class \textbf{P}, solvable and thus verifiable in polynomial time. \\
+These definitions give us the possibility to introduce the central question of the complexity theory: does \textbf{P}$=$\textbf{NP}? The hypothesis stating \textbf{P}$\ne$\textbf{NP} is widely accepted, the majority of the results presented in this thesis are relevant and presented under this hypothesis. \\
+In order to be able to gather a large amount of problems either in \textbf{P} or \textbf{NP} and given a problem to be able to determine if it is in one, the other or none of the class, Cook and Karp introduced and used, in two of the most fundamental articles of the complexity theory (\cite{Cook71} and \cite{Karp72}), the notion of reduction between two decision problems.
+
+\begin{definition}{\emph{(The Karp reduction)}}\\
+Let $A$ and $B$ two decision problems. We say that $A$ is reducible to $B$ if there is a function $f$ such that:
+\begin{itemize}
+    \item for all instance $I \in A$, $f(I)\in B$
+    \item the answer to the question of the decision problem $A$ is yes for an instance $I^*$ if and only if the answer to question of the decision problem $B$ is yes for the instance $f(I^*)$
+    \item it takes a polynomial time to compute $f$ 
+\end{itemize}
+\end{definition}
+
+The reduction gives the possibility to transfer the result of belonging to a class from one problem to another. Indeed, there is a theorem stating that if a decision problem $B$ is in \textbf{P} and a decision problem $A$ is reducible to $B$, then $A$ is in \textbf{P} too. This affirms that if it is possible to solve a decision problem $B$ in polynomial time, thus it is also possible to solve an easier decision problem $A$ in polynomial time. We can do the same reasoning for the problem in \textbf{NP}. \\
+The problem in \textbf{NP} are naturally harder. In \cite{Cook71}, the author showed that all problem in \textbf{NP} are reducible to the well known {\sc SAT} problem, i.e all problem in \textbf{NP} are easier than the {\sc SAT} problem. This observation leads to the definition of the complexity \textbf{NP}-hard and \textbf{NP}-complete.
+
+\begin{definition}{\emph{(The complexity class of problems \textbf{NP}-hard)}}\\
+The complexity class \emph{\textbf{NP}-hard} of problems is defined as the set of all decision problems as least as hard as any problem in \emph{\textbf{NP}}
+\end{definition}
+
+Thus, to show that a decision problem $B$ is \textbf{NP}-hard (i.e is in the complexity class \textbf{NP}-hard, one needs to prove that there exists a Karp reduction, i.e taking polynomial time, from another decision problem $A$ that is \textbf{NP}-hard.  
+Note that a problem can be \textbf{NP}-hard but not in \textbf{NP}, if it is:
+
+\begin{definition}{ \emph{(The complexity class of problems \textbf{NP}-complete)}}\\
+The complexity class \emph{\textbf{NP}-complete} of problems is defined as the set of all decision problems that are both in \emph{\textbf{NP}} and \emph{\textbf{NP}-hard}.
+\end{definition}
+
+We introduced some central notions of the complexity theory (see \cite{gj} for a more detailed presentation on complexity theory), let us now present approximation algorithms and its motivations.
+
+
+\subsection{Approximation algorithms}
+As said in the previous section, a vast amount of optimization problems are known to be NP-hard i.e not polynomially solvable if P$\ne$NP, which is the central hypothesis of the complexity theory. The hardness of those problems make real world applications and implementations really difficult or even impossible. It is then naturally that about 30 years ago approximation algorithms were introduced. Those algorithms give some solutions in reasonable time, more precisely in polynomial time, even if they are not optimal. The quality of a solution outputed by such an algorithm is defined by a ratio, comparing its solution to the optimal solution. \\
+Formally, for an optimization problem $P$ and an instance $I$, the quality of an approximation algorithm is given by the ratio $\rho(I)$ defined as: 
+$$\rho(I) = \frac{\emph{SOL(I)}}{\emph{OPT}}$$
+with \emph{SOL(I)} the value of the solution returned by the algorithm on the instance $I$ and computed in polynomial time, \emph{OPT(I)} the value of the optimal solution. Note that the value of the ratio has to be less (resp. greater) than one for maximization (resp. minimization) problems.\\
+We say that there is $\rho$-approximation algorithm for an optimization problem if it has been shown that for any instance $I$ of the problem, i.e specially in the worst case scenario, the ratio $\rho(I)$ is verified. One is looking for an approximation algorithm with a ratio as close as possible to 1. \\
+
+Some problems have a known constant approximation ratio and said to be in a complexity class called \textbf{APX}:
+\begin{definition}{\emph{(The complexity class of problems \textbf{APX})}}\\
+The complexity class \emph{\textbf{APX}} of problems is defined as the set of all optimization problems that have a constant approximation ratio computed in polynomial time. 
+\end{definition}
+
+When a problem is not in \textbf{APX}, we say that it is \textbf{APX}-hard. 
+
+
+\vspace{5cm}
+Algo facteur constant SOL/OPT pour pb np difficile np complet\\
+L reduction\\
+Ptas sinon \\
+fptas\\
+borne asymptomatique \\
+technique scaling knapsack, pseudo poly \\
+technique unique variable fractionnaire kp encore \\
+
 
 
 \section{Multistage optimization}
@@ -421,7 +478,7 @@ In its multistage version, the perfection version of the problem is called the {
 
 In \cite{Gupta}, they showed that the {\sc perfect matching maintenance} problem becomes surprisingly inapproximable, even in the \emph{offline} case. This negative result is the first observation of the hardness induced by the multistage framework. Indeed, the majority of the problems studied for now and considered easy, i.e polynomial solvable or easily approximable, in their static form become really hard in this framework, even for limited restricted instances, in the \emph{offline} case and for a small number of time steps.\\
 
-The negative result on the {\sc perfect matching maintenance} was improved a few years later in \cite{bampis2018multistage}. Indeed, in \cite{Gupta}, it was shown that the problem was innaproximable for instances with as least $8$ time steps but the question for less time steps and for specific instances such as bipartite graph was left open. \cite{bampis2018multistage} addressed this open question and proved that the problem is hard to approximate event for $2$ time steps and in bipartite graphs. Then, they showed other negative results. Even the metric version of the problem where the triangle inequalities are satisfied, called {\sc minimum multistage perfect matching}, is APX-hard, if P$\ne$ NP, i.e does not have a PTAS (a formal definition of a PTAS is given in the second chapter). However, in the case where the number of time steps it equal to $2$ or $3$, they presented a constant approximation ratio. Finally, they also showed that the problem in its maximization version, with the complementary objective function, was also APX-hard even though it has a constant approximation ratio. \\
+The negative result on the {\sc perfect matching maintenance} was improved a few years later in \cite{bampis2018multistage}. Indeed, in \cite{Gupta}, it was shown that the problem was innaproximable for instances with as least $8$ time steps but the question for less time steps and for specific instances such as bipartite graph was left open. \cite{bampis2018multistage} addressed this open question and proved that the problem is hard to approximate event for $2$ time steps and in bipartite graphs. Then, they showed other negative results. Even the metric version of the problem where the triangle inequalities are satisfied, called {\sc minimum multistage perfect matching}, is APX-hard, if P$\ne$ NP. However, in the case where the number of time steps it equal to $2$ or $3$, they presented a constant approximation ratio. Finally, they also showed that the problem in its maximization version, with the complementary objective function, was also APX-hard even though it has a constant approximation ratio. \\
 
 
 Very recently, in \cite{chimani2020approximating}, the authors looked again at the {\sc multistage matching} problem and a variant where the number of overall modifications are as small as possible. They improved the results presented in \cite{bampis2018multistage} by showing the NP-hardness of the problem in an even more restricted case than the one presented in \cite{bampis2018multistage}. They also presented a new approximation algorithm that does not require the restrictions needed before.
