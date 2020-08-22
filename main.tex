@@ -22,6 +22,7 @@
 \usepackage[font=small,labelfont=bf, figurename=]{caption} 
 \usepackage{comment}
 \usepackage{pgfpages}
+\usepackage{hyperref}
 
 
 %
@@ -250,7 +251,7 @@ Coordinateur: Bruno Escoffier and Euripide Bampis \\vspace{0.2cm}\\
 
 
 
-
+\chapterToc{Acknowledgment}
 
 
 
@@ -330,17 +331,34 @@ The complexity class \emph{\textbf{APX}} of problems is defined as the set of al
 
 When a problem is not in \textbf{APX}, we say that it is \textbf{APX}-hard. 
 
+Let us finally introduce two last classes of complexity, known to be in \textbf{APX}.
 
-\vspace{5cm}
-Algo facteur constant SOL/OPT pour pb np difficile np complet\\
-L reduction\\
-Ptas sinon \\
-fptas\\
-borne asymptomatique \\
-technique scaling knapsack, pseudo poly \\
-technique unique variable fractionnaire kp encore \\
+The first one is called \textbf{PTAS}.
+\begin{definition}{\emph{(The complexity class of problems \textbf{PTAS})}}\\
+The complexity class of problems \emph{\textbf{PTAS}} is defined as the set of all optimization problems admitting a Polynomial Time Approximation Scheme. A \emph{\textbf{PTAS}} is, given a maximization (resp. minimization) optimization problem and a parameter $\epsilon >0$, a $(1-\epsilon)$-approximation (resp. $(1+\epsilon)$) algorithm running in polynomial time with the size of the instance but exponential in $\epsilon$.
 
+\end{definition}
 
+The other one is more restricted class called \textbf{FPTAS} that is polynomial in both the instance size and $\epsilon$.
+Formally:
+\begin{definition}{\emph{(The complexity class of problems \textbf{FPTAS})}}\\
+The complexity class of problems \emph{\textbf{FPTAS}} is defined as the set of all optimization problems admitting a Fully Polynomial Time Approximation Scheme. A \emph{\textbf{FPTAS}} is, given a maximization (resp. minimization) optimization problem and a parameter $\epsilon >0$, a $(1-\epsilon)$-approximation (resp. $(1+\epsilon)$) algorithm running in polynomial time with both the size of the instance and $\epsilon$.
+
+\end{definition}
+
+A lot of other complexity classes dealing with approximation algorithms are studied in the literature, results on the two presented classes are showed in the second chapter of the thesis (see \cite{ausiello2005approximability} for a detailed survey on the approximation preserving reductions). \\
+
+Finally, let us define the L-reduction, being like the Karp-reduction but nearly preserving the approximation properties between two decision problems, i.e preserving the \textbf{PTAS} for all problems and the membership to \textbf{APX} only for minimization problems:
+\begin{definition}{\emph{(The L-reduction)}}\\
+Let $A$ and $B$ two decision problems. We say that $A$ is L-reducible to $B$ if there are two polynomial time reduction functions $f$ and $g$ (resp. from $A$ to $B$ and from $B$ to $A$), $c_A$ and $c_B$ their respective cost functions, $\alpha >0$ and $\beta >0 $ such that for all instance $x \in A$ and $y' \in S(f(x))$, $S(f(x))$ being the set of all feasible solution of $f(x)$:
+\begin{itemize}
+    \item OPT$_B(f(x))\leq \alpha $OPT$_A(x)$
+    \item for every solution $y'$ of $f(x)$: 
+    \begin{itemize}
+        \item $|$OPT$_A(x)-c_A(g(y'))|\leq \beta|$OPT$_B(f(x))-c_B(y')|$
+    \end{itemize}
+\end{itemize}
+\end{definition}
 
 \section{Multistage optimization}
 Beyond the complexity issues, some real world problems naturally induce some difficulties regarding their own data. Indeed, in some cases, one only has a partial knowledge of the problem data or in some other cases the data will be brought to evolve over time. To deal with these kind of temporal difficulties, a lot of approaches have been developed, most of them since the early 1980's, responding to different applications and needs. \\
@@ -411,7 +429,7 @@ Let us now give a formal definition of an optimization problem in its multistage
 \begin{definition}{\emph{(Multistage Optimization problem).}} In a Multistage Optimization problem, given 
 \begin{itemize}
 \item a combinatorial optimization problem $\cal P$ 
-\item a number $T \in \mathbb{N}$ of time steps;
+\item a number $T \in \mathbb{N}^*$ of time steps;
 \item for any $t \in T$, an instance $I_t$ of the optimization problem $\cal P$. We will denote:
 \begin{itemize}
 
@@ -748,48 +766,17 @@ The first {\sc TSP} example presented in the introduction of stochastic optimiza
 
 
 \chapter{Multistage Knapsack Problem}
-\alex{define PTAS}\\
 
 \section{Introduction}
-In a classical combinatorial optimization problem, given an instance of the problem we seek a feasible solution optimizing the objective function. However, in many systems the input may change over the time and the solution has to be adapted to the input changes. It is then necessary to determine a tradeoff between the optimality of the solutions in each time step and the stability/similarity of consecutive solutions. This is important since in many applications there is a significant transition cost for changing (parts of) a solution. 
-Recently, Gupta et al.
-\cite{Gupta} and Eisenstat et al. 
-\cite{Eisenstat} introduced 
- a \emph{multistage} model in order to deal with such situations. They consider that the input is a sequence of instances (one for each time step), and the goal is to find a sequence of solutions (one for each time step) reaching such a tradeoff. 
+We presented and motivated the study of the Multistage Knapsack Problem in section \ref{multiintro}. Note that in this chapter, the multistage framework is studied in the \textit{offline} setting.\\
 
-
-Our work follows the direction proposed by Gupta et al. 
-\cite{Gupta} who suggested the study
-of more combinatorial optimization problems in their multistage framework. In this paper,
-we focus on the multistage version of the {\sc Knapsack} problem. Consider a company owning
-a set $N = \{u_1, \ldots , u_n\}$ of production units. Each unit can be used or not; if $u_i$ is used, it
-spends an amount $w_i$ of a given resource (energy, raw material,...), and generates a profit
-$p_i$. Given a bound $W$ on the global amount of available resource, the static {\sc Knapsack} problem
-aims at determining a feasible solution that specifies the chosen units in order to maximize the total profit under the constraint that the total amount of the resource does not exceed the bound of $W$.
-In a multistage setting, considering a time horizon $t = 1, 2, \ldots,T$ of, let us say, $T$ days,
-the company needs to decide a production plan for each day of the time horizon, given that data
-(such as prices, level of resources,...) usually change over time. This is a typical situation,
-for instance, in energy production planning (like electricity production, where units can be
-nuclear reactors, wind or water turbines,...), or in data centers (where units are machines and
-the resource  corresponds to the available energy). 
-Moreover, in these examples, there is an extra cost to turn ON or OFF
- a unit like in the case of turning ON/OFF a reactor in electricity production~\cite{thesececile}, or a machine in a data center~\cite{Albers17}. 
-Obviously, whenever a reactor is
-in the ON or OFF state, it is beneficial to maintain it at the same state for several consecutive time steps, in order to avoid the overhead costs of state changes. 
-Therefore, the design of a production plan over a given time horizon has to take into account 
-both the profits generated each
-day from the operation of the chosen units, as well as the potential transition profits from
-maintaining a unit at the same state for consecutive days.
-We refer the reader interested in planning problems in electricity production to~\cite{thesececile}.
-
-We formalize the problem as follows. We are 
+Briefly, let us define again the problem. We are 
 given a time horizon $t=1,2,\ldots,T$, and a sequence of knapsack instances $I_1,I_2,\ldots,I_T$, one for each time step, defined on a set of $n$ objects. In every time step $t$ we have to choose a feasible knapsack $S_t$ of $I_t$, which gives a \emph{knapsack profit}. Taking into account transition costs, we measure the stability/similarity of two  consecutive solutions  $S_t$ and $S_{t+1}$ by identifying the objects for which the decision, to be picked or not, remains the same in $S_t$ and $S_{t+1}$, giving a \emph{transition profit}. We are asked to produce a sequence of solutions $S_1,S_2,\ldots,S_T$  so that the total knapsack profit plus the overall transition profit is maximized.
 
-Our main contribution is a polynomial time approximation scheme (PTAS) for the multistage  version of the {\sc Knapsack} problem. Up to the best of our knowledge, this is the first approximation scheme for a multistage combinatorial optimization problem and its existence contrasts with the inapproximability results for other combinatorial optimization problems that are even polynomial-time solvable in the static case (e.g. the {\sc multistage  Spanning Tree} problem \cite{Gupta}, or the {\sc multistage  Bipartite Perfect Matching} problem \cite{Bampis}).
+Our main contribution is a polynomial time approximation scheme (\textbf{PTAS}) for the multistage  version of the {\sc Knapsack} problem. Up to the best of our knowledge, this is the first approximation scheme for a multistage combinatorial optimization problem and its existence contrasts with the inapproximability results for other combinatorial optimization problems that are even polynomial-time solvable in the static case (e.g. the {\sc multistage  Spanning Tree} problem \cite{Gupta}, or the {\sc multistage  Bipartite Perfect Matching} problem \cite{Bampis}).
 
 \subsection{Problem definition}
 Formally, the {\sc Multistage  Knapsack} problem can be defined as follows.
-
 
 \begin{definition}
 In the {\sc Multistage  Knapsack} problem ($MK$) we are given:
@@ -808,8 +795,8 @@ In the {\sc Multistage  Knapsack} problem ($MK$) we are given:
 \end{itemize}
 We are asked to select a subset $S_t\subseteq N$ of objects at each time $t$ so as to respect the capacity constraint: $\sum_{i\in S_t} w_{ti}\leq C_t$. To a solution $S=(S_1,\dots,S_T)$ are associated:
 \begin{itemize}
-  \item A knapsack profit $\sum_{t=1}^T\sum_{i\in S_t} p_{ti}$ corresponding to the sum of the profits of the $T$ knapsacks;
-  \item A transition profit $\sum\limits_{t=1} ^ {T-1} \sum\limits_{i \in \Delta_t} B_{ti}$ where $\Delta_t$ is the set of objects either taken or not taken at both time steps $t$ and $t+1$ in $S$ (formally $\Delta_t=(S_t\cap S_{t+1})\cup(\overline{S_t}\cap \overline{S_{t+1}})$).\\
+  \item A knapsack profit $\sum\limits_{t=1}^T\sum\limits_{i\in S_t} p_{ti}=\sum\limits_{t=1}^T p_t(S_t)$ corresponding to the sum of the profits of the $T$ knapsacks;
+  \item A transition profit $\sum\limits_{t=1} ^ {T-1} \sum\limits_{i \in \Delta_t} B_{ti} = \sum\limits_{t=1}^{T-1}b(S_t,S_{t+1})$ where $\Delta_t$ is the set of objects either taken or not taken at both time steps $t$ and $t+1$ in $S$ (formally $\Delta_t=(S_t\cap S_{t+1})\cup(\overline{S_t}\cap \overline{S_{t+1}})$).
   
 \end{itemize} 
 The value of the solution $S$ is the sum of the knapsack profit and the transition profit, to be maximized.
@@ -822,36 +809,44 @@ The value of the solution $S$ is the sum of the knapsack profit and the transiti
 
 
 
-\noindent{\bf Multistage combinatorial optimization.}  A lot of optimization
-problems have been considered in online or semi-online settings, where the input changes over
-time and the algorithm has to modify the solution (re-optimize) by making as few changes
-as possible. We refer the reader to \cite{Anthony, Blanchard, Cohen, Gu, Megow, Nagarajan}
- and the references therein. 
+% \noindent{\bf Multistage combinatorial optimization.}  A lot of optimization
+% problems have been considered in online or semi-online settings, where the input changes over
+% time and the algorithm has to modify the solution (re-optimize) by making as few changes
+% as possible. We refer the reader to \cite{Anthony, Blanchard, Cohen, Gu, Megow, Nagarajan}
+%  and the references therein. 
  
-Multistage optimization has been studied for fractional problems by Buchbinder et
-al. 
-\cite{Buchbinder} and Buchbinder, Chen and Naor 
-\cite{Buchbinder+}. The multistage model considered in this article is the one studied in Eisenstat et al. 
-\cite{Eisenstat} and Gupta et al. 
-\cite{Gupta}. Eisenstat et al. 
-\cite{Eisenstat} studied the multistage version of facility location problems. They proposed a logarithmic approximation algorithm. An et al. 
-\cite{An} obtained constant factor approximation for some related problems.
- Gupta et al. 
- \cite{Gupta} studied the {\sc Multistage  Maintenance Matroid} problem for
-both the offline and the online settings. They presented a logarithmic approximation
-algorithm for this problem, which includes as a special case a natural multistage version of
-{\sc Spanning Tree}. The same paper also introduced the study of the {\sc Multistage  Minimum Perfect Matching} problem. They showed that the problem becomes hard to approximate
- even for a constant number of stages. Later, Bampis et al. 
- \cite{Bampis} showed that the problem is
-hard to approximate even for bipartite graphs and for the case of two time steps. In the case where the edge costs are metric within every time step they first proved that the problem remains APX-hard even for two time steps. They also show that the maximization version of the problem admits a constant factor approximation algorithm but is APX-hard. In another work
-\cite{Bampis+}, the {\sc Multistage Max-Min Fair Allocation}
-problem has been studied in the offline and  the online settings. This corresponds to a multistage variant of the {\sc Santa Klaus} problem. For the off-line setting, the authors
-showed that the multistage version of the problem is much harder
-than the static one. They provide constant factor approximation algorithms for the off-line setting. Regarding the on-line setting, we refer the reader to \cite{esa} where some approximability results are shown for a variety of subset maximization problems in a multistage framework. Finally, in a very recent work \cite{multistagevc}, the {\sc multistage Vertex cover} problem was studied with a complexity parameterized angle.\\
+% Multistage optimization has been studied for fractional problems by Buchbinder et
+% al. 
+% \cite{Buchbinder} and Buchbinder, Chen and Naor 
+% \cite{Buchbinder+}. The multistage model considered in this article is the one studied in Eisenstat et al. 
+% \cite{Eisenstat} and Gupta et al. 
+% \cite{Gupta}. Eisenstat et al. 
+% \cite{Eisenstat} studied the multistage version of facility location problems. They proposed a logarithmic approximation algorithm. An et al. 
+% \cite{An} obtained constant factor approximation for some related problems.
+%  Gupta et al. 
+%  \cite{Gupta} studied the {\sc Multistage  Maintenance Matroid} problem for
+% both the offline and the online settings. They presented a logarithmic approximation
+% algorithm for this problem, which includes as a special case a natural multistage version of
+% {\sc Spanning Tree}. The same paper also introduced the study of the {\sc Multistage  Minimum Perfect Matching} problem. They showed that the problem becomes hard to approximate
+%  even for a constant number of stages. Later, Bampis et al. 
+%  \cite{Bampis} showed that the problem is
+% hard to approximate even for bipartite graphs and for the case of two time steps. In the case where the edge costs are metric within every time step they first proved that the problem remains APX-hard even for two time steps. They also show that the maximization version of the problem admits a constant factor approximation algorithm but is APX-hard. In another work
+% \cite{Bampis+}, the {\sc Multistage Max-Min Fair Allocation}
+% problem has been studied in the offline and  the online settings. This corresponds to a multistage variant of the {\sc Santa Klaus} problem. For the off-line setting, the authors
+% showed that the multistage version of the problem is much harder
+% than the static one. They provide constant factor approximation algorithms for the off-line setting. Regarding the on-line setting, we refer the reader to \cite{esa} where some approximability results are shown for a variety of subset maximization problems in a multistage framework. Finally, in a very recent work \cite{multistagevc}, the {\sc multistage Vertex cover} problem was studied with a complexity parameterized angle.\\
 
 \noindent{\bf Knapsack variants.}
 
-Our work builds upon the {\sc Knapsack} literature \cite{Kelerrer}. It is well known that there is a simple 2-approximation algorithm as well as a fully polynomial time (FPTAS) for the static case \cite{Ibarra, Lawler, Magazine, Kellerer}. There are two variants that are of special interest for our work: 
+Our work builds upon the {\sc Knapsack} literature; See \cite{Kelerrer} for a complete survey on knapsack variants, and \cite{Ibarra, Lawler, Magazine, Kellerer}.
+
+Let us now present the well known 2-approximation algorithm for the knapsack problem.
+
+\begin{theorem}
+2-approx
+\end{theorem}
+\alex{dvp preuve 2-approx, FPTAS et 1 seule frac variable}\\
+It is well known that there is a simple 2-approximation algorithm as well as a fully polynomial time (FPTAS) for the static case . There are two variants that are of special interest for our work: 
 
 (i) The first variant is a  generalization of the {\sc Knapsack} problem known as the $k$-{\sc Dimensional Knapsack} ($k-DKP$) problem:
 %in which each object has $k$ nonnegative integer weights and $k$ positive integer capacities. The objective is to choose a subset of maximum total profit among all subsets whose weight does not exceed the capacity of the $k$ dimensions. 
@@ -1377,7 +1372,7 @@ g(S) &\geq &  (1-\epsilon')g(S^*)-\frac{g(S^*)}{T_0} \\
 %Due to space constraints, the proof of Theorem~\ref{thptasgen} is deferred to Appendix (section~\ref{appthptasgen}). The underlying idea is to upper bound the loss of the algorithm which corresponds to transition costs between time steps $aT_0$ and $aT_0+1$, for $1\leq a\leq q-1$. 
 
 \section{Pseudo-polynomiality and hardness results}
-
+\alex{def pseudo poly}\\
 We complement the previous result on approximation scheme by showing the following results for {\sc Multistage  Knapsack}:
 \begin{itemize}
 \item First, it does not admit an FPTAS (unless $P=NP$), even if there are only two times steps (Section~\ref{sec:nofptas}) and the bonus is uniform ($B_{ti}=B$ for all $i$, all $t$);
@@ -1480,8 +1475,8 @@ Suppose first that there is an independent set $V'$ of size at least $K$. We tak
 Conversely, take a solution of {\sc Binary Multistage  Knapsack} of value at least $n(m-1)B+mK$. Since $B=2nm$, there must be no modification of the knapsack over the time. Indeed, otherwise, the transition profit would be at most $n(m-1)B-B$, while the knapsack profit is at most $mn$, so the value would be less than $n(m-1)B$. So we consider the set of vertices corresponding to this knapsack. Thanks to the value of the knapsack, it has size at least $K$. Thanks to the capacity constraints of the bags, this is an independent set. 
 \end{proof}
 Since $B$ is polynomially bounded in the proof, this shows that {\sc Multistage  Knapsack} is strongly $NP$-hard.
-%\section{Conclusion}
-%We considered the {\sc Multistage Knapsack} problem in the offline setting and we studied the impact of the number of time steps in the complexity of the problem. It would be interesting to continue this work in the online and the semi-online settings in order to measure the impact of the knowledge of the future on the quality of the solution.
+\section{Conclusion}
+We considered the {\sc Multistage Knapsack} problem in the offline setting and we studied the impact of the number of time steps in the complexity of the problem. It would be interesting to continue this work in the online and the semi-online settings in order to measure the impact of the knowledge of the future on the quality of the solution.
 
 
 %SFS is studied in Section~\ref{sec:static}, while GE in Section~\ref{sec:general}.
@@ -2105,8 +2100,100 @@ We have not worried about computational complexity in this work (and therefore n
 
 \chapter{Target-based computer-assisted orchestration: a theoretical analysis}
 \section{Introduction}\label{sec:introduction}
+The Target-based computer-assisted orchestration is an application of the multistage framework... blabla 
 
-[TBD: A few lines of introduction]
+\section{An overview of target-based music orchestration}\label{otargorch}
+
+In this section we will present the Target-based computer-assisted orchestration and the software called Orchidea doing it. We based this presentation on the youtube tutorial given in \cite{youtubecella}. Note that some of the figures of this section are taken from this video.\\
+%Therefore, not being an expert in the musical and orchestration domains, all definitions, observations and figures are directly taken from this presentation . \\ 
+The main reference page is www.orch-idea.org where is deployed the software, the system and the information.\\
+The orchidea software is an assisting tool that does not orchestrate but helps the composer to orchestrate. It was developed by a few researchers including Carmine Cella, currently teaching at Berkley university and that is accountable for the latest version of the software. He worked with IRCAM, Berkley and the HEM.  \\
+
+
+\subsection{Assisted orchestration}
+\textbf{Preliminaries}
+
+\alex{def dynamics, playing styles..;}\\
+
+Let us give here quick definitions of terms used later in the document. 
+
+A \textbf{sound} is a periodic wave. It is possible to decompose this periodic wave, seen as a periodic function, using Fourier series which are a weighted sum of sinusoids.\\
+
+The different sinusoids, being distincts from one another in terms of their frequencies, compose the harmonic series of a sound. In this series, the fundamental harmonic, i.e the harmonic with the lowest frequency and the one that is the most noticeable to a human ear, is called the first \textbf{partial} and the other frequencies, i.e the other \textbf{partials} of a sound, create the rest of the sound.\\
+
+The first partial usually define the \textbf{pitch} of a sound, represented by notes letter from A to G$\#$.\\
+
+The \textbf{timbre} of a sound can be seen as the quality of a sound, each instrument like a cello or a violin producing its own quality of sound. It is the timbre that gives the possibility to a human ear to identify and recognize one instrument from another. Formally, it is directly created by the harmonic series, i.e the set of partials of a sound.\\
+
+The \textbf{amplitude} of a sound is its volume, measured in dB.
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.3]{A440.png}
+\caption{The note La}
+\label{figassistedorch}
+\end{figure}
+
+
+\begin{definition}{\emph{(Assisted orchestration)}}
+Assisted orchestration can be seen as the process of searching for the best combinations of orchestral sounds to match a target sound under specified metric constraints.
+\end{definition}
+
+The notions presented in this definition will be discussed and addressed later in this section.
+
+context and ref to check: \cite{maresz2013computer}
+
+In a nutshell, assisted orchestration is the concept of making a connection between the symbolic space of music which is the score of a music, seeing music as a combination of symbols describing it with notes, pitches, instruments $\ldots$, and the signal space of music which is the timbre of a sound, the sound itself. 
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.3]{assistedorch.png}
+\caption{Assisted orchestration as the connection between symbolic space and signal space}
+\label{figassistedorch}
+\end{figure}
+
+The subject of acoustic space has been widely studied by composers in the last 20 years i.e with composers focusing mainly on the sound itself and less on the notes themselves.  \\
+
+\textbf{An exemple of an assisted orchestration application }
+The first well known application of assisted orchestration was a piece done by J. Harvey called \textit{Mortuos Plango, Vivos Voco (1981}) who reproduced the audio of a bell and received a warm welcome. "It showed that IRCAM institute's apparently esoteric research program could yield music capable of appealing to a wider audience" said Curtis Roads, a famous composer. It thus gave wider perspectives and motivations of what assisted orchestration can do. Harvey tried in this piece to transcribe the sound of the bell and retranscribe it by synthesis. The transcription was done manually at the time looking at the partials of a sound.\\
+Later in 2008, in a piece called \textit{Speakings}, J. Harvey used Orchidée, an older version of Orchidea, in order to replicate the sound of a human voice.\\
+
+To write a music score, a composer simply writes symbol in a music sheet. Then, the symbols are "played" generating sound. \\
+Assisted orchestration can be seen as the other way around. Indeed, in this case, given a sound, a composer tries to find its corresponding score. This differs from music transcription, where the sound is someone playing an instrument and then one needs to find the corresponding score often using the same instrument. Indeed, in assisted orchestration the sound can be anything like bells, noise, voices$\ldots$ for which there is no corresponding score. One can say that assisted orchestration is a general case of musical transcription. \\
+
+The assisted orchestration problem can also be seen as the problem corresponding to, given an orchestration, reproducing a target timbre within a computational context. Namely, given specific writing constraints of the composer like the orchestra with a set of chosen instruments, playing styles, dynamics$\ldots$, is it possible to be as close as possible to the target sound. \\
+
+Formally, this problem can be seen as a multi-objective one:
+\begin{itemize}
+    \item a combinatorial optimization problem defined on the description of the timbre: 
+    \item a constraint solving problem defined on the symbols of musical writing
+\end{itemize}
+This last point points out the connection between the symbolic space and the signal space.\\
+
+Let us present an example in order to show the hardness of the problem.
+
+\begin{ex}
+Given a target sound, one is ask to reconstruct the sound using instruments of an restricted orchestra composed of only two instruments being able to play only two notes at a fixed single dynamic. \\
+To solve this problem, you have to find best combination of sounds, the closest one to the target sound, among the set of possible combinations. Indeed, one can choose to take:the first note on the first instrument and on the other instrument, the second note on the first instrument and on the other instrument, the first note on the first instrument and the second note on the other instrument, the first note on the second instrument and the first note on the other instrument.
+For each of the four combinations, one has to compute a distance between the combination and the target sound. Under this specific set of very restricted constraints it is easy to find the best possible solution in a small amount of time. \\
+
+However, in practice the set of feasible solution is way larger: each instrument of an orchestra has the possibility to play around forty notes, several dynamics, articulations, playing styles$\ldots$. The number of different combinations in a basic setting is around $2^{30000}$ making the problem intractable. An analysis of the problem complexity will be presented in the second section of this chapter.\\
+
+\end{ex}
+The intractability of the problem leads to the introduction of heuristics computing forecast. 
+Indeed, the general structure of the algorithm consists of, given:
+\begin{itemize}
+    \item a \textbf{target sound}
+    \item a set of \textbf{symbolic constraints} i.e musical constraints
+    \item a set of \textbf{sounds} in the database
+    \item a \textbf{search engine} computing:
+    \begin{itemize}
+        \item the \textbf{feature forecast}: for each combination its feature are forecast using an heuristic
+        \item the \textbf{dissimilarity measure}: measure evaluating the distance between two sounds (the quality of the measure is still an open question in the literature) 
+    \end{itemize}
+\end{itemize}
+
+
+
 
 \subsection{Target-based music orchestration}\label{sec:tbmo}
 
@@ -2755,7 +2842,7 @@ We provide in this article the first, to our knowledge, theoretical analysis of 
 
 The experiments we conducted give hope for possible practical improvements using ILP and shortest path formulations. However, this is only a first step in this direction. There is probably a gap between a good solution for the abstract model we consider and what a composer would consider as a harmonious solution. This gap has to be filled in order to use the techniques in a target-based orchestration software. 
 
-
+\chapterToc{Conclusion and outlook}
 
 %\sectionToc{Contenu de ce document}
 \bibliographystyle{apalike}
@@ -2787,3 +2874,4 @@ We can define the transition bonus/cost as:
     \item \emph{Hamming Bonus/Cost:} here we get the bonus/cost for each object for which the decision (to be in the solution or not) is the same between time steps $t$ and $t+1$. In other words, the bonus/cost is proportional to $|N|$ minus the number of modifications (Hamming distance) in the solutions. The \emph{Hamming Bonus} was presented previously in the {\sc multistage knapsack} problem example where we got some bonus for both objects taken and not taken at both time steps.
 \end{itemize}
 \end{definition}
+aaa
