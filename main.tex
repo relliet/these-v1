@@ -1509,12 +1509,12 @@ We considered the {\sc Multistage Knapsack} problem in the offline setting and w
 
 \section{Introduction}
 
-In a classical combinatorial optimization setting, given an instance of a problem one needs to find a good feasible solution. However, in many situations, the data may evolve over time and one has to solve a sequence of instances. The natural approach of solving every instance independently may induce a significant transition cost, for instance for moving a system from one state to another. This cost may represent, e.g., the cost of turning on/off the servers in a data center \cite{LinWAT13,BansalGKPSS15,AntoniadisS17,AlbersQ18}, the cost of changing the quality level in video streaming \cite{Joseph}, or the cost for turning on/off nuclear plants \cite{thesececile}.  %It becomes then necessary to study optimization problems in a new framework where the objective is to know whether it is possible to determine  a tradeoff between the quality of the solutions in each time step and the stability/similatity of the solutions in cosnecutive time steps.  
-Gupta et al. \cite{Gupta} and Eisenstat et al. \cite{Eisenstat}  proposed
- a \emph{multistage} model where given  a time horizon $t = 1, 2, \ldots,T$,  the input is a sequence of instances $I_1,I_2,\ldots,I_T$, (one for each time step), and the goal is to find a sequence of solutions $S_1,S_2,\ldots,S_T$ (one for each time step) reaching  a trade-off between the quality of the solutions in each time step and the stability/similarity of the solutions in consecutive time steps. The addition of the transition cost makes some  classic combinatorial optimization problems much harder. This is the case  for instance  %some problems (e.g. 
- for the minimum weighted perfect matching problem in the \emph{off-line} case where the whole sequence of instances is known in advance. While the one-step problem is polynomially-time solvable, the multistage problem becomes hard to approximate even for bipartite graphs and for only two time steps \cite{Bampis,Gupta}. 
+%In a classical combinatorial optimization setting, given an instance of a problem one needs to find a good feasible solution. However, in many situations, the data may evolve over time and one has to solve a sequence of instances. The natural approach of solving every instance independently may induce a significant transition cost, for instance for moving a system from one state to another. This cost may represent, e.g., the cost of turning on/off the servers in a data center \cite{LinWAT13,BansalGKPSS15,AntoniadisS17,AlbersQ18}, the cost of changing the quality level in video streaming \cite{Joseph}, or the cost for turning on/off nuclear plants \cite{thesececile}.  %It becomes then necessary to study optimization problems in a new framework where the objective is to know whether it is possible to determine  a tradeoff between the quality of the solutions in each time step and the stability/similatity of the solutions in cosnecutive time steps.  
+%Gupta et al. \cite{Gupta} and Eisenstat et al. \cite{Eisenstat}  proposed
+% a \emph{multistage} model where given  a time horizon $t = 1, 2, \ldots,T$,  the input is a sequence of instances $I_1,I_2,\ldots,I_T$, (one for each time step), and the goal is to find a sequence of solutions $S_1,S_2,\ldots,S_T$ (one for each time step) reaching  a trade-off between the quality of the solutions in each time step and the stability/similarity of the solutions in consecutive time steps. The addition of the transition cost makes some  classic combinatorial optimization problems much harder. This is the case  for instance  %some problems (e.g. 
+ %for the minimum weighted perfect matching problem in the \emph{off-line} case where the whole sequence of instances is known in advance. While the one-step problem is polynomially-time solvable, the multistage problem becomes hard to approximate even for bipartite graphs and for only two time steps \cite{Bampis,Gupta}. 
  
- In this work, we focus on the \emph{online}  case, where at time $t$ no knowledge is available for instances at times $t+1, \ldots, T$.  When it is not possible to handle the online case, we turn our attention to the $k$-\emph{lookahead} case, where at time $t$ the instances at times $t+1, \ldots, t+k$ are also known. This case is of interest since in some applications like in  dynamic capacity planning in data centers,
+ In this chapter, we focus on the \emph{online}  case, where at time $t$ no knowledge is available for instances at times $t+1, \ldots, T$.  When it is not possible to handle the online case, we turn our attention to the $k$-\emph{lookahead} case, where at time $t$ the instances at times $t+1, \ldots, t+k$ are also known. This case is of interest since in some applications like in  dynamic capacity planning in data centers,
  the forecasts of future demands may be very helpful  \cite{Lin,Liu}. Our goal is to measure the impact of the lack of  knowledge of the future  on the quality and the stability of the returned solutions. 
  Indeed, our algorithms are limited in their knowledge of the sequence of instances.
 Given that the number of time steps is given, we compute the competitive ratio of the algorithm after time step $T$: As we focus on maximization problems, we say that a \finalversion{(deterministic)} algorithm is (strictly) $\alpha$-competitive (with competitive ratio $\alpha$) if its value is at least $\frac1\alpha$ times the optimal value on all instances.
@@ -1542,8 +1542,8 @@ This is a very general class of problems, including the maximization \emph{Subse
 
 
 
-Given a problem in the previous class, we are interested in its \ot{} version~\cite{Gupta,Eisenstat}.
-The stability over time of a solution sequence is classically captured by considering a transition cost when a modification is made in the solution. Here, dealing with maximization problems, we will consider a transition {\it bonus} $B$ for taking into account the similarity of two consecutive solutions.
+Given a problem in the previous class, we are interested in its multistage version~(\cite{Gupta,Eisenstat}).
+The stability over time of a solution sequence is classically captured by considering a transition cost when a modification is made in the solution. Here, dealing with maximization problems, we will consider again a transition {\it bonus} $B$ for taking into account the similarity of two consecutive solutions.
 In what follows, we will use the term object to denote an element of $N$ (so an object can be a vertex of a graph, or an edge,\dots, depending on the underlying problem). 	%\textcolor{red}{Kevin: were we assuming anywhere now that $\emptyset$ is feasible?}
 
 \begin{definition}
@@ -1597,36 +1597,11 @@ In this article, we will consider two possible ways for the data to evolve.
 \end{definition}
 
 
-\subsection{Related Work}
-
-A series of papers consider the  online or semi-online settings, where the input changes over
-time and the algorithm has to modify (re-optimize) the solution by making as few changes
-as possible (see \cite{Anthony,Blanchard,Cohen,Gu,Megow,Nagarajan}%\cite{Anthony, , Cohen, Gu, Megow, Nagarajan} 
-and the references therein). 
-The multistage model considered in this paper has been introduced in Eisenstat
-et al. \cite{Eisenstat} and Gupta et al. \cite{Gupta}. Eisenstat
-et al. \cite{Eisenstat} studied the multistage version of facility location problems. They proposed a logarithmic approximation algorithm. An et al. \cite{An} obtained constant factor approximation algorithms for some related problems.
- Gupta et al. \cite{Gupta} studied the {\sc Multistage  Maintenance Matroid} problem for
-both the offline and the online settings. They presented a logarithmic approximation
-algorithm for this problem, which includes as a special case a natural multistage version of
-{\sc Spanning Tree}. They also considered the online version of the problem and they provide an efficient randomized competitive algorithm against any oblivious adversary. The same paper also introduced the study of the {\sc Multistage  Minimum Perfect Matching} problem for which they proved that it is hard to approximate 
- even for a constant number of stages.  Bampis et al. \cite{Bampis} improved this negative result by showing that the problem is
-hard to approximate even for bipartite graphs and for the case of two time steps. When the edge costs are metric within every time step they  proved that the problem remains APX-hard even for two time steps. They also showed that the maximization version of the problem admits a constant factor approximation algorithm, but is APX-hard. Olver et al.~\cite{Olver} studied a multistage version of the {\sc Minimum Linear Arrangement} problem, which is related to a variant of the {\sc List Update} problem~\cite{Sleator}, and provided a logarithmic lower bound for the online version and a polylogarithmic upper bound for the offline version.
-
- The {\sc Multistage Max-Min Fair Allocation}
-problem has been studied in the offline and  the online settings in \cite{Bampis+}. This problem corresponds to a multistage variant of the {\sc Santa Klaus} problem. For the off-line setting, the authors
-showed that the multistage version of the problem is much harder
-than the static one. They provided
-constant factor approximation algorithms for the off-line setting. For the online setting they proposed a constant competitive ratio for SSFS-type evolving instances and they proved that it is not possible to find an online algorithm with bounded competitive ratio for GE-type evolving instances. Finally, they showed that in the 1-lookahead case, where at time step $t$ we know the instance of time step $t+1$, it is possible to get a constant approximation ratio.  
-
-Buchbinder et
-al.~\cite{Buchbinder} and Buchbinder, Chen and Naor \cite{Buchbinder+} considered a multistage model and they studied the relation between the online learning and competitive analysis frameworks, mostly for fractional optimization problems. 
-
 \subsection{Summary of Results and Overview}\label{subsec:results}
 
-The contribution of our paper is a framework for online multistage maximization problems (comprising different models), a characterization of those models in which a constant competitive ratio is achievable, and almost tight upper and lower bounds on the best-possible competitive ratio for these models. \finalversion{The focus here is on deterministic algorithms.}
+The contribution of this chapter is a framework for online multistage maximization problems (comprising different models), a characterization of those models in which a constant competitive ratio is achievable, and almost tight upper and lower bounds on the best-possible competitive ratio for these models. \finalversion{The focus here is on deterministic algorithms.}
 
-We increase the complexity of the considered models over the course of the paper. We start with the arguably simplest model: Considering a static set of feasible solutions clearly restricts the general model of evolution; while such a straightforward comparison between the Hamming and intersection bonus is not possible, the Hamming bonus seems simpler in that, compared to the intersection model, there are (somewhat comparable) extra terms added on the profit of both the algorithm and the optimum. As we show in Subsection~\ref{subsec:static-hamming}, there is indeed a simple $2$-competitive algorithm: At each time $t$, it greedily chooses the set $S_t$ that either maximizes the transition bonus w.r.t.\ $S_{t-1}$ (that is, choosing $S_t=S_{t-1}$, which is possible in this model) or maximizes the value $p_t(S_t)$. We complement this observation with a matching lower bound only involving two time steps.
+We increase the complexity of the considered models over the course of the chapter. We start with the arguably simplest model: Considering a static set of feasible solutions clearly restricts the general model of evolution; while such a straightforward comparison between the Hamming and intersection bonus is not possible, the Hamming bonus seems simpler in that, compared to the intersection model, there are (somewhat comparable) extra terms added on the profit of both the algorithm and the optimum. As we show in Subsection~\ref{subsec:static-hamming}, there is indeed a simple $2$-competitive algorithm: At each time $t$, it greedily chooses the set $S_t$ that either maximizes the transition bonus w.r.t.\ $S_{t-1}$ (that is, choosing $S_t=S_{t-1}$, which is possible in this model) or maximizes the value $p_t(S_t)$. We complement this observation with a matching lower bound only involving two time steps.
 
 We then toggle the transition-bonus model and the data-evolution model separately and show that constant competitive ratios can still be achieved. First, in Subsection~\ref{subsec:static-intersection}, we consider intersection bonus. We show that, \emph{after} modifying the profits \finalversion{(internally)} to make larger solutions more profitable, a $(2+1/(T-1))$-competitive algorithm can be achieved by a greedy approach again. We also give an (almost matching) lower bound of $2$ again. Next, we toggle the evolution model. In Subsection~\ref{subsec:general-hamming}, we adapt the greedy algorithm from Subsection~\ref{subsec:static-hamming} by reweighting to obtain a $(3+1/(T-1))$-competitive algorithm using a more complicated analysis. We complement this result with a lower bound of $1+\sqrt{2}$.
 
@@ -2086,7 +2061,7 @@ By basic calculus, this proves that there exists a $t$ with $b_t\leq 1$, implyin
 
 \section{Conclusion}\label{sec:conclusion}
 
-In this paper, we have developed techniques for online multistage subset maximization problems and thereby settled the achievable competitive ratios in the various settings almost exactly. Disregarding asymptotically vanishing terms in the upper bounds, what remains open is the exact ratio in the general-evolution setting with Hamming bonus (shown to be between $1+\sqrt{2}$ and $3$ in this paper) and exact bounds for the models with Hamming bonus when $T\rightarrow\infty$. Furthermore, it is plausible that the ratios can be improved for (classes of) more specific problems.
+In this chapter, we have developed techniques for online multistage subset maximization problems and thereby settled the achievable competitive ratios in the various settings almost exactly. Disregarding asymptotically vanishing terms in the upper bounds, what remains open is the exact ratio in the general-evolution setting with Hamming bonus (shown to be between $1+\sqrt{2}$ and $3$ in this chapter) and exact bounds for the models with Hamming bonus when $T\rightarrow\infty$. Furthermore, it is plausible that the ratios can be improved for (classes of) more specific problems.
 
 We emphasize that we have focussed on deterministic algorithms in this work. Indeed, some of our bounds can be improved by randomization (assuming an oblivious adversary):
 \begin{itemize}
@@ -2098,7 +2073,7 @@ While we believe that we have treated various of the most natural ways of defini
 
 We have not worried about computational complexity in this work (and therefore neither about the representation of the set of feasible solutions); indeed, often we use an oracle providing the optimal solution to instances of a potentially hard problem. However, we mention that, if only an approximation algorithm to the problem at hand was known, we would be able to obtain similar online algorithms whose competitive ratio would depend on the approximation guarantee of the approximation algorithm.
 
-\chapter{Target-based computer-assisted orchestration: a theoretical analysis}
+\chapter{The target-based computer-assisted orchestration problem}
 \section{Introduction}\label{sec:introduction}
 The Target-based computer-assisted orchestration is an application of the multistage framework... blabla 
 
@@ -2129,7 +2104,7 @@ The \textbf{amplitude} of a sound is its volume, measured in dB.
 \begin{figure}[h!]
 \centering
 \includegraphics[scale=0.3]{A440.png}
-\caption{The note La}
+\caption{Representation of the note La}
 \label{figassistedorch}
 \end{figure}
 
@@ -2146,7 +2121,7 @@ In a nutshell, assisted orchestration is the concept of making a connection betw
 
 \begin{figure}[h!]
 \centering
-\includegraphics[scale=0.3]{assistedorch.png}
+\includegraphics[scale=0.4]{assistedorch.png}
 \caption{Assisted orchestration as the connection between symbolic space and signal space}
 \label{figassistedorch}
 \end{figure}
@@ -2180,7 +2155,7 @@ However, in practice the set of feasible solution is way larger: each instrument
 
 \end{ex}
 The intractability of the problem leads to the introduction of heuristics computing forecast. 
-Indeed, the general structure of the algorithm consists of, given:
+Indeed, the general structure of the algorithm (see \ref{fig:generalstructstat}) consists of, given:
 \begin{itemize}
     \item a \textbf{target sound}
     \item a set of \textbf{symbolic constraints} i.e musical constraints
@@ -2188,9 +2163,131 @@ Indeed, the general structure of the algorithm consists of, given:
     \item a \textbf{search engine} computing:
     \begin{itemize}
         \item the \textbf{feature forecast}: for each combination its feature are forecast using an heuristic
-        \item the \textbf{dissimilarity measure}: measure evaluating the distance between two sounds (the quality of the measure is still an open question in the literature) 
+        \item the \textbf{dissimilarity measure}: measure evaluating the distance between two sounds 
     \end{itemize}
+    \item the search engine then optimizes the instance and give a \textbf{score} as an output
 \end{itemize}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.4]{generalstructstat.png}
+\caption{General structure of the assisted orchestration algorithm}
+\label{fig:generalstructstat}
+\end{figure}
+
+It is important to notice that the outcome of an assisted orchestration algorithm is a score, i.e a set of symbols, and not sound. One can play the score using some sound database containing the instruments of the solution to be able to directly compare the solution sound to the target sound but the aim of the algorithm, once again, is to help a composer reproduce a given sound with a set of instruments.\\
+
+
+Note that the choice of the dissimilarity measure and its distance is still an opened question in the literature. Indeed, some hypothesis are made on the distance but up to our knowledge there is not one measure being better than the others. The hardness of this choice comes from the fact that the two compared sounds have to be close for example regarding their respective spectrum description but this does not necessarily imply that the two sounds will be close from the perspective of a composer, or from the human ear. 
+
+\subsection{The search engine: features forecast and dissimilarity measure}
+Let us now develop the search engine and the notion behind the feature forecast and the dissimilarity measure. \\
+
+The sounds of the database are described by features. We will develop later the different features existing in the literature, for now it is just relevant to notice that each sound is described by a chosen feature. Each feature describes the sound with a specific metric and has a fixed number of dimension. For example, in the figure \ref{fig:searchengine}, each sound is described by a feature of dimension $K$, i.e to each sound is associated a value vector of $K$ dimension: $d_1, \ldots, d_K$. In the presented assisted orchestration algorithm, one makes a random combination between the sounds (the techniques used by the algorithm will be develop later in the chapter). Then, with the combination obtained, one needs to find the features of the combination, i.e the features of the sounds selected by the algorithm. However, in practice, it is not possible to compute the exact features of the combination, being too large and taking too much time to compute. This is where the notion of \textbf{features forecast} is introduced. Indeed, features are only predicted and its calculation in itself is a difficult problem, the features being, for most of the cases non linear features (see later in the chapter for a more detailed explanation of the calculation). \\
+Once the features forecast of the combination is predicted, one needs to describe the target sound with the same features (note that here the features of the target sound are its "real" features, the complexity of computing them being small because the calculation is being applied only to one sound). Only then, a distance is made, the \textbf{dissimilarity measure}, between the features of target sound and the features of combination found by the algorithm. \\
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.4]{searchengine.png}
+\caption{The search engine}
+\label{fig:searchengine}
+\end{figure}
+
+We see in the Figure \ref{fig:searchengine} an illustration of the search engine, the set $\mathcal{S}$ of sounds on the left of the figure being the sounds of the database described with $K$ dimension features. A random combination of sounds is then generated and its features description predicted. We see on the right of the figure the target sound $\mathcal{T}$ described also with $K$ dimension features. The two of them are then compared using a distance, the dissimilarity measure $D^k_\mathcal{T}(\mathcal{S}) | k=1,\ldots,K$, applied on the features. Note again that this measure will be developed later in the document.\\
+
+\subsection{The original genetic software: \textit{Orchidee}}%idea behind the assisted orchestration problem}
+
+Let us now present the idea behind the assisted orchestration software called \textit{Orchidee}.\\
+
+Using only a few features, the sound is embedded in a low dimension space. The selected features describing the sound of the database are called perceptual features i.e relevant for the perception features such as the pitch, the energy, the brightness, the bandwith,$\ldots$. \\
+
+Then a multiobjective optimization algorithm is applied to the instance, minimizing jointly all the features describing the sounds with value $D^k_\mathcal{T}(\mathcal{S}) | k=1,\ldots,K$.\\
+The algorithm then generates a set of solutions that can be represented as a Pareto front.\\
+\alex{mettre ref ?? DeFINIR Pareto} \\
+
+Indeed, each solution on the Pareto front would be better according to a given feature, for example, one solution would have the best pitch, another would have the best brightness, $\ldots$.\\
+This approach was very useful for the composers that could choose between the set of all the Pareto dominating solutions according to their personal listening preferences between the features. The assisted orchestration problem was implemented this way around 2007 in a software called \textit{Orchidee}.\\
+This approach was developed and presented in the thesis by Carpentier in 2008 (\cite{carpentier2008approche}).\\
+
+In order to address the problem of computing a forecast on a combination of sounds, a genetic algorithm was developed to thwart the impossibility of computing all the combinations of sounds. The genetic algorithm indeed generates a random combinations of sounds "good enough", i.e not optimal but close to it. \\
+Let us now present informally the genetic algorithm used in the \textit{Orchidee} software. It starts with a random combinations of sounds, for example $500$ random combinations of sounds, and then the \textit{fitness} of the combination is calculated, ranking it in comparison to the target. Then, genetic transformations called crossover and mutation are applied to the best found combination of sounds. The crossover transformation takes, given two combinations, part of one combination and part of the other combination. Then, the algorithm generates a new combination of sound being a mix of the two combinations. Next, the algorithm applies a mutation on the produced combination of sound, i.e altering the combination of sounds by a random factor. Finally, the fitness of this last combination is computed again, being able to rank again the solutions found. Then, the mutation, crossover operations are applied again on the best found solution generated a new solution on which fitness is again applied. The algorithm does these operations over and over again until the solutions found converged, i.e the value of the solution does not change too much between two series of genetic operations. The solution found at the end is "good enough", i.e is close to optimal solution. Thus, the genetic algorithm of \textit{Orchidee} works as follows:\\
+
+\textbf{Genetic assisted orchestration algorithm}
+\begin{enumerate}
+    \item Initialization:
+    \begin{itemize}
+        \item Generate randomly an initial combination of sounds 
+        \item Compute the fitness of the combination of sounds 
+    \end{itemize}
+    \item While the fitness of the solution has not converged do:
+    \begin{itemize}
+        \item Rank the solution found and find the best combination of sounds
+        \item Apply the crossover operation to the best solution found
+        \item Apply the mutation operation to the best solution found
+        \item Compute the fitness of the solution
+    \end{itemize}
+    \item Output the solution
+\end{enumerate}
+
+This algorithm was developed in 2008 and is the foundation of the actual assisted orchestration tool that we are going to present now.
+
+\subsection{\textit{Orchidea}}
+Let us now introduce \textit{Orchidea}, the assisted orchestration tool on which our theoretical studies presented in the next section (\alex{chapter??}) were based on. Until \textit{Orchidea}, the assisted orchestration mainly dealt with static target sound, i.e with a single sound like a note of an instrument, a bell, $\ldots$. \textit{Orchidea} focuses on both static and dynamic/temporal target sounds. Indeed, the target sounds can now be dynamic, like a whole piece of music, a series of sounds, $\ldots$ To deal with the temporal aspect of assisted orchestration, \textit{Orchidea} introduces two new approaches in the assisted orchestration framework, a joint time-target optimization and connection models. These two approaches will be developed later in the section. \\
+The implementation of \textit{Orchidea} began in 2017 and is still in development, a first public and usable version with a modular interface was presented in 2019 on the visual programming language MAX/MSP as well as a standalone application. \\
+
+The current architecture of the \textit{Orchidea} software can be described as:
+\begin{itemize}
+    \item an high-dimensional mono-objective optimization function with dynamic symbolic constraints. This contrasts with the previous approach that was multi-objective with  low-dimensional description. The choice of this new approach, increasing the abstraction level, was motivated by being closer to composers, to what they are looking for when they are using the assisted orchestration tool and less focused on sound analysis itself
+    \item a greedy strategy is used to generate the initial population of sounds. This contrasts also with the existing approach where random combinations were used. The greedy strategy, called stochastic pursuit strategy, finds the closest best solution and generates the initial combination of sounds 
+    \item a neural network to predict the features of the sound combinations contrasting with the previous genetic approach developed
+    \item an asymmetric distance for the evaluation of the solutions (the dissimilarity measure). This new distance uses two new variables called positive and negative penalization. This will developed later in the document 
+    \item a joint time-frequency optimization called hysteresis of the orchestration where the solutions found on previous time steps are weighted in order to connect the solutions of the current time step with the previous ones. This will also be developed later in the document
+    \item temporal modeling graph: a representation of the dynamic orchestration problem as a graph and the introduction of the continuity model
+\end{itemize}
+
+Let us now introduce the notion of segmentation of a dynamic sound target. Indeed, a dynamic sound target is decomposed into slices respecting the temporal variations and generates a segmentation of the target with a fixed number of time steps. To be more precise, to each time step is associated a static target sound on which calculations are applied.
+
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[scale=0.6]{Orchidea_overview.pdf}
+\caption{An overview of \textit{Orchidea}, the state-of-the-art system for dynamic target-based orchestration. The three main stages of the algorithm implemented in \textit{Orchidea} are the segmentation of the target, the timbral match and the temporal modelling of the solutions.}
+\label{fig:orchidea_overview}
+\end{figure}
+
+The figure \ref{fig:orchidea_overview} represents an overview of \textit{Orchidea}.\\
+First, a dynamic target is segmented and decomposed into static target sounds, i.e the temporal target is cut into slices. Then, the features of sound combinations are forecast using a neural network. Next, the forecast is matched with the target sounds using the stochastic matching pursuit and the evolutionary optimization algorithms considering the set of symbolic subject to a set of symbolic constraints. Finally, temporal modeling is calculated with a joint time-frequency optimization algorithm and taking into account the continuity of the solutions, i.e the continuity model. \\
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[scale=0.3]{tempmodel.png}
+    \caption{Temporal modeling of \textit{Orchidea}}
+    \label{fig:tempmodel}
+\end{figure}
+
+The figure \ref{fig:tempmodel} presents the way temporality is addressed in the \textit{Orchidea} software.
+Given a temporal target sound, a segmentation is generated according to a novelty measure, i.e each time the sound is "new" a new slice/time step is generated. On each time step/segment generated is applied stochastic pursuit and high-dimensional optimization. Each solutions are represented as a graph (we use the same technique in the next chapter, the construction of the graph will be detailed then) and joint-optimization is applied on both paths of the graph and the target of the next time step in the instance of dynamic orchestration. Indeed, a best-path connection is done connecting the different segment/time steps of the dynamic orchestration in order to both minimize the distance to the target sound and the changes in the solution between two consecutive time temps, i.e for the solution to be as stable as possible across the time horizon. This stability echoes the multistage framework.\\
+\alex{mettre ceci dans related multistage framework??}\\
+
+The stability of a solution in a dynamic orchestration problem is evaluated using a so called continuity model, limiting as much as possible the movements in the solution. This means that when a sound is taken it is best to keep it at the next time step. Indeed, if a sound is kept for two consecutive time steps, the solution will "connect" the different time steps together. This connection implies better results acoustically as the sound generated by the instrument will be continuous (not discrete). (See figure \ref{fig:contmodel}).
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[scale=0.35]{contmodel.png}
+    \caption{Illustration of the continuity model}
+    \label{fig:contmodel}
+\end{figure}
+
+The continuity model is the first time an assisted orchestration software deals with 
+
+\alex{print partial filtering aka harmonic filter}\\
+
+
+
+\alex{print page max??}\\
+
+
+\alex{assymetric distance, mettre dessin en dessous au dessus}\\
 
 
 
@@ -2223,22 +2320,18 @@ In a nutshell, the approach implemented in Orchidea works as follows:
 	\item the best match for each segment is then connected temporally to the other best matches in order to produce a musically meaningful score.
 \end{itemize}
 
-\begin{figure}[ht!]
-\centering
-\includegraphics[width=140mm]{Orchidea_overview.pdf}
-\caption{An overview of Orchidea, the state-of-the-art system for dynamic target-based orchestration. The three main stages of the algorithm implemented in Orchidea are the segmentation of the target, the timbral match and the temporal modelling of the solutions.}
-\label{fig:orchidea_overview}
-\end{figure}
+
 
 The approach discussed above is depicted in figure \ref{fig:orchidea_overview}.
 
-In this paper we propose a theoretical analysis of the target-based orchestration problem from a computational standpoint and we compare our results with Orchidea... [ALEX EXPAND HERE]
-
+In this chapter we propose a theoretical analysis of the target-based orchestration problem from a computational standpoint and we compare our results with Orchidea... [ALEX EXPAND HERE]
+\chapter{Target-based computer-assisted orchestration: a theoretical analysis}
+\section{Theoretical..}
 \subsection{Problems definition}\label{sec:def}
 
 %As mentioned in introduction, the goal is to select sounds in a database in order to reproduce as well as possible a given sound or melody ...
 
-We now formally define the target-based orchestration problems we focus on in this article. 
+We now formally define the target-based orchestration problems we focus on in this chapter. 
 
 {\bf Sounds.} We have a set $N=\{s_1,s_2,\dots,s_n\}$ of $n$ sounds, corresponding to the database of sound samples. Each sound is produced by  an instrument. Formally, $N$ is partitioned into $N_1,\dots,N_Z$ where $Z$ is the number of instruments. Besides its instrument, each sound $s_i$ is characterized by its values on several dimensions (feature space): formally, to $s_i$ are associated $M$ nonnegative values $p_{ij},j=1,\dots,M$, where $M$ is the number of dimensions.
 
@@ -2777,6 +2870,159 @@ To make a fare comparison with the solution computed by the software, we include
 
 \subsection{Dynamic Case}\label{sec:expdyn}
 
+
+\subsection{Linear programming techniques}
+\begin{center}
+   \begin{eqnarray*}
+     \ \left \{ \begin{array}{ll}
+    \min \ \sum\limits_{i=1} ^ T d(S_i,G_i) +  \sum\limits_{i=2}^T B_i \text{ }d(S_i,S_{i-1}) \\
+    s.t. \left |
+    %\begin{array}{ll}
+    \begin{array}{llllll}
+    \sum\limits_{i \in N}  x_{ti} & \leq &L_t & \forall{t} \in \{1,...,T\} \\
+ 
+    x_{ti} \in \{0,1\} & & & \forall{t} \in \{1,...,T\}, \forall{i} \in N\\
+    %\end{array}\\
+    \end{array}
+    \right.
+    \end{array} 
+    \right.
+    \end{eqnarray*}
+    \end{center}
+
+
+
+Let us introduce five dummy variables in order to linearize the program, such that:
+
+\begin{itemize}
+    \item $ \alpha_{ijt}= x_{it}\delta_{jt}$ 
+    \item $\beta_{it} = x_{i(t+1)}\sum\limits_{l\in N} x_{l(t)}$ 
+    \item $\lambda_{it} = x_{it}\sum\limits_{l\in N} x_{l(t+1)}$
+    \item $y_{ii't}= x_{it}x_{i'(t+1)}$ 
+    \item $\theta_{ii'tj}= y_{ii't} \gamma_{jt}$
+\end{itemize}
+
+We thus obtain the following linear program. We'll delimit the linear program into three programs of constraints, one for the "distances", one for the "linearization" of the variables and one for the "cardinality".\\
+The objective function of the linear program is:
+
+
+
+$\min \ \sum\limits_{t=1} ^ T \sum\limits_{j=1}^M \delta_{jt} + \sum\limits_{t=1}^{T-1} \sum\limits_{j=1}^M B_t \gamma_{jt}$
+
+s.t to: \\
+the "distances" constraints:
+
+
+\begin{center}
+   \begin{eqnarray*}
+     \ \left \{ \begin{array}{ll}
+     \left |
+    \begin{array}{llll}
+    \sum\limits_{i\in N} \alpha_{ijt}+\sum\limits_{i \in N} x_{it}(p_{ij}-G_{jt})\geq 0& \forall{t} \in \{1,\ldots,T\},\forall{j} \in \{1,\ldots,M\} \\
+    \sum\limits_{i\in N} \alpha_{ijt}+\sum\limits_{i \in N} x_{it}(G_{jt}-p_{ij})\geq 0& \forall{t} \in \{1,\ldots,T\},\forall{j} \in \{1,\ldots,M\} \\
+    \sum\limits_{i \in N} \sum \limits_{i' \in N} \theta_{ii'tj}+\sum\limits_{i\in N} p_{ij}(\beta_{it}-\lambda_{it})\geq 0 & \forall j,\forall t \in \{1,\ldots,T-1\}\\
+   \sum\limits_{i \in N} \sum \limits_{i' \in N} \theta_{ii'tj}+\sum\limits_{i\in N} p_{ij}(\lambda_{it}-\beta_{it})\geq 0 & \forall j, \forall t \in \{1,\ldots,T-1\}\\
+    \end{array}
+    \right.
+    \end{array} 
+    \right.
+    \end{eqnarray*}
+    \end{center}
+$\min \ \sum\limits_{t=1} ^ T \sum\limits_{j=1}^M \delta_{jt} + \sum\limits_{t=2}^T \sum\limits_{j=1}^M B_t \gamma_{jt}$
+
+
+    
+    
+ 
+the "linearization" constraints:
+
+
+
+\begin{center}
+   \begin{eqnarray*}
+     \ \left \{ \begin{array}{ll}
+     \\
+    s.t. \left |
+    %\begin{array}{ll}
+    \begin{array}{llll}
+   \alpha_{ijt} \geq \delta_{jt}-(1-x_{it})M& \forall i, \forall j, \forall t\\
+   \alpha_{ijt} \leq M x_{it} & \forall i, \forall j, \forall t\\
+   \alpha_{ijt} \geq 0 & \forall i, \forall j, \forall t\\
+   \alpha_{ijt} \leq \delta_{jt} & \forall i, \forall j, \forall t\\
+   y_{ii't} \geq x_{it} - (1-x_{i'(t+1)})M & \forall i, \forall i', \forall t \in \{1,\ldots,T-1\}\\
+   y_{ii't} \geq x_{i'(t+1)} - (1-x_{it})M & \forall i, \forall i', \forall t \in \{1,\ldots,T-1\}\\
+   y_{ii't} \leq x_{i'(t+1)} & \forall i, \forall i', \forall t \in \{1,\ldots,T-1\}\\
+   y_{ii't} \leq x_{it} & \forall i, \forall i', \forall t \in \{1,\ldots,T-1\} \\
+   y_{ii't} \geq 0 & \forall i, \forall i', \forall t \in \{1,\ldots,T-1\} \\
+   %y_{ii't} \leq x_{it} & \forall i, \forall i', \forall t \in \{1,\ldots,T-1\} \\
+   %y_{ii't} \leq x_{i'(t+1)} & \forall i, \forall i', \forall t \in \{1,\ldots,T-1\} \\
+   \theta_{ii'tj} \geq \gamma_{jt} - (1-y_{ii't})M & \forall i, \forall i', \forall j, \forall t \in \{1,\ldots,T-1\} \\
+   \theta_{ii'tj} \leq M y_{ii't} & \forall i, \forall i', \forall j, \forall t \in \{1,\ldots,T-1\} \\
+   \theta_{ii'tj} \geq 0 & \forall i, \forall i', \forall j, \forall t \in \{1,\ldots,T-1\} \\
+   \theta_{ii'tj} \leq \gamma_{jt} & \forall i, \forall i', \forall j, \forall t \in \{1,\ldots,T-1\} \\
+   \beta_{it}\leq \sum\limits_{\ell \in N} y_{\ell i t} & \forall i, \forall t \in \{1,\ldots,T-1\}\\
+   \beta_{it}\geq \sum\limits_{\ell \in N} y_{\ell i t}& \forall i, \forall t \in \{1,\ldots,T-1\}\\
+   
+   
+   \lambda_{it}\leq \sum\limits_{\ell \in N} y_{i \ell t} & \forall i, \forall t \in \{1,\ldots,T-1\}\\
+   \lambda_{it}\geq \sum\limits_{\ell \in N} y_{i \ell t}& \forall i, \forall t \in \{1,\ldots,T-1\}\\
+   
+
+      \end{array}
+    \right.
+    \end{array} 
+    \right.
+    \end{eqnarray*}
+    \end{center}  
+
+    
+the "cardinality" constraints, the sounds are ordered by instruments in the database, i.e each sound is present in a fixed interval $I_z \subseteq N\  \forall z \in Z$:
+
+
+\begin{center}
+   \begin{eqnarray*}
+     \ \left \{ \begin{array}{ll}
+     \\
+  
+    s.t. \left |
+    %\begin{array}{ll}
+    \begin{array}{llll}
+   
+   \sum \limits_{i \in N} x_{it} \leq L_t & \forall t \\
+   \sum \limits_{i \in N_z} x_{it} \leq L_{zt} & \forall i, \forall t, \forall z\\
+    x_{it} \in \{0,1\} & \forall i, \forall{t} \\
+
+    
+    %\end{array}\\
+    \end{array}
+    \right.
+    \end{array} 
+    \right.
+    \end{eqnarray*}
+    \end{center}
+    
+The number of variables of the linear program is:
+\begin{itemize}
+    \item $NT$ variables $x$
+    \item $N^2T$ variables $y$
+    \item $MT$ variables $\delta$
+    \item $M(T-1)$ variables $\gamma$
+    \item $NMT$ variables $\alpha$
+    \item $N(T-1)$ variables $\beta$
+    \item $N(T-1)$ variables $\lambda$
+    \item $N^2(T-1)M$ variables $\theta$
+\end{itemize}
+
+In practice, we apply a filter on the TinySol dataset and apply the algorithm on around $1400$ sounds, i.e $N=1400$, of dimension $M$ equal to $1024$ and it is possible to have around $20$ timesteps, i.e $T=20$. The number of variables is thus extremly large. For exemple, only for the $\theta$ variable we have $1400^2 \times 20 \times 1024 = 40140800000 = 40$ billion $\theta$ variables. So, the problem can't run even on powerful engines.  
+
+However, to verify it, we runned the algorithm on a very restrictive instance with only $T=2$ timesteps, a hard filter on the dataset, allowing only one note to be picken and thus around $N=250$ sounds, a small metric called moments with $M=4$. Even is this special case, the number of variables is quite large with around $2*250^2*4=500000$ $\theta$ variables. 
+
+In order to do some proper tests, we implemented shortest path algorithm.
+ 
+
+
+
+
 For the dynamic case, we now need to minimize $\sum_{t=1}^T d(S_t,G^t)+\sum_{t=1}^{T-1} C_t d(S_t,S_{t+1})$. 
 
 Let us first focus on an ILP formulation. We need now to consider $nT$ binary variables $x_{it}$, indicating whether $s_i$ is taken in $S_t$ or not. To linearize the objective function, we can introduce $\Theta(nT)$ variables: $\delta_{jt}$ which will be equal to $|p_j(S_t)/|S_t|-G_j|$, and $\alpha_{jt}$ which will be equal to $|p_j(S_t)/|S_t|-p_j(S_{t+1})/|S_{t+1}||$. Then the objective is to minimize $\sum_{t=1}^T\sum_{j=1}^M \delta_{jt}+ \sum_{t=1}^{T-1}\sum_{j=1}^M \alpha_{jt}$, and we put the constraints:
@@ -2798,6 +3044,8 @@ To overcome this difficulty, we rather propose in the following a heuristic, cal
 
 
 \subsubsection{SPH: Shortest Path Heuristic}
+\alex{print graph shortest path + def comment le graph est construit }\\
+
 
 In Theorems~\ref{th:dyn1dnoc} and~\ref{th:generaldynamic}, the principle was to use DP to produce a set of solutions at each time step, and then to solve a shortest path problem to find the best combinations of solutions. As explained previously, with $M=1024$ dimension we cannot use DP to produce solutions at each time step, but the shortest path idea is still interesting. Then, the principle of SPH (shortest path heuristics) is:
 \begin{itemize}
@@ -2843,7 +3091,7 @@ We provide in this article the first, to our knowledge, theoretical analysis of 
 The experiments we conducted give hope for possible practical improvements using ILP and shortest path formulations. However, this is only a first step in this direction. There is probably a gap between a good solution for the abstract model we consider and what a composer would consider as a harmonious solution. This gap has to be filled in order to use the techniques in a target-based orchestration software. 
 
 \chapterToc{Conclusion and outlook}
-
+\clearpage
 %\sectionToc{Contenu de ce document}
 \bibliographystyle{apalike}
 \bibliography{biblio}
