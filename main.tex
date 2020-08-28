@@ -8,6 +8,7 @@
 
 %% Packages
 %\usepackage[french]{babel}
+\usepackage{csvsimple}
 
 \usepackage[latin1]{inputenc}
 \usepackage{theorem}
@@ -838,15 +839,7 @@ The value of the solution $S$ is the sum of the knapsack profit and the transiti
 
 \noindent{\bf Knapsack variants.}
 
-Our work builds upon the {\sc Knapsack} literature; See \cite{Kelerrer} for a complete survey on knapsack variants, and \cite{Ibarra, Lawler, Magazine, Kellerer}.
-
-Let us now present the well known 2-approximation algorithm for the knapsack problem.
-
-\begin{theorem}
-2-approx
-\end{theorem}
-\alex{dvp preuve 2-approx, FPTAS et 1 seule frac variable}\\
-It is well known that there is a simple 2-approximation algorithm as well as a fully polynomial time (FPTAS) for the static case . There are two variants that are of special interest for our work: 
+Our work builds upon the {\sc Knapsack} literature \cite{Kelerrer}. It is well known that there is a simple 2-approximation algorithm as well as a fully polynomial time (FPTAS) for the static case \cite{Ibarra, Lawler, Magazine, Kellerer}. There are two variants that are of special interest for our work: 
 
 (i) The first variant is a  generalization of the {\sc Knapsack} problem known as the $k$-{\sc Dimensional Knapsack} ($k-DKP$) problem:
 %in which each object has $k$ nonnegative integer weights and $k$ positive integer capacities. The objective is to choose a subset of maximum total profit among all subsets whose weight does not exceed the capacity of the $k$ dimensions. 
@@ -2075,17 +2068,50 @@ We have not worried about computational complexity in this work (and therefore n
 
 \chapter{The target-based computer-assisted orchestration problem}
 \section{Introduction}\label{sec:introduction}
-The Target-based computer-assisted orchestration is an application of the multistage framework... blabla 
+Among the different aspects of musical writing, musical orchestration is probably the most empirical one and it has been traditionally taught in an intuitive and non formalized way. Treatises in orchestration are often made of a sequence of recipes on instruments and do not discuss the art of orchestration directly.
+
+More recently, however, musical composers started imagining highly complex timbres made of extended instrumental techniques and needed a more systematic approach to orchestration and to composition in general. \\
+
+This motivated the development of computational tools able to assist the process of musical composition and consolidated in an import research area known as \textit{Computer-Assisted Composition (CAC)} (\cite{fernandez2013ai},\cite{ariza2005navigating}). Within CAC, target-based computer-assisted orchestration is an important example of how computers can be used for assisting musical orchestration (\cite{maresz2013computer}).\\
+
+(The Target-based computer-assisted orchestration is an application of the multistage framework... blabla )
 
 \section{An overview of target-based music orchestration}\label{otargorch}
 
-In this section we will present the Target-based computer-assisted orchestration and the software called Orchidea doing it. We based this presentation on the youtube tutorial given in \cite{youtubecella}. Note that some of the figures of this section are taken from this video.\\
+In this chapter we will present the Target-based computer-assisted orchestration and the software called \textit{Orchidea} doing it. We based this presentation on the youtube tutorial given in \cite{youtubecella}. Note that some of the figures of this section are taken from this video.\\
 %Therefore, not being an expert in the musical and orchestration domains, all definitions, observations and figures are directly taken from this presentation . \\ 
+
+
 The main reference page is www.orch-idea.org where is deployed the software, the system and the information.\\
-The orchidea software is an assisting tool that does not orchestrate but helps the composer to orchestrate. It was developed by a few researchers including Carmine Cella, currently teaching at Berkley university and that is accountable for the latest version of the software. He worked with IRCAM, Berkley and the HEM.  \\
+The \textit{Orchidea} software is an assisting tool that does not orchestrate but helps the composer to orchestrate. It was developed by a few researchers including Carmine Cella, currently teaching at Berkley university and that is accountable for the latest version of the software. He worked with IRCAM, Berkley and the HEM.  \\
 
 
-\subsection{Assisted orchestration}
+
+
+ 
+
+
+
+
+
+
+
+The approach implemented in \textit{Orchidea} works as follows and will be developed more into details in this chapter:
+\begin{itemize}
+	\item a target sound and a database of orchestral sounds are embedded in a high-dimensional feature space;
+	\item the target sound is cut into segments that represent the temporal variations;
+	\item each segment is timbrally matched against a large number of combinations of sounds of the database
+	by means of a multi-stage algorithm that optimise both the features and the symbolic constraints;
+	\item the best match for each segment is then connected temporally to the other best matches in order to produce a musically meaningful score.
+\end{itemize}
+
+
+
+The approach discussed above is depicted in figure \ref{fig:orchidea_overview}.
+
+In this chapter we propose a theoretical analysis of the target-based orchestration problem from a computational standpoint and we compare our results with \textit{Orchidea}... [ALEX EXPAND HERE]
+
+\subsection{Target-based music orchestration}
 \textbf{Preliminaries}
 
 \alex{def dynamics, playing styles..;}\\
@@ -2115,10 +2141,10 @@ Assisted orchestration can be seen as the process of searching for the best comb
 
 The notions presented in this definition will be discussed and addressed later in this section.
 
-context and ref to check: \cite{maresz2013computer}
 
-In a nutshell, assisted orchestration is the concept of making a connection between the symbolic space of music which is the score of a music, seeing music as a combination of symbols describing it with notes, pitches, instruments $\ldots$, and the signal space of music which is the timbre of a sound, the sound itself. 
+In a nutshell, target-based computer-assisted orchestration is the fact of making a connection between the symbolic space of music which is the score of a music, seeing music as a combination of symbols describing it with notes, pitches, instruments $\ldots$, and the signal space of music which is the timbre of a sound, the sound itself. 
 
+In other words, target-based computer-assisted orchestration can be thought of as the process of searching for combinations of orchestral sounds in a database of sound samples to match a given sound (called \emph{target}) while respecting specific symbolic constraints (such as the instruments to use).
 \begin{figure}[h!]
 \centering
 \includegraphics[scale=0.4]{assistedorch.png}
@@ -2126,34 +2152,34 @@ In a nutshell, assisted orchestration is the concept of making a connection betw
 \label{figassistedorch}
 \end{figure}
 
-The subject of acoustic space has been widely studied by composers in the last 20 years i.e with composers focusing mainly on the sound itself and less on the notes themselves.  \\
+The subject of acoustic space has been widely studied by composers in the last 20 years with composers focusing mainly on the sound itself and less on the notes themselves.  \\
 
 \textbf{An exemple of an assisted orchestration application }
 The first well known application of assisted orchestration was a piece done by J. Harvey called \textit{Mortuos Plango, Vivos Voco (1981}) who reproduced the audio of a bell and received a warm welcome. "It showed that IRCAM institute's apparently esoteric research program could yield music capable of appealing to a wider audience" said Curtis Roads, a famous composer. It thus gave wider perspectives and motivations of what assisted orchestration can do. Harvey tried in this piece to transcribe the sound of the bell and retranscribe it by synthesis. The transcription was done manually at the time looking at the partials of a sound.\\
-Later in 2008, in a piece called \textit{Speakings}, J. Harvey used Orchidée, an older version of Orchidea, in order to replicate the sound of a human voice.\\
+Later in 2008, in a piece called \textit{Speakings}, J. Harvey used \textit{Orchidee}, an older version of \textit{Orchidea} presented later in the chapter, in order to replicate the sound of a human voice.\\
 
 To write a music score, a composer simply writes symbol in a music sheet. Then, the symbols are "played" generating sound. \\
 Assisted orchestration can be seen as the other way around. Indeed, in this case, given a sound, a composer tries to find its corresponding score. This differs from music transcription, where the sound is someone playing an instrument and then one needs to find the corresponding score often using the same instrument. Indeed, in assisted orchestration the sound can be anything like bells, noise, voices$\ldots$ for which there is no corresponding score. One can say that assisted orchestration is a general case of musical transcription. \\
 
-The assisted orchestration problem can also be seen as the problem corresponding to, given an orchestration, reproducing a target timbre within a computational context. Namely, given specific writing constraints of the composer like the orchestra with a set of chosen instruments, playing styles, dynamics$\ldots$, is it possible to be as close as possible to the target sound. \\
+The assisted orchestration problem can also be seen as the problem corresponding to, given an orchestration, reproducing a target timbre within a computational context. Namely, given specific writing constraints of the composer like an orchestra with a set of chosen instruments, playing styles, dynamics$\ldots$, is it possible to be as close as possible to the target sound. \\
 
 Formally, this problem can be seen as a multi-objective one:
 \begin{itemize}
-    \item a combinatorial optimization problem defined on the description of the timbre: 
+    \item a combinatorial optimization problem defined on the description of the timbre
     \item a constraint solving problem defined on the symbols of musical writing
 \end{itemize}
-This last point points out the connection between the symbolic space and the signal space.\\
+This points out the connection between the symbolic space and the signal space.\\
 
 Let us present an example in order to show the hardness of the problem.
 
 \begin{ex}
-Given a target sound, one is ask to reconstruct the sound using instruments of an restricted orchestra composed of only two instruments being able to play only two notes at a fixed single dynamic. \\
-To solve this problem, you have to find best combination of sounds, the closest one to the target sound, among the set of possible combinations. Indeed, one can choose to take:the first note on the first instrument and on the other instrument, the second note on the first instrument and on the other instrument, the first note on the first instrument and the second note on the other instrument, the first note on the second instrument and the first note on the other instrument.
+Given a target sound, one is ask to reconstruct the sound using instruments of a restricted orchestra composed of only two instruments being able to play only two notes at a fixed single dynamic. \\
+To solve this problem, one has to find the best combination of sounds, being the closest one to the target sound, among the set of possible combinations. Indeed, one can choose to take the first note on the first instrument and on the other instrument, the second note on the first instrument and on the other instrument, the first note on the first instrument and the second note on the other instrument, the first note on the second instrument and the first note on the other instrument.
 For each of the four combinations, one has to compute a distance between the combination and the target sound. Under this specific set of very restricted constraints it is easy to find the best possible solution in a small amount of time. \\
-
-However, in practice the set of feasible solution is way larger: each instrument of an orchestra has the possibility to play around forty notes, several dynamics, articulations, playing styles$\ldots$. The number of different combinations in a basic setting is around $2^{30000}$ making the problem intractable. An analysis of the problem complexity will be presented in the second section of this chapter.\\
-
 \end{ex}
+However, in practice the set of feasible solution is way larger: each instrument of an orchestra has the possibility to play around forty notes, several dynamics, articulations, playing styles$\ldots$. The number of different combinations in a basic setting is around $2^{30000}$ making the problem intractable. An analysis of the problem complexity will be presented in the next chapter.\\
+Typical solutions to this problem are orchestral scores that include specific instruments, notes, dynamics and playing styles such that, when played, they sound perceptually similar to the target sound. In principle, to find the combination of orchestral sounds that sounds the closest to the target, it would be enough to compute all possible combinations of the sounds in the database and rank them by a distance measure with the target sound. This approach, while conceptually justified, is normally not computable given the large amount of possible combinations.\\
+
 The intractability of the problem leads to the introduction of heuristics computing forecast. 
 Indeed, the general structure of the algorithm (see \ref{fig:generalstructstat}) consists of, given:
 \begin{itemize}
@@ -2175,16 +2201,16 @@ Indeed, the general structure of the algorithm (see \ref{fig:generalstructstat})
 \label{fig:generalstructstat}
 \end{figure}
 
-It is important to notice that the outcome of an assisted orchestration algorithm is a score, i.e a set of symbols, and not sound. One can play the score using some sound database containing the instruments of the solution to be able to directly compare the solution sound to the target sound but the aim of the algorithm, once again, is to help a composer reproduce a given sound with a set of instruments.\\
+Let us say again that the outcome of an assisted orchestration algorithm is a score, i.e a set of symbols, and not sound. One can play the score using some sound database containing the instruments of the solution to be able to directly compare the solution sound to the target sound but the aim of the algorithm is to help a composer reproduce a given sound with a set of instruments.\\
 
 
-Note that the choice of the dissimilarity measure and its distance is still an opened question in the literature. Indeed, some hypothesis are made on the distance but up to our knowledge there is not one measure being better than the others. The hardness of this choice comes from the fact that the two compared sounds have to be close for example regarding their respective spectrum description but this does not necessarily imply that the two sounds will be close from the perspective of a composer, or from the human ear. 
+Note that the choice of the dissimilarity measure and its distance is still an opened question in the literature. Indeed, some hypothesis are made on the distance but up to our knowledge there is not one measure being better than the others. The hardness of this choice comes from the fact that the two compared sounds have to be close for example regarding their respective spectrum description (this notion will be defined later) but this does not necessarily imply that the two sounds will be close from the perspective of a composer, or from the human ear. 
 
 \subsection{The search engine: features forecast and dissimilarity measure}
 Let us now develop the search engine and the notion behind the feature forecast and the dissimilarity measure. \\
 
-The sounds of the database are described by features. We will develop later the different features existing in the literature, for now it is just relevant to notice that each sound is described by a chosen feature. Each feature describes the sound with a specific metric and has a fixed number of dimension. For example, in the figure \ref{fig:searchengine}, each sound is described by a feature of dimension $K$, i.e to each sound is associated a value vector of $K$ dimension: $d_1, \ldots, d_K$. In the presented assisted orchestration algorithm, one makes a random combination between the sounds (the techniques used by the algorithm will be develop later in the chapter). Then, with the combination obtained, one needs to find the features of the combination, i.e the features of the sounds selected by the algorithm. However, in practice, it is not possible to compute the exact features of the combination, being too large and taking too much time to compute. This is where the notion of \textbf{features forecast} is introduced. Indeed, features are only predicted and its calculation in itself is a difficult problem, the features being, for most of the cases non linear features (see later in the chapter for a more detailed explanation of the calculation). \\
-Once the features forecast of the combination is predicted, one needs to describe the target sound with the same features (note that here the features of the target sound are its "real" features, the complexity of computing them being small because the calculation is being applied only to one sound). Only then, a distance is made, the \textbf{dissimilarity measure}, between the features of target sound and the features of combination found by the algorithm. \\
+The sounds of the database are described by features. We will develop later the different features existing in the literature, for now it is just relevant to notice that each sound is described by a chosen feature. Each feature describes the sound with a specific metric and has a fixed number of dimension. For example, in the figure \ref{fig:searchengine}, each sound is described by a feature of dimension $K$, i.e to each sound is associated a vector value of dimension $K$: $d_1, \ldots, d_K$. In the first assisted orchestration algorithm that we will present, one makes a random combination between the sounds (the techniques used by the algorithm will be develop later in the chapter). Then, with the combination obtained, one needs to find the features of the combination, i.e the features of the sounds selected by the algorithm. However, in practice, it is not possible to compute the exact features of the combination, being too large and taking too much time to compute. This is where the notion of \textbf{features forecast} is introduced. Indeed, features are only predicted and their calculation themselves is a difficult problem, the features being, for most of the cases non linear features (two ways of computing the features will be presented in the chapter). \\
+Once the features forecast of the combination is predicted, one needs to describe the target sound with the same features (note that here, the features of the target sound are its "real" features, the complexity of computing them being small because the calculation is being applied only to one sound). Only then, a distance is made, the \textbf{dissimilarity measure}, between the features of target sound and the features of combination found by the algorithm. \\
 
 \begin{figure}[h!]
 \centering
@@ -2193,12 +2219,15 @@ Once the features forecast of the combination is predicted, one needs to describ
 \label{fig:searchengine}
 \end{figure}
 
-We see in the Figure \ref{fig:searchengine} an illustration of the search engine, the set $\mathcal{S}$ of sounds on the left of the figure being the sounds of the database described with $K$ dimension features. A random combination of sounds is then generated and its features description predicted. We see on the right of the figure the target sound $\mathcal{T}$ described also with $K$ dimension features. The two of them are then compared using a distance, the dissimilarity measure $D^k_\mathcal{T}(\mathcal{S}) | k=1,\ldots,K$, applied on the features. Note again that this measure will be developed later in the document.\\
+We see in the Figure \ref{fig:searchengine} an illustration of the search engine, the set $\mathcal{S}$ of sounds on the left of the figure being the sounds of the database described with $K$ dimension features. A random combination of sounds is then generated and its features description predicted. We see on the right of the figure the target sound $\mathcal{T}$ described also with $K$ dimension features. The two of them are then compared using a distance, the dissimilarity measure $D^k_\mathcal{T}(\mathcal{S}) | k=1,\ldots,K$, applied on the features. The measure will be developed later in the document.\\
 
-\subsection{The original genetic software: \textit{Orchidee}}%idea behind the assisted orchestration problem}
+\section{The original software: \textit{Orchidee}}%idea behind the assisted orchestration problem}
 
 Let us now present the idea behind the assisted orchestration software called \textit{Orchidee}.\\
+Indeed, a solution to the target-based music orchestration problem proposed in \cite{carpentier2007evolutionary}, consists in using a multi-objective genetic heuristics and a constraint solver that are jointly optimized. The target sound and the sounds in the database are embedded in a low-dimensional feature space and each generated combination of sounds is evaluated with a distance metric. 
+This approach is solely focused on the so-called \emph{static} aspect of the problem: the target sound is considered as time-invariant and the algorithm does not consider any timbral change over time.
 
+Let us now develop it more into details.\\
 Using only a few features, the sound is embedded in a low dimension space. The selected features describing the sound of the database are called perceptual features i.e relevant for the perception features such as the pitch, the energy, the brightness, the bandwith,$\ldots$. \\
 
 Then a multiobjective optimization algorithm is applied to the instance, minimizing jointly all the features describing the sounds with value $D^k_\mathcal{T}(\mathcal{S}) | k=1,\ldots,K$.\\
@@ -2206,11 +2235,11 @@ The algorithm then generates a set of solutions that can be represented as a Par
 \alex{mettre ref ?? DeFINIR Pareto} \\
 
 Indeed, each solution on the Pareto front would be better according to a given feature, for example, one solution would have the best pitch, another would have the best brightness, $\ldots$.\\
-This approach was very useful for the composers that could choose between the set of all the Pareto dominating solutions according to their personal listening preferences between the features. The assisted orchestration problem was implemented this way around 2007 in a software called \textit{Orchidee}.\\
+This approach was very useful for the composers that could choose between the set of all the Pareto dominating solutions according to their personal listening preferences between the features. The assisted orchestration problem was implemented this way around 2007 in the \textit{Orchidee} software.\\
 This approach was developed and presented in the thesis by Carpentier in 2008 (\cite{carpentier2008approche}).\\
 
 In order to address the problem of computing a forecast on a combination of sounds, a genetic algorithm was developed to thwart the impossibility of computing all the combinations of sounds. The genetic algorithm indeed generates a random combinations of sounds "good enough", i.e not optimal but close to it. \\
-Let us now present informally the genetic algorithm used in the \textit{Orchidee} software. It starts with a random combinations of sounds, for example $500$ random combinations of sounds, and then the \textit{fitness} of the combination is calculated, ranking it in comparison to the target. Then, genetic transformations called crossover and mutation are applied to the best found combination of sounds. The crossover transformation takes, given two combinations, part of one combination and part of the other combination. Then, the algorithm generates a new combination of sound being a mix of the two combinations. Next, the algorithm applies a mutation on the produced combination of sound, i.e altering the combination of sounds by a random factor. Finally, the fitness of this last combination is computed again, being able to rank again the solutions found. Then, the mutation, crossover operations are applied again on the best found solution generated a new solution on which fitness is again applied. The algorithm does these operations over and over again until the solutions found converged, i.e the value of the solution does not change too much between two series of genetic operations. The solution found at the end is "good enough", i.e is close to optimal solution. Thus, the genetic algorithm of \textit{Orchidee} works as follows:\\
+Let us now present informally the genetic algorithm used in the \textit{Orchidee} software. It starts with a random combinations of sounds, for example $500$ random combinations of sounds, and then the \textit{fitness} of the combination is calculated, ranking it in comparison to the target. Then, genetic transformations called crossover and mutation are applied to the best found combination of sounds. The crossover transformation takes, given two combinations, part of one combination and part of the other combination. Then, the algorithm generates a new combination of sound being a mix of the two combinations. Next, the algorithm applies a mutation on the produced combination of sound, i.e altering the combination of sounds by a random factor. Finally, the fitness of this last combination is computed again, being able to rank again the solutions found. Then, the mutation and the crossover operations are applied again on the best found solution generating a new solution on which the \textit{fitness} is computed again. The algorithm does these series of operations over and over again until the solutions found converged, i.e the value of the solution does not change too much between two series of genetic operations. The solution found at the end is "good enough". To be more precise, the genetic algorithm of \textit{Orchidee} works as follows:\\
 
 \textbf{Genetic assisted orchestration algorithm}
 \begin{enumerate}
@@ -2231,9 +2260,22 @@ Let us now present informally the genetic algorithm used in the \textit{Orchidee
 
 This algorithm was developed in 2008 and is the foundation of the actual assisted orchestration tool that we are going to present now.
 
-\subsection{\textit{Orchidea}}
-Let us now introduce \textit{Orchidea}, the assisted orchestration tool on which our theoretical studies presented in the next section (\alex{chapter??}) were based on. Until \textit{Orchidea}, the assisted orchestration mainly dealt with static target sound, i.e with a single sound like a note of an instrument, a bell, $\ldots$. \textit{Orchidea} focuses on both static and dynamic/temporal target sounds. Indeed, the target sounds can now be dynamic, like a whole piece of music, a series of sounds, $\ldots$ To deal with the temporal aspect of assisted orchestration, \textit{Orchidea} introduces two new approaches in the assisted orchestration framework, a joint time-target optimization and connection models. These two approaches will be developed later in the section. \\
-The implementation of \textit{Orchidea} began in 2017 and is still in development, a first public and usable version with a modular interface was presented in 2019 on the visual programming language MAX/MSP as well as a standalone application. \\
+\section{\textit{Orchidea}}
+
+While the problem adressed by the \textit{Orchidee} software is an interesting problem, in practice no real sounds exhibit a time-invariant nature. As such, the computer-assisted orchestration problem can be formulated in a \emph{dynamic} manner: the parameters of the algorithm should change over time, to account to the timbral changes of the target sound.
+This approach, that requires many more parameters and has a greater computational complexity, has been discussed in \cite{Cella2018},
+\cite{Cella2020b} and is implemented in the \textit{Orchidea} toolbox for assisted orchestration ({www.orch-idea.org}), currently considered the state-of-the-art system for target-based computer-assisted dynamic and static orchestration.
+
+
+\textit{Orchidea} is the assisted orchestration tool on which our theoretical studies presented in the next chapter were based on. Until \textit{Orchidea}, the assisted orchestration mainly dealt with static target sound, i.e with a single sound like a note of an instrument, a bell, $\ldots$. \textit{Orchidea} focuses on both static and dynamic/temporal target sounds. Indeed, the target sounds can now be dynamic, like a whole piece of music, a series of sounds, $\ldots$ To deal with the temporal aspect of assisted orchestration, \textit{Orchidea} introduces two new approaches in the assisted orchestration framework, a joint time-target optimization and connection models. These two approaches will be developed later in the section. \\
+The implementation of \textit{Orchidea} began in 2017 and is still in development, a first public and usable version with a modular interface was presented in 2019 on the visual programming language MAX/MSP (see \ref{fig:max}) as well as a standalone application. \\
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[scale=0.4]{maxsol.png}
+    \caption{The \textit{Orchidea} software in MAX/MSP}
+    \label{fig:max}
+\end{figure}
 
 The current architecture of the \textit{Orchidea} software can be described as:
 \begin{itemize}
@@ -2256,7 +2298,7 @@ Let us now introduce the notion of segmentation of a dynamic sound target. Indee
 \end{figure}
 
 The figure \ref{fig:orchidea_overview} represents an overview of \textit{Orchidea}.\\
-First, a dynamic target is segmented and decomposed into static target sounds, i.e the temporal target is cut into slices. Then, the features of sound combinations are forecast using a neural network. Next, the forecast is matched with the target sounds using the stochastic matching pursuit and the evolutionary optimization algorithms considering the set of symbolic subject to a set of symbolic constraints. Finally, temporal modeling is calculated with a joint time-frequency optimization algorithm and taking into account the continuity of the solutions, i.e the continuity model. \\
+First, a dynamic target is segmented and decomposed into static target sounds, i.e the temporal target is cut into slices. Then, the features of sound combinations are forecast using a neural network. Next, the forecast is matched with the target sounds using the stochastic matching pursuit and the evolutionary optimization algorithms subject to a set of symbolic constraints. Finally, temporal modeling is calculated with a joint time-frequency optimization algorithm and taking into account the continuity of the solutions, i.e the continuity model. \\
 
 \begin{figure}[ht!]
     \centering
@@ -2269,7 +2311,7 @@ The figure \ref{fig:tempmodel} presents the way temporality is addressed in the 
 Given a temporal target sound, a segmentation is generated according to a novelty measure, i.e each time the sound is "new" a new slice/time step is generated. On each time step/segment generated is applied stochastic pursuit and high-dimensional optimization. Each solutions are represented as a graph (we use the same technique in the next chapter, the construction of the graph will be detailed then) and joint-optimization is applied on both paths of the graph and the target of the next time step in the instance of dynamic orchestration. Indeed, a best-path connection is done connecting the different segment/time steps of the dynamic orchestration in order to both minimize the distance to the target sound and the changes in the solution between two consecutive time temps, i.e for the solution to be as stable as possible across the time horizon. This stability echoes the multistage framework.\\
 \alex{mettre ceci dans related multistage framework??}\\
 
-The stability of a solution in a dynamic orchestration problem is evaluated using a so called continuity model, limiting as much as possible the movements in the solution. This means that when a sound is taken it is best to keep it at the next time step. Indeed, if a sound is kept for two consecutive time steps, the solution will "connect" the different time steps together. This connection implies better results acoustically as the sound generated by the instrument will be continuous (not discrete). (See figure \ref{fig:contmodel}).
+The stability of a solution in a dynamic orchestration problem is evaluated using a so called continuity model, limiting as much as possible the movements in the solution. This means that when a sound is taken it is best to keep it at the next time step. Indeed, if a sound is kept for two consecutive time steps, the solution will "connect" the different time steps together. This connection implies better results acoustically as the sound generated by the instrument will be continuous. (See figure \ref{fig:contmodel}).
 
 \begin{figure}[ht!]
     \centering
@@ -2278,55 +2320,13 @@ The stability of a solution in a dynamic orchestration problem is evaluated usin
     \label{fig:contmodel}
 \end{figure}
 
-The continuity model is the first time an assisted orchestration software deals with 
-
-\alex{print partial filtering aka harmonic filter}\\
-
-
-
-\alex{print page max??}\\
-
-
-\alex{assymetric distance, mettre dessin en dessous au dessus}\\
+\alex{transition vers théorique??}
 
 
 
 
-\subsection{Target-based music orchestration}\label{sec:tbmo}
-
-Among the different aspects of musical writing, musical orchestration is probably the most empirical one and it has been traditionally taught in an intuitive and non formalized way. Treatises in orchestration are often made of a sequence of recipes on instruments and do not discuss the art of orchestration directly.
-
-More recently, however, musical composers started imagining highly complex timbres made of extended instrumental techniques and needed a more systematic approach to orchestration and to composition in general. 
-
-This motivated the development of computational tools able to assist the process of musical composition and consolidated in an import research area known as \emph{Computer-Assisted Composition (CAC)} \cite{Fernandez2013, Ariza2005}. Within CAC, target-based computer-assisted orchestration is an important example of how computers can be used for {assisting} musical orchestration \cite{Maresz2013}. 
-
-Target-based computer-assisted orchestration can be thought of as the process of searching for combinations of orchestral sounds in a database of sound samples to match a given sound (called \emph{target}) while respecting specific symbolic constraints (such as the instruments to use).
-
-Typical solutions to this problem are orchestral scores that include specific instruments, notes, dynamics and playing styles such that, when played, they sound perceptually similar to the target sound. In principle, to find the combination of orchestral sounds that sounds the closest to the target, it would be enough to compute all possible combinations of the sounds in the database and rank them by a distance measure with the target sound. This approach, while conceptually justified, is normally not computable given the large amount of possible combinations.
-
-A solution to this problem, proposed in \cite{Carpentier2007}, consists in using a multi-objective genetic heuristics and a constraint solver that are jointly optimized. The target sound and the sounds in the database are embedded in a low-dimensional feature space and each generated combination of sounds is evaluated with a distance metric. 
-This approach is solely focused on the so-called \emph{static} aspect of the problem: the target sound is considered as time-invariant and the algorithm does not consider any timbral change over time.
-
-While this is an interesting problem, in practice no real sounds exhibit a time-invariant nature. As such, the computer-assisted orchestration problem can be formulated in a \emph{dynamic} manner: the parameters of the algorithm should change over time, to account to the timbral changes of the target sound.
-This approach, that requires many more parameters and has a greater computational complexity, has been discussed in \cite{Cella2018},
-\cite{Cella2020b} and is implemented in the \emph{Orchidea} toolbox for assisted orchestration ({www.orch-idea.org}), currently considered the state-of-the-art system for target-based computer-assisted dynamic and static orchestration.
-
-In a nutshell, the approach implemented in Orchidea works as follows:
-\begin{itemize}
-	\item a target sound and a database of orchestral sounds are embedded in a high-dimensional feature space;
-	\item the target sound is cut into segments that represent the temporal variations;
-	\item each segment is timbrally matched against a large number of combinations of sounds of the database
-	by means of a multi-stage algorithm that optimise both the features and the symbolic constraints;
-	\item the best match for each segment is then connected temporally to the other best matches in order to produce a musically meaningful score.
-\end{itemize}
-
-
-
-The approach discussed above is depicted in figure \ref{fig:orchidea_overview}.
-
-In this chapter we propose a theoretical analysis of the target-based orchestration problem from a computational standpoint and we compare our results with Orchidea... [ALEX EXPAND HERE]
 \chapter{Target-based computer-assisted orchestration: a theoretical analysis}
-\section{Theoretical..}
+\section{Problems definition and results}
 \subsection{Problems definition}\label{sec:def}
 
 %As mentioned in introduction, the goal is to select sounds in a database in order to reproduce as well as possible a given sound or melody ...
@@ -2380,7 +2380,7 @@ Note that the set of sounds $N$, the value $p_{ij}$ of sounds on dimensions, and
 
 In this objective function $f$, the first part measures the (average) distance of subset $S_t$ with respect to target $G_t$, we will call it {\it orchestration cost}. The second part measures  the cost from moving from subset $S_t$ to subset $S_{t+1}$, we will refer to it as {\it transition cost}. Coefficients $C_t$ allow to balance between these two costs.
 
-\subsection{Contributions and organization of the article}
+\subsection{Contributions and organization of the chapter}
 
 The main contribution of this article is a theoretical analysis of algorithmic properties of \stat and \dyn. We first focus on the computational complexity of the problems, both in the static case and in the dynamic case. We show that the static problem \stat is NP-hard, even in the very restricted case of \statoned (with only one dimension, one instrument and no constraint). 
 We then show that \stat is solvable in pseudo-polynomial time (when the number of dimensions is fixed), by a dynamic programming (DP) procedure. Combining this procedure with a shortest path representation capturing temporality, we show that the pseudo-polynomiality result extends to the dynamic case. We also propose approximation algorithms for both problems based on rounding techniques from the DP procedures. Table~\ref{table:results} sums up the results we obtain.
@@ -2401,7 +2401,7 @@ We then show that \stat is solvable in pseudo-polynomial time (when the number o
 \end{figure}
 
 We also perform some experiments to generate orchestrations on specific targets. We evaluate our results both in a qualitative and a quantitative manner. 
-The qualitative evaluation is performed by acoustic inspection of the solution and direct comparison with the solutions of the same target generated by Orchidea. The quantitative evaluation uses the objective function of the considered model to compare solutions.
+The qualitative evaluation is performed by acoustic inspection of the solution and direct comparison with the solutions of the same target generated by \textit{Orchidea}. The quantitative evaluation uses the objective function of the considered model to compare solutions.
 
 The article is organized as follows. In Section~\ref{sec:1dnoc} we focus on the restricted static problem \statoned. We tackle the general static problem \stat in Section~\ref{sec:static}, and the dynamic problems \dyn in Section~\ref{sec:dyn}. Experimental results are given in Section~\ref{sec:expe}. 
 
@@ -2793,7 +2793,7 @@ As for the case of 1 dimension, we scale the profits and target to get an instan
 
 \section{Towards practical solutions: some experimental results}\label{sec:expe}
 
-We conduct some experiments to solve the orchestration problems on some specific target sounds, both in the static and in the dynamic frameworks. Our experiments use the database \emph{TinySOL} used in the software Orchidea (see Section~\ref{sec:dataset}), containing around 1500 sounds.  We compare our results with the solutions output by the evolutionary algorithm used in the software Orchidea.
+We conduct some experiments to solve the orchestration problems on some specific target sounds, both in the static and in the dynamic frameworks. Our experiments use the database \emph{TinySOL} used in the software \textit{Orchidea} (see Section~\ref{sec:dataset}), containing around 1500 sounds.  We compare our results with the solutions output by the evolutionary algorithm used in the software \textit{Orchidea}.
 
 We first consider the static case (Section~\ref{sec:expstat}). While a pseudo-polynomial time algorithm has been obtained (Theorem~\ref{th:generalstatic}), the number of dimensions of sounds in the database is $M=1024$, which makes DP inefficient as its time complexity is exponential in $M$. Rather, we propose an ILP formulation of the problem, that allows to solve the problem efficiently on the {\it TinySol} database.
 
@@ -2803,13 +2803,30 @@ For the dynamic case (Section~\ref{sec:expdyn}), an ILP formulation turns out to
 \subsection{Dataset}
 \label{sec:dataset}
 
-{\bf Database.} The database of orchestral sounds used in our experiments is called \emph{TinySOL} and is distributed with the software Orchidea. TinySOL is a streamlined version of the Studio On Line (SOL) database created by IRCAM, that contains over 117,000 instrument samples, including extended techniques and contemporary playing styles \cite{Cella2021}. TinySOL, on the other hand, contains only 1,529 samples from 12 instruments. The instruments come from different orchestral families: strings, woodwinds, and brass. Each sample is one instrument playing a single note in the \emph{ordinario} playing style, with one of three dynamics: \textit{pp}, \textit{mf}, or \textit{ff} (for example \texttt{Flute-C4-pp} or \texttt{Clarinet-D5-mf}). 
+{\bf Database.} The database of orchestral sounds used in our experiments is called \emph{TinySOL} and is distributed with the software \textit{Orchidea}. TinySOL is a streamlined version of the Studio On Line (SOL) database created by IRCAM, that contains over 117,000 instrument samples, including extended techniques and contemporary playing styles \cite{Cella2021}. TinySOL, on the other hand, contains only 1,529 samples from 12 instruments. The instruments come from different orchestral families: strings, woodwinds, and brass. Each sample is one instrument playing a single note in the \emph{ordinario} playing style, with one of three dynamics: \textit{pp}, \textit{mf}, or \textit{ff} (for example \texttt{Flute-C4-pp} or \texttt{Clarinet-D5-mf}). 
 
 Each sample (sound) in the database is described by its value on $M=1024$ dimensions, called its {\it sprectrum} (related to the spectrum analysis of the sound). 
 
-{\bf Orchestra.} In the experiments, we use the same orchestra: it contains ... instruments, [TBD: orchestra/instrument descriptions]. This specifies the orchestration constraints of our problems. 
+{\bf Orchestra.} In the experiments, we always use the same orchestra: it contains 23 instruments: 2 Flutes (Fl), 2 Oboes (Ob), 2 Clarinets in Bb (ClBb), 2 Bassoon (Bn), 2 French Horns (Hn), 2 Trumpets in C (TpC), 2 Trombones (Tbn), 1 Bass Tuba (BTb), 2 Violins (Vn), 2 Violas (Va),2 Cellos (Vc) and 2 Contrabasses Cb 
+%[TBD: orchestra/instrument descriptions]. 
+This specifies the orchestration constraints of our problems. 
 
-{\bf Targets.} [It may be better todescribe the targets here.]
+
+{\bf Targets.}
+There are two types of target sounds: 
+\begin{itemize}
+    \item static targets with real instrument sounds such as \texttt{bass clarinet, wind harp}, extract of orchestral sounds \texttt{Beethoven chord2} and some real life sounds with no corresponding scores such as \texttt{boat docking,car horn, girl scream}.
+    \item dynamic targets with real instruments sounds such as \texttt{Jarret vienna cut, A minor, Brahms}, real life sounds with no corresponding scores such as \texttt{drops}
+\end{itemize}
+
+Note that the target sounds are listenable at http://www.orch-idea.org/.\\
+
+
+%archeos-bell&Tbn-B1-pp&ClBb-ord-B3-pp&508&2803&3323&6436\\
+		
+						
+
+
 
 \subsection{Static case}\label{sec:expstat}
 
@@ -2819,6 +2836,15 @@ We first focus on the static case. As explained above, with $M>1000$ dimensions,
 
 For each sound $s_i$ we consider a binary variable $x_i$ equal to 1 iff $s_i$ is taken in the solution $S$.
 We have mainly to linearize the objective function $d(S,G)=\sum_{j=1}^M \left| \frac{p_j(S)}{|S|} - G_j\right|$. To do so, we introduce a variable $\delta_j$ which will correspond to the cost $| \frac{p_j(S)}{|S|} - G_j|$ on dimension $j$. We have the following formulation with $n+M$ variables ($n$ binary and $M$ continuous) and a number of constraints of the same order (we remind that $L_z$ is the number of available instruments of type $z$ in the orchestra, and $L$ an upper bound on the number of selected sounds). 
+
+\alex{print partial filtering aka harmonic filter}\\
+
+
+
+
+
+\alex{assymetric distance, mettre dessin en dessous au dessus}\\
+
 
 \begin{center}
    \begin{eqnarray*}
@@ -2856,16 +2882,65 @@ We use this latter solution in our experiments as it turned out to be much more 
 
 
 \subsubsection{Results on some target sounds}
-[TBD]
 
-[Describe the sounds here, if not done in the section on the data]
 
-[One paragraph explaining that: we want to compare to the solution obtained by the current software which uses an evolutionary algorithm. We note that in that software there are two specific ingredients (1) a filter that reduce the set of sounds [...] (2) the fact that, for musical purpose, it is less problematic on a dimension to be lower to the targer than higher to it. 
-[...]
-To make a fare comparison with the solution computed by the software, we included these two ingredients to get the solution with an ILP formulation.]
+The aim of these tests were to be able to compare and evaluate our ILP model with the current \textit{Orchidea} software which uses an evolutionary algorithm.\\
+In the software two specific ingredients were used:
+\begin{figure}[!h]
+    \centering
+    \includegraphics[scale=0.3]{harmofilter.png}
+    \caption{Representation of the harmonic filter}
+    \label{fig:harmofilter}
+\end{figure}
 
-[results (tabular with the values).]
+(1) The \textbf{harmonic filter} is a filter that reduces the set of sounds in order to apply algorithms on smaller database and running faster. Looking at the spectral envelope of the static target sound, it is possible to extract the fundamental harmonic (the first partial) and its corresponding note as well as the other present harmonics and notes. The partials and their specific notes are represented by peaks in the spectral envelope. The partial filtering, i.e the harmonic filter, uses then a threshold applied on the spectral envelop and only keep in the database the notes corresponding to the peaks above the threshold. \\
 
+The figure \ref{fig:harmofilter} illustrates the harmonic filter. The peaks above the threshold have corresponding notes/partials A3, A4 and E4. This implies that in the database will be present only sounds with the notes A3, A4 and E4 removing all the other notes for all instruments reducing considerably the size of the database to use. \\
+
+
+(2) \textbf{Upper and lower penalties} are resp. negative and positive penalties applied to a solution of the assisted orchestration problem. Indeed, for musical purpose, it less problematic on a dimension to be lower to the target than higher to it regarding the amplitude of the spectral envelopes of both sounds. \\
+The figure \ref{fig:penalt} is a representation of the penalties with the blue curve represents the spectral envelop of the target sound and the red one the solution envelop. Positive penalties (+) are applied when the solution curve peaks are below the target ones and negative penalties (-) when they are above the target spectral envelop. 
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[scale=0.3]{penalt.png}
+    \caption{Representation of the penalties with the blue curve the spectral envelop of the target sound and the red one the solution envelop}
+    \label{fig:penalt}
+\end{figure}
+
+To make a fare comparison between with the solution computed by the \textit{Orchidea} software and the ILP one, these two ingredients were included to get the solution with an ILP formulation, i.e the calculations were applied on the same databases and with the same penalties factors.
+
+\begin{figure}[ht!]
+\begin{tabular}{r||c|c|c|c}%{c|c|c|c|c}
+     \textbf{target sound}&\textbf{LP}&\textbf{Evolutionary}&\textbf{LP post dbgen}&\textbf{Evolutionary post dbgen}  \\
+     archeos bell&508&2803&3323&6436\\
+bass clarinet&1114&6074&4785&14153\\
+Beethoven chord2&490&2401&1145&2513\\
+boat docking&463&2363&1470&3922\\
+car horn&1017&3968&1674&9414\\
+girl scream&2651&3581&4096&4555\\
+WinchesterBell&897&2302&3097&3434\\
+wind harp&736&1656&3101&6288\\
+YaBn mul PG ST12&757&5660&1304&8255\\	
+ 
+\end{tabular}
+\caption{Summary of results of the LP and the Evolutionary algorithms on some static target sounds }
+\label{tab:resultstat}
+\end{figure}
+In the \ref{tab:resultstat} tab is presented our results on some static targets sounds. \\ 
+Let us now present \textbf{dbgen} in order to analyze the results. dbgen is a script that, given a sound or a set of sounds generates the spectral data of a sound, i.e it creates a value vector of dimension the size of the chosen feature type (here it is the spectrum feature that was used). \\
+Two calculations of the distance of a solution to the target sound were made for both the ILP and the evolutionary solutions. \\
+One was done directly between the solution and the target sound spectrum values, doing the absolute difference on each dimension and then dividing it by the number of dimensions. \\
+The other one, a sound was first generated based on the spectral description of the solution and then dbgen was applied to it, generating again a spectral description of the sound. 
+
+
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[scale=0.3]{clarinetA3.png}
+    \caption{Representation of the solution with the static target Clarinet A3 }
+    \label{fig:claA3}
+\end{figure}
 [Conclusion on the results -> improvements,...]
 
 \subsection{Dynamic Case}\label{sec:expdyn}
@@ -2896,7 +2971,7 @@ Let us introduce five dummy variables in order to linearize the program, such th
 
 \begin{itemize}
     \item $ \alpha_{ijt}= x_{it}\delta_{jt}$ 
-    \item $\beta_{it} = x_{i(t+1)}\sum\limits_{l\in N} x_{l(t)}$ 
+    \item $\beta_{it} = x_{i(t+1)}\sum\limits_{l\in N} x_{l(t)}$
     \item $\lambda_{it} = x_{it}\sum\limits_{l\in N} x_{l(t+1)}$
     \item $y_{ii't}= x_{it}x_{i'(t+1)}$ 
     \item $\theta_{ii'tj}= y_{ii't} \gamma_{jt}$
@@ -2908,6 +2983,8 @@ The objective function of the linear program is:
 
 
 $\min \ \sum\limits_{t=1} ^ T \sum\limits_{j=1}^M \delta_{jt} + \sum\limits_{t=1}^{T-1} \sum\limits_{j=1}^M B_t \gamma_{jt}$
+
+
 
 s.t to: \\
 the "distances" constraints:
@@ -3066,11 +3143,11 @@ Note that overall the computation time is (nearly) linear in $T$.
 
 [Again: description of the targets (and the orchestra), if not done before]
 
-As previously, we compare SPH with the solution output by the current software Orchidea. 
+As previously, we compare SPH with the solution output by the current software \textit{Orchidea}. 
 
-[Put results on SPH and Orchidea, comments,...]
+[Put results on SPH and \textit{Orchidea}, comments,...]
 
-Also, we were interested in evaluating the choice of sets $\Omega_t=A_t$ in SPH. To do so, we also consider the set $B_t$ of solutions output by the evolutionary algorithm of Orchidea on target at time $t$. We consider in the experiments 3 possible choices:
+Also, we were interested in evaluating the choice of sets $\Omega_t=A_t$ in SPH. To do so, we also consider the set $B_t$ of solutions output by the evolutionary algorithm of \textit{Orchidea} on target at time $t$. We consider in the experiments 3 possible choices:
 \begin{itemize}
     \item $\Omega_t=A_t$ (SPH);
     \item $\Omega_t=A_t\cup B_t$;
