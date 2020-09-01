@@ -2807,9 +2807,9 @@ For the dynamic case (Section~\ref{sec:expdyn}), an ILP formulation turns out to
 
 Each sample (sound) in the database is described by its value on $M=1024$ dimensions, called its {\it sprectrum} (related to the spectrum analysis of the sound). 
 
-{\bf Orchestra.} In the experiments, we always use the same orchestra: it contains 23 instruments: 2 Flutes (Fl), 2 Oboes (Ob), 2 Clarinets in Bb (ClBb), 2 Bassoon (Bn), 2 French Horns (Hn), 2 Trumpets in C (TpC), 2 Trombones (Tbn), 1 Bass Tuba (BTb), 2 Violins (Vn), 2 Violas (Va),2 Cellos (Vc) and 2 Contrabasses Cb 
+{\bf Orchestra.} In the experiments, we always use the same orchestra: it contains 23 instruments: 2 Flutes (Fl), 2 Oboes (Ob), 2 Clarinets in Bb (ClBb), 2 Bassoon (Bn), 2 French Horns (Hn), 2 Trumpets in C (TpC), 2 Trombones (Tbn), 1 Bass Tuba (BTb), 2 Violins (Vn), 2 Violas (Va),2 Cellos (Vc) and 2 Contrabasses (Cb). 
 %[TBD: orchestra/instrument descriptions]. 
-This specifies the orchestration constraints of our problems. 
+This specifies the orchestration constraints of our problems.\\
 
 
 {\bf Targets.}
@@ -2837,13 +2837,7 @@ We first focus on the static case. As explained above, with $M>1000$ dimensions,
 For each sound $s_i$ we consider a binary variable $x_i$ equal to 1 iff $s_i$ is taken in the solution $S$.
 We have mainly to linearize the objective function $d(S,G)=\sum_{j=1}^M \left| \frac{p_j(S)}{|S|} - G_j\right|$. To do so, we introduce a variable $\delta_j$ which will correspond to the cost $| \frac{p_j(S)}{|S|} - G_j|$ on dimension $j$. We have the following formulation with $n+M$ variables ($n$ binary and $M$ continuous) and a number of constraints of the same order (we remind that $L_z$ is the number of available instruments of type $z$ in the orchestra, and $L$ an upper bound on the number of selected sounds). 
 
-\alex{print partial filtering aka harmonic filter}\\
 
-
-
-
-
-\alex{assymetric distance, mettre dessin en dessous au dessus}\\
 
 
 \begin{center}
@@ -2898,8 +2892,8 @@ In the software two specific ingredients were used:
 The figure \ref{fig:harmofilter} illustrates the harmonic filter. The peaks above the threshold have corresponding notes/partials A3, A4 and E4. This implies that in the database will be present only sounds with the notes A3, A4 and E4 removing all the other notes for all instruments reducing considerably the size of the database to use. \\
 
 
-(2) \textbf{Upper and lower penalties} are resp. negative and positive penalties applied to a solution of the assisted orchestration problem. Indeed, for musical purpose, it less problematic on a dimension to be lower to the target than higher to it regarding the amplitude of the spectral envelopes of both sounds. \\
-The figure \ref{fig:penalt} is a representation of the penalties with the blue curve represents the spectral envelop of the target sound and the red one the solution envelop. Positive penalties (+) are applied when the solution curve peaks are below the target ones and negative penalties (-) when they are above the target spectral envelop. 
+(2) \textbf{Upper and lower penalties} are resp. negative and positive penalties applied to a solution of the assisted orchestration problem. Indeed, for musical purpose, it is less problematic on a dimension to be lower to the target than higher to it regarding the amplitude of the spectral envelopes of both sounds. \\
+The figure \ref{fig:penalt} is a representation of the penalties. The blue curve represents the spectral envelop of the target sound and the red one the solution envelop. Positive penalties (+) are applied when the solution curve peaks are below the target ones and negative penalties (-) when they are above the target spectral envelop. 
 
 \begin{figure}[h!]
     \centering
@@ -2908,7 +2902,7 @@ The figure \ref{fig:penalt} is a representation of the penalties with the blue c
     \label{fig:penalt}
 \end{figure}
 
-To make a fare comparison between with the solution computed by the \textit{Orchidea} software and the ILP one, these two ingredients were included to get the solution with an ILP formulation, i.e the calculations were applied on the same databases and with the same penalties factors.
+To make a fare comparison between with the solution computed by the \textit{Orchidea} software and the ILP one, these two ingredients were included to get the solution with the ILP formulation, i.e the calculations were applied on the same databases and with the same penalties factors.
 
 \begin{figure}[ht!]
 \begin{tabular}{r||c|c|c|c}%{c|c|c|c|c}
@@ -2928,10 +2922,13 @@ YaBn mul PG ST12&757&5660&1304&8255\\
 \label{tab:resultstat}
 \end{figure}
 In the \ref{tab:resultstat} tab is presented our results on some static targets sounds. \\ 
-Let us now present \textbf{dbgen} in order to analyze the results. dbgen is a script that, given a sound or a set of sounds generates the spectral data of a sound, i.e it creates a value vector of dimension the size of the chosen feature type (here it is the spectrum feature that was used). \\
+Let us now present \textbf{dbgen} in order to analyze the results. dbgen is a script that, given a sound or a set of sounds generates its feature description, i.e it creates a value vector of dimension the size of the chosen feature type (here 1024 as it is the spectrum feature that was used). \\
 Two calculations of the distance of a solution to the target sound were made for both the ILP and the evolutionary solutions. \\
 One was done directly between the solution and the target sound spectrum values, doing the absolute difference on each dimension and then dividing it by the number of dimensions. \\
-The other one, a sound was first generated based on the spectral description of the solution and then dbgen was applied to it, generating again a spectral description of the sound. 
+The other one, a sound was first generated based on the spectral description of the solution and then dbgen was applied to it, generating again a spectral description of the sound. \\
+
+ The ILP solutions being optimal, they are always smaller than the one computed with the evolutionary algorithm. It was interesting to notice that in some cases some sounds of the database were taken by both algorithms and that in other cases it did not. Even  if the solution were better according to their values (calculated on the objective function of the ILP), some solutions of the evolutionary algorithm seemed to "sound" better. This is due to the hardness of the dissimilarity measure choice and to the ILP formulation being a simpler modelization than the evolutionary one. 
+ 
 
 
 
@@ -2945,8 +2942,10 @@ The other one, a sound was first generated based on the spectral description of 
 
 \subsection{Dynamic Case}\label{sec:expdyn}
 
+We give an ILP formulation of the assisted orchestration problem in its dynamic version. The idea behind the formulation was to emphasize the similarities and links with the multistage framework.\\
 
-\subsection{Linear programming techniques}
+\textbf{ILP Formulation}
+
 \begin{center}
    \begin{eqnarray*}
      \ \left \{ \begin{array}{ll}
@@ -2965,7 +2964,14 @@ The other one, a sound was first generated based on the spectral description of 
     \end{eqnarray*}
     \end{center}
 
+The formulation presented before is far from being linear but it is interesting to point out the presence of the bonus $B_i$. Let us develop the objective function of the formulation and note that it is a direct application of the multistage framework. \\
+One needs to seek a trade-off between:
+\begin{itemize}
+    \item the quality of the solution: on each of the $T$ time steps of the time horizon is computed a distance between the solution and the target sound
+    \item the stability of the solution for consecutive time steps: for all consecutive time steps is computed the distance between the consecutive time steps solutions
+\end{itemize}. 
 
+In our formulation, the distance to the target sound and the distance between consecutive time steps solutions is the same.
 
 Let us introduce five dummy variables in order to linearize the program, such that:
 
@@ -3147,16 +3153,16 @@ As previously, we compare SPH with the solution output by the current software \
 
 [Put results on SPH and \textit{Orchidea}, comments,...]
 
-Also, we were interested in evaluating the choice of sets $\Omega_t=A_t$ in SPH. To do so, we also consider the set $B_t$ of solutions output by the evolutionary algorithm of \textit{Orchidea} on target at time $t$. We consider in the experiments 3 possible choices:
+Also, we were interested in evaluating the choice of sets $\Omega_t=A_t$ in SPH. To do so, we also consider the set $E_t$ of solutions output by the evolutionary algorithm of \textit{Orchidea} on target at time $t$. We consider in the experiments 3 possible choices:
 \begin{itemize}
     \item $\Omega_t=A_t$ (SPH);
-    \item $\Omega_t=A_t\cup B_t$;
-    \item $\Omega_t=B_t$.
+    \item $\Omega_t=A_t\cup E_t$;
+    \item $\Omega_t=E_t$.
 \end{itemize}
 
 [Results, tables, comments]
 
-Interestingly, adding $B_t$ (ie, choosing $\Omega_t=A_t\cup B_t$) never led to an improvements in the considered targets, and using only $B_t$ is always worse than using $A_t$. 
+Interestingly, adding $E_t$ (ie, choosing $\Omega_t=A_t\cup E_t$) never led to an improvements in the considered targets, and using only $E_t$ is always worse than using $A_t$. 
 [...]
 
 \section{Conclusion}
