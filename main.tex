@@ -9,7 +9,9 @@
 %% Packages
 %\usepackage[french]{babel}
 \usepackage{csvsimple}
-
+\usepackage{tikz}
+\usetikzlibrary{arrows,automata}
+\usepackage{tkz-graph}
 \usepackage[latin1]{inputenc}
 \usepackage{theorem}
 \usepackage{amsmath}
@@ -24,6 +26,7 @@
 \usepackage{comment}
 \usepackage{pgfpages}
 \usepackage{hyperref}
+\usetikzlibrary{positioning,chains,fit,shapes,calc}
 
 
 %
@@ -2803,7 +2806,7 @@ For the dynamic case (Section~\ref{sec:expdyn}), an ILP formulation turns out to
 \subsection{Dataset}
 \label{sec:dataset}
 
-{\bf Database.} The database of orchestral sounds used in our experiments is called \emph{TinySOL} and is distributed with the software \textit{Orchidea}. TinySOL is a streamlined version of the Studio On Line (SOL) database created by IRCAM, that contains over 117,000 instrument samples, including extended techniques and contemporary playing styles \cite{Cella2021}. TinySOL, on the other hand, contains only 1,529 samples from 12 instruments. The instruments come from different orchestral families: strings, woodwinds, and brass. Each sample is one instrument playing a single note in the \emph{ordinario} playing style, with one of three dynamics: \textit{pp}, \textit{mf}, or \textit{ff} (for example \texttt{Flute-C4-pp} or \texttt{Clarinet-D5-mf}). 
+{\bf Database.} The database of orchestral sounds used in our experiments is called \emph{TinySOL} and is distributed with the software \textit{Orchidea}. TinySOL is a streamlined version of the Studio On Line (SOL) database created by IRCAM, that contains over 117,000 instrument samples, including extended techniques and contemporary playing styles. TinySOL, on the other hand, contains only 1,529 samples from 12 instruments. The instruments come from different orchestral families: strings, woodwinds, and brass. Each sample is one instrument playing a single note in the \emph{ordinario} playing style, with one of three dynamics: \textit{pp}, \textit{mf}, or \textit{ff} (for example \texttt{Flute-C4-pp} or \texttt{Clarinet-D5-mf}). 
 
 Each sample (sound) in the database is described by its value on $M=1024$ dimensions, called its {\it sprectrum} (related to the spectrum analysis of the sound). 
 
@@ -2816,7 +2819,7 @@ This specifies the orchestration constraints of our problems.\\
 There are two types of target sounds: 
 \begin{itemize}
     \item static targets with real instrument sounds such as \texttt{bass clarinet, wind harp}, extract of orchestral sounds \texttt{Beethoven chord2} and some real life sounds with no corresponding scores such as \texttt{boat docking,car horn, girl scream}.
-    \item dynamic targets with real instruments sounds such as \texttt{Jarret vienna cut, A minor, Brahms}, real life sounds with no corresponding scores such as \texttt{drops}
+    \item dynamic targets with real instruments sounds such as \texttt{Jarret vienna cut, A minor, Brahms}, real life sounds with no corresponding scores such as \texttt{Drops}
 \end{itemize}
 
 Note that the target sounds are listenable at http://www.orch-idea.org/.\\
@@ -2889,7 +2892,7 @@ In the software two specific ingredients were used:
 
 (1) The \textbf{harmonic filter} is a filter that reduces the set of sounds in order to apply algorithms on smaller database and running faster. Looking at the spectral envelope of the static target sound, it is possible to extract the fundamental harmonic (the first partial) and its corresponding note as well as the other present harmonics and notes. The partials and their specific notes are represented by peaks in the spectral envelope. The partial filtering, i.e the harmonic filter, uses then a threshold applied on the spectral envelop and only keep in the database the notes corresponding to the peaks above the threshold. \\
 
-The figure \ref{fig:harmofilter} illustrates the harmonic filter. The peaks above the threshold have corresponding notes/partials A3, A4 and E4. This implies that in the database will be present only sounds with the notes A3, A4 and E4 removing all the other notes for all instruments reducing considerably the size of the database to use. \\
+The figure \ref{fig:harmofilter} illustrates the harmonic filter. In the example, the peaks above the threshold have corresponding notes/partials A3, A4 and E4. This implies that in the database will be present only sounds with the notes A3, A4 and E4, removing all the other notes for all instrument and reducing considerably the size of the database to use. \\
 
 
 (2) \textbf{Upper and lower penalties} are resp. negative and positive penalties applied to a solution of the assisted orchestration problem. Indeed, for musical purpose, it is less problematic on a dimension to be lower to the target than higher to it regarding the amplitude of the spectral envelopes of both sounds. \\
@@ -2907,21 +2910,21 @@ To make a fare comparison between with the solution computed by the \textit{Orch
 \begin{figure}[ht!]
 \begin{tabular}{r||c|c|c|c}%{c|c|c|c|c}
      \textbf{target sound}&\textbf{LP}&\textbf{Evolutionary}&\textbf{LP post dbgen}&\textbf{Evolutionary post dbgen}  \\
-     archeos bell&508&2803&3323&6436\\
-bass clarinet&1114&6074&4785&14153\\
-Beethoven chord2&490&2401&1145&2513\\
-boat docking&463&2363&1470&3922\\
-car horn&1017&3968&1674&9414\\
-girl scream&2651&3581&4096&4555\\
-WinchesterBell&897&2302&3097&3434\\
-wind harp&736&1656&3101&6288\\
+     Archeos Bell&508&2803&3323&6436\\
+Bass Clarinet&1114&6074&4785&14153\\
+Beethoven Chord2&490&2401&1145&2513\\
+Boat Docking&463&2363&1470&3922\\
+Car Horn&1017&3968&1674&9414\\
+Girl Scream&2651&3581&4096&4555\\
+Winchester Bell&897&2302&3097&3434\\
+Wind Harp&736&1656&3101&6288\\
 YaBn mul PG ST12&757&5660&1304&8255\\	
  
 \end{tabular}
 \caption{Summary of results of the LP and the Evolutionary algorithms on some static target sounds }
 \label{tab:resultstat}
 \end{figure}
-In the \ref{tab:resultstat} tab is presented our results on some static targets sounds. \\ 
+In the \ref{tab:resultstat} tab are presented our results on some static targets sounds. \\ 
 Let us now present \textbf{dbgen} in order to analyze the results. dbgen is a script that, given a sound or a set of sounds generates its feature description, i.e it creates a value vector of dimension the size of the chosen feature type (here 1024 as it is the spectrum feature that was used). \\
 Two calculations of the distance of a solution to the target sound were made for both the ILP and the evolutionary solutions. \\
 One was done directly between the solution and the target sound spectrum values, doing the absolute difference on each dimension and then dividing it by the number of dimensions. \\
@@ -2938,42 +2941,64 @@ The other one, a sound was first generated based on the spectral description of 
     \caption{Representation of the solution with the static target Clarinet A3 }
     \label{fig:claA3}
 \end{figure}
-[Conclusion on the results -> improvements,...]
 
+\alex{utile de mettre un pritn de solution comme cela ? }\\
 \subsection{Dynamic Case}\label{sec:expdyn}
 
-We give an ILP formulation of the assisted orchestration problem in its dynamic version. The idea behind the formulation was to emphasize the similarities and links with the multistage framework.\\
+We give an ILP formulation of the assisted orchestration problem in its dynamic version. The idea behind the formulation is to emphasize the similarities and links with the multistage framework.\\
 
-\textbf{ILP Formulation}
+\textbf{ILP Formulation}\\
+First, let us give the idea behind the objective function of the dynamic version of the problem:\\
+$$\min \ \sum\limits_{i=1} ^ T d(S_i,G_i) +  \sum\limits_{i=2}^T B_i \text{ }d(S_i,S_{i-1}) $$
 
-\begin{center}
-   \begin{eqnarray*}
-     \ \left \{ \begin{array}{ll}
-    \min \ \sum\limits_{i=1} ^ T d(S_i,G_i) +  \sum\limits_{i=2}^T B_i \text{ }d(S_i,S_{i-1}) \\
-    s.t. \left |
-    %\begin{array}{ll}
-    \begin{array}{llllll}
-    \sum\limits_{i \in N}  x_{ti} & \leq &L_t & \forall{t} \in \{1,...,T\} \\
+% \begin{center}
+%   \begin{eqnarray*}
+%      \ \left \{ \begin{array}{ll}
+%     \min \ \sum\limits_{i=1} ^ T d(S_i,G_i) +  \sum\limits_{i=2}^T B_i \text{ }d(S_i,S_{i-1}) \\
+%     s.t. \left |
+%     %\begin{array}{ll}
+%     \begin{array}{llllll}
+%     \sum\limits_{i \in N}  x_{ti} & \leq &L_t & \forall{t} \in \{1,...,T\} \\
  
-    x_{ti} \in \{0,1\} & & & \forall{t} \in \{1,...,T\}, \forall{i} \in N\\
-    %\end{array}\\
-    \end{array}
-    \right.
-    \end{array} 
-    \right.
-    \end{eqnarray*}
-    \end{center}
+%     x_{ti} \in \{0,1\} & & & \forall{t} \in \{1,...,T\}, \forall{i} \in N\\
+%     %\end{array}\\
+%     \end{array}
+%     \right.
+%     \end{array} 
+%     \right.
+%     \end{eqnarray*}
+%     \end{center}
 
-The formulation presented before is far from being linear but it is interesting to point out the presence of the bonus $B_i$. Let us develop the objective function of the formulation and note that it is a direct application of the multistage framework. \\
-One needs to seek a trade-off between:
+We see that the function can be seen as a multistage framework function. \\
+Indeed, one needs to seek a trade-off between:
 \begin{itemize}
     \item the quality of the solution: on each of the $T$ time steps of the time horizon is computed a distance between the solution and the target sound
     \item the stability of the solution for consecutive time steps: for all consecutive time steps is computed the distance between the consecutive time steps solutions
 \end{itemize}. 
 
-In our formulation, the distance to the target sound and the distance between consecutive time steps solutions is the same.
+Note that in our formulation of the problem, the distance to the target sound and the distance between consecutive time steps solutions is the same. The fact of using the same distance for the two ingredients of the objective function differs with the approach used in \textit{Orchidea} software. Indeed, a lot of different functions could be considered in order to evaluate the stability of a given solution to the problem. It could be interesting for example to seek a solution that minimizes: the instruments modifications (if an instrument is played at a time step $t$, a bonus is obtained for taking the same instrument at the next time step), the note modifications (keeping the same note on any instrument) or a combination of the two. This is interesting if a composer is according importance to the continuity of its solutions (see \ref{fig:contmodel}) that is represented in the continuity model. Our choice of using the same distance measure gives us the possibility to model the problem as an ILP problem and not as a multi-objective problem, the two elements of our function being comparable. \\
+Note that in some cases, if the target pitch, i.e its note, change a lot between two consecutive steps, it is not relevant to keep the same note as the result would be certainly far from the target sound. This possibility has been taken into account and model with bonus weighted in function of each target sound at each time step, i.e if the target does not change too much, the bonus is significant, if it does change a lot, the bonus would be less important.\\
 
-Let us introduce five dummy variables in order to linearize the program, such that:
+
+
+
+We need now to consider $nT$ binary variables $x_{it}$, indicating whether $s_i$ is taken in $S_t$ or not. To linearize the objective function, we can introduce $\Theta(nT)$ variables: $\delta_{jt}$ which will be equal to $|p_j(S_t)/|S_t|-G_j|$, and $\alpha_{jt}$ which will be equal to $|p_j(S_t)/|S_t|-p_j(S_{t+1})/|S_{t+1}||$. Then the objective is to minimize $\sum_{t=1}^T\sum_{j=1}^M \delta_{jt}+ \sum_{t=1}^{T-1}\sum_{j=1}^M \alpha_{jt}$, and we put the constraints:
+\begin{itemize}
+    \item $\delta_{jt}\geq \frac{p_j(S_t)}{|S_t|}-G_{jt}$ and $\delta_{jt}\geq G_{jt}-\frac{p_j(S_t)}{|S_t|}$;
+    \item $\alpha_{jt}\geq \frac{p_j(S_t)}{|S_t|}-\frac{p_j(S_{t+1})}{|S_{t+1}|}$ and $\alpha_{jt}\geq \frac{p_j(S_{t+1})}{|S_{t+1}|}-\frac{p_j(S_t)}{|S_t|}$.
+\end{itemize}
+
+In order to linearize these constraints, as in the static case we can:
+\begin{itemize}
+    \item Either add some extra variables, to avoid quadratic terms in the constraints;
+    \item Or fix the number of selected sounds at {\it each} time step, and solve the ILP for all the possible combinations of sizes of solutions $S_t$.
+\end{itemize}
+In the first case we need to introduce $\Omega(nMT)$ variables to linearize the constraints. In the second case we need to solve $L^T$ ILP, where $L$ is the maximum number of sounds selected at one time step, $L=23$ in our orchestra.
+
+Both approaches were not able to solve our instances (recall that $n$ and $M$ are of order of 1000), as soon as $T>2$. 
+
+In order to model this dynamic problem as an ILP formulation we introduced a lot of new dummy variables.\\
+Indeed, let us introduce five dummy variables used in order to linearize the program:
 
 \begin{itemize}
     \item $ \alpha_{ijt}= x_{it}\delta_{jt}$ 
@@ -2983,17 +3008,16 @@ Let us introduce five dummy variables in order to linearize the program, such th
     \item $\theta_{ii'tj}= y_{ii't} \gamma_{jt}$
 \end{itemize}
 
-We thus obtain the following linear program. We'll delimit the linear program into three programs of constraints, one for the "distances", one for the "linearization" of the variables and one for the "cardinality".\\
+
+We present the following linear program. The linear program is delimited into three programs of constraints, one for the "distances", one for the "linearization" of the variables and one for the "cardinality".\\
 The objective function of the linear program is:
-
-
 
 $\min \ \sum\limits_{t=1} ^ T \sum\limits_{j=1}^M \delta_{jt} + \sum\limits_{t=1}^{T-1} \sum\limits_{j=1}^M B_t \gamma_{jt}$
 
+with $\sum\limits_{t=1} ^ T \sum\limits_{j=1}^M \delta_{jt}$ being the distance of a solution to the target sound over the time horizon and $\sum\limits_{t=1}^{T-1} \sum\limits_{j=1}^M B_t \gamma_{jt}$ the distance measuring the stability of the solutions over the time horizon. 
 
-
-s.t to: \\
-the "distances" constraints:
+As said before, the program is subject to:\\
+The \textbf{"distances"} constraints:
 
 
 \begin{center}
@@ -3011,14 +3035,10 @@ the "distances" constraints:
     \right.
     \end{eqnarray*}
     \end{center}
-$\min \ \sum\limits_{t=1} ^ T \sum\limits_{j=1}^M \delta_{jt} + \sum\limits_{t=2}^T \sum\limits_{j=1}^M B_t \gamma_{jt}$
 
-
-    
     
  
-the "linearization" constraints:
-
+The \textbf{"linearization"} constraints:
 
 
 \begin{center}
@@ -3059,7 +3079,7 @@ the "linearization" constraints:
     \end{center}  
 
     
-the "cardinality" constraints, the sounds are ordered by instruments in the database, i.e each sound is present in a fixed interval $I_z \subseteq N\  \forall z \in Z$:
+and finnaly the \textbf{"cardinality"} constraints. Note the sounds are ordered by instruments in the database, i.e each sound is present in a fixed interval $I_z \subseteq N\  \forall z \in Z$:
 
 
 \begin{center}
@@ -3084,74 +3104,134 @@ the "cardinality" constraints, the sounds are ordered by instruments in the data
     \end{eqnarray*}
     \end{center}
     
-The number of variables of the linear program is:
-\begin{itemize}
-    \item $NT$ variables $x$
-    \item $N^2T$ variables $y$
-    \item $MT$ variables $\delta$
-    \item $M(T-1)$ variables $\gamma$
-    \item $NMT$ variables $\alpha$
-    \item $N(T-1)$ variables $\beta$
-    \item $N(T-1)$ variables $\lambda$
-    \item $N^2(T-1)M$ variables $\theta$
-\end{itemize}
+The number of variables of the linear program is very large, in fact there are: $NT$ variables $x$,$N^2T$ variables $y$,$MT$ variables $\delta$,$M(T-1)$ variables $\gamma$, $NMT$ variables $\alpha$, $N(T-1)$ variables $\beta$, $N(T-1)$ variables $\lambda$, $N^2(T-1)M$ variables $\theta$.
 
-In practice, we apply a filter on the TinySol dataset and apply the algorithm on around $1400$ sounds, i.e $N=1400$, of dimension $M$ equal to $1024$ and it is possible to have around $20$ timesteps, i.e $T=20$. The number of variables is thus extremly large. For exemple, only for the $\theta$ variable we have $1400^2 \times 20 \times 1024 = 40140800000 = 40$ billion $\theta$ variables. So, the problem can't run even on powerful engines.  
+In practice, we apply the harmonic filter on the TinySol dataset and apply the algorithm on around $1400$ sounds, i.e $N=1400$, of dimension $M$ equal to $1024$ and it is possible to have around $20$ timesteps, i.e $T=20$. The number of variables is thus extremly large. For exemple, only for the $\theta$ variable we have $1400^2 \times 20 \times 1024 = 40140800000 = 40$ billion $\theta$ variables. So it is impossible to run the program, even on powerful engines.  
 
 However, to verify it, we runned the algorithm on a very restrictive instance with only $T=2$ timesteps, a hard filter on the dataset, allowing only one note to be picken and thus around $N=250$ sounds, a small metric called moments with $M=4$. Even is this special case, the number of variables is quite large with around $2*250^2*4=500000$ $\theta$ variables. 
 
-In order to do some proper tests, we implemented shortest path algorithm.
- 
 
 
-
-
-For the dynamic case, we now need to minimize $\sum_{t=1}^T d(S_t,G^t)+\sum_{t=1}^{T-1} C_t d(S_t,S_{t+1})$. 
-
-Let us first focus on an ILP formulation. We need now to consider $nT$ binary variables $x_{it}$, indicating whether $s_i$ is taken in $S_t$ or not. To linearize the objective function, we can introduce $\Theta(nT)$ variables: $\delta_{jt}$ which will be equal to $|p_j(S_t)/|S_t|-G_j|$, and $\alpha_{jt}$ which will be equal to $|p_j(S_t)/|S_t|-p_j(S_{t+1})/|S_{t+1}||$. Then the objective is to minimize $\sum_{t=1}^T\sum_{j=1}^M \delta_{jt}+ \sum_{t=1}^{T-1}\sum_{j=1}^M \alpha_{jt}$, and we put the constraints:
-\begin{itemize}
-    \item $\delta_{jt}\geq \frac{p_j(S_t)}{|S_t|}-G_{jt}$ and $\delta_{jt}\geq G_{jt}-\frac{p_j(S_t)}{|S_t|}$;
-    \item $\alpha_{jt}\geq \frac{p_j(S_t)}{|S_t|}-\frac{p_j(S_{t+1})}{|S_{t+1}|}$ and $\alpha_{jt}\geq \frac{p_j(S_{t+1})}{|S_{t+1}|}-\frac{p_j(S_t)}{|S_t|}$.
-\end{itemize}
-
-In order to linearize these constraints, as in the static case we can:
-\begin{itemize}
-    \item Either add some extra variables, to avoid quadratic terms in the constraints;
-    \item Or fix the number of selected sounds at {\it each} time step, and solve the ILP for all the possible combinations of sizes of solutions $S_t$.
-\end{itemize}
-In the first case we need to introduce $\Omega(nMT)$ variables to linearize the constraints. In the second case we need to solve $L^T$ ILP, where $L$ is the maximum number of sounds selected at one time step, $L=...$ in our orchestra.
-
-Both approaches were not able to solve our instances (recall that $n$ and $M$ are of order of 1000), as soon as $T>2$. 
 
 To overcome this difficulty, we rather propose in the following a heuristic, called {\it SPH}, the idea of which is to combine (1) the fact that we can solve the static problems (as explained in the previous section) (2) a shortest path formulation that allows to efficiently combine  solutions found in different time steps.  
 
 
 \subsubsection{SPH: Shortest Path Heuristic}
-\alex{print graph shortest path + def comment le graph est construit }\\
 
 
-In Theorems~\ref{th:dyn1dnoc} and~\ref{th:generaldynamic}, the principle was to use DP to produce a set of solutions at each time step, and then to solve a shortest path problem to find the best combinations of solutions. As explained previously, with $M=1024$ dimension we cannot use DP to produce solutions at each time step, but the shortest path idea is still interesting. Then, the principle of SPH (shortest path heuristics) is:
+
+
+
+In Theorems~\ref{th:dyn1dnoc} and~\ref{th:generaldynamic}, the principle was to use DP to produce a set of solutions at each time step, and then to solve a shortest path problem to find the best combinations of solutions. As explained previously, with $M=1024$ dimension we cannot use DP to produce solutions at each time step, but the shortest path idea is still interesting. Then, the principle of SPH (shortest path heuristics) is (see Figure \ref{fig:sph}):
 \begin{itemize}
     \item To compute, for each time step $t$, a set $\Omega_t$ of feasible solutions;
     \item Then to find the best tuple $(S_1,\dots,S_T)\in \Omega_1\times \dots \times \Omega_T$, by solving a shortest path problem on a DAG on vertex set $\cup \Omega_t$ (and two vertices $s$ and $t$).
 \end{itemize}
 
-The second step can be done very efficiently, and the problem boils down to finding interesting sets of solutions (independently) for each time step. 
+\begin{figure}[!ht]
+\centering
+\begin{tikzpicture}[scale=0.7,thick,
+  every node/.style={draw,circle},
+  fsnode/.style={fill=black},
+  ssnode/.style={fill=black},
+  every fit/.style={ellipse,draw,inner sep=-2pt,text width=1cm},
+  ->,shorten >= 3pt,shorten <= 3pt
+]
 
-Recall that for the static case, we solve the instances using an ILP for each number of sounds $i$, from 1 to the maximum number of sounds $L$. This produces an interesting bunch of $L$ static solutions. Our heuristic SPH is precisely to use for $\Omega_t$ this set $A_t$ of $L$ feasible solutions. Once obtained these static solution, the shortest path problem is on $LT$ nodes (plus $s$ and $t$). 
+\begin{scope}[xshift=-2cm,yshift=-2.5cm,start chain=going below,node distance=7mm]
+  %\node[ssnode,on chain] (s) [label=left:{a}] {};
+  \node[ssnode,on chain] (s){};
+\end{scope}
 
+\begin{scope}[xshift=14cm,yshift=-2.5cm,start chain=going below,node distance=7mm]
+  %\node[ssnode,on chain] (S) [label=right:{b}] {};
+  \node[ssnode,on chain] (S) {};
+\end{scope}
+
+\begin{scope}[start chain=going below,node distance=7mm]
+\foreach \i in {1,2,...,5}
+  \node[fsnode,on chain] (f\i) [label=left: ] {};
+\end{scope}	
+
+\begin{scope}[xshift=3cm,,start chain=going below,node distance=7mm]
+\foreach \i in {6,7,...,10}
+  \node[ssnode,on chain] (s\i) [label=right: ] {};
+\end{scope}
+
+\begin{scope}[xshift=6cm,,start chain=going below,node distance=7mm]
+\foreach \i in {11,12,...,15}
+  \node[ssnode,on chain] (s\i) [label=right: ] {};
+\end{scope}
+
+\begin{scope}[xshift=9cm,,start chain=going below,node distance=7mm]
+\foreach \i in {16,17,...,20}
+  \node[ssnode,on chain] (s\i) [label=right: ] {};
+\end{scope}
+
+\begin{scope}[xshift=12cm,,start chain=going below,node distance=7mm]
+\foreach \i in {21,22,...,25}
+  \node[ssnode,on chain] (s\i) [label=right: ] {};
+\end{scope}
+
+% the set U
+\node [black,fit=(f1) (f5),label=above:{$\Omega_1$}] {};
+% the set V
+\node [black,fit=(s6) (s10),label=above:{$\Omega_2$}] {};
+
+\node [black,fit=(s11) (s15),label=above:{$\Omega_{\ldots}$}] {};
+
+\node [black,fit=(s16) (s20),label=above:{$\Omega_{T-1}$}] {};
+\node [black,fit=(s21) (s25),label=above:{$\Omega_T$}] {};
+
+
+
+
+% the edges
+\draw (f1) -- (s6);% node[midway,above] {$B$};
+\draw (s) -- (f1);
+\draw (s) -- (f2);
+\draw (s) -- (f3);
+\draw (s) -- (f4);
+\draw (s) -- (f5);
+\draw (s6) -- (s13);
+\draw (s13) -- (s17);
+\draw (s17) -- (s24);
+\draw (s24) -- (S);
+
+\end{tikzpicture}
+\caption{Representation of the SPH algorithm for the D-TOP}
+\label{fig:sph}
+\end{figure}
+
+
+
+The second step can be done very efficiently, and the problem boils down to finding interesting sets of solutions (independently) for each time step. \\
+Recall that for the static case, we solve the instances using an ILP for each number of sounds $i$, from 1 to the maximum number of sounds $L$. This produces an interesting bunch of $L$ static solutions. Our heuristic SPH is precisely to use for $\Omega_t$ this set $A_t$ of $L$ feasible solutions. Once obtained these static solution, the shortest path problem is on $LT$ nodes (plus $s$ and $t$). \\
 Note that overall the computation time is (nearly) linear in $T$.  
 
 
 \subsubsection{Results on some dynamic target sounds}
 
-[TBD]
+\begin{figure}[ht!]
+\centering
+\begin{tabular}{c||c|c|c|c|c}%{c|c|c|c|c}
+     \textbf{target sound}&$\Omega_t=A_t$&$\Omega_t=A_t\cup E_t$&$\Omega_t=E_t$  &\textit{Orchidea}&$T$\\
+A Minor&5354&5354&7236&8316&16\\
+Brahms&3446&3446&4235&4845&8\\
+Drops&5902&5902&8270&8925&12\\
+Jarret Vienna&1727&1727&2304&2531&6\\
 
-[Again: description of the targets (and the orchestra), if not done before]
+ 
+\end{tabular}
+\caption{Summary of results of the LP and the Evolutionary algorithms on some static target sounds }
+\label{tab:resultstat}
+\end{figure}
+
+%[Again: description of the targets (and the orchestra), if not done before]
 
 As previously, we compare SPH with the solution output by the current software \textit{Orchidea}. 
 
-[Put results on SPH and \textit{Orchidea}, comments,...]
+%[Put results on SPH and \textit{Orchidea}, comments,...]
 
 Also, we were interested in evaluating the choice of sets $\Omega_t=A_t$ in SPH. To do so, we also consider the set $E_t$ of solutions output by the evolutionary algorithm of \textit{Orchidea} on target at time $t$. We consider in the experiments 3 possible choices:
 \begin{itemize}
