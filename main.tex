@@ -71,13 +71,13 @@
 %\renewcommand\qedsymbol{$\QED$}
 
 
-\newcommand{\stat}{{\sc S-TOP }}
+\newcommand{\stat}{{\sc S-TOP}}
 
-\newcommand{\statoned}{{\sc S-TOP-1D }}
+\newcommand{\statoned}{{\sc S-TOP-1D}}
 
-\newcommand{\dyn}{{\sc D-TOP }}
+\newcommand{\dyn}{{\sc D-TOP}}
 
-\newcommand{\dynoned}{{\sc D-TOP-1D }}
+\newcommand{\dynoned}{{\sc D-TOP-1D}}
 
 %% Blbio
 %\newcites{s}{Travaux personnels}
@@ -190,18 +190,46 @@ Note} #1} \vspace{0.1cm}}
 \hfill
 \includegraphics[width = 25mm]{logo-lip6.png}
 
-\centering
-\vspace{5cm}
+{\centering
+\vspace{1cm}
+{\sc SORBONNE UNIVERSIT\'E}\\
+
+{\sc LIP6}\\
+{\sc (\'Equipe Recherche Op\'erationnelle)}\\
+\vspace{0.6cm}
+\large
+\textbf{TH\`ESE DE DOCTORAT EN INFORMATIQUE}\\\par}
+\vspace{0.8cm}
+
 {\fbox{\parbox[c]{15cm}{\begin{center}
-{\bf \LARGE{
-Algorithmic aspects of Multistage Optimization }}\end{center}}}}
-
-
-{\large
-
+{\bf \huge{
+Aspects Algorithmiques de l'Optimisation Multistage\\ }}\end{center}}}}
+{\centering
+\normalsize
+\vspace{0.7cm}\\
+Pr\'esent\'ee et soutenue publiquement le $\ldots/\ldots/\ldots$ par \\ 
+\vspace{0.3cm}
+\large \textbf{ ALEXANDRE TEILLER}\\
+\vspace{0.4cm}
+\large \textit{devant le jury compos\'e de : } \par}
+\vspace{0.4cm}
+{\normalsize
 \begin{tabular}{ll}
-Coordinateur: Bruno Escoffier and Euripide Bampis \\
-\vspace{0.2cm}\\
+Directeurs de th\`ese : & {\sc Evripidis Bampis}\\
+& Professeur \`a Sorbonne Universit\'e, Paris\\
+& {\sc Bruno Escoffier}  \\
+& Professeur \`a Sorbonne Universit\'e, Paris\\
+Rapporteurs : & {\sc Cedric Bentz}\\
+& Ma\^itre de Conf\'erences au CNAM, Paris\\
+& {\sc Denis Trystram}\\
+& Professeur \`a Grenoble INP, Grenoble\\
+Examinateurs : & {\sc Carlos Agon}\\
+& Professeur \`a Sorbonne Universit\'e, Paris\\
+& {\sc Christian Laforest}\\
+& Professeur \`a ISIMA, Aubi\`ere\\
+& {\sc Valia Mitsou}\\
+& Ma\^itresse de Conf\'erences \`a l'Universit\'e de Paris, Paris
+
 \end{tabular}}
 \end{titlepage}
 
@@ -298,56 +326,67 @@ Coordinateur: Bruno Escoffier and Euripide Bampis \\
 
 
 \chapterToc{Introduction}
+In a classical combinatorial optimization setting, given an instance of a problem one needs to find a good feasible solution. However, in many situations, the data may evolve over time and one has to solve a sequence of instances. The natural approach of solving every instance independently may induce a significant transition cost, for instance for moving a system from one state to another. \cite{Gupta} and \cite{Eisenstat}  proposed a \emph{multistage} model where given a time horizon $t = 1, 2, \ldots,T$, the input is a sequence of instances $I_1,I_2,\ldots,I_T$, (one for each time step), and the goal is to find a sequence of solutions $S_1,S_2,\ldots,S_T$ (one for each time step) reaching a trade-off between the quality of the solutions in each time step and the stability/similarity of the solutions in consecutive time steps. The \emph{multistage} framework is the main subject of the thesis in which we addressed some maximization problems in the offline setting as well as in the online one and study a direct application of the framework in a musical context. Roughly speaking, in the offline setting, one has a complete knowledge of the data over the time horizon whereas in the online setting, one only knows the data at a time $t$ and the intances of future time steps $t+1,\ldots,T$ are unknown.\\
 
+In the chapter \ref{chap:overview} of the thesis, we will present an overview of optimization tackling evolving data. First are presented some notions of complexity theory that will be used during the whole document. Then, the framework of this thesis is presented as well as its current state of the art. Note that the framework was introduced fairly recently (in 2014) and more and more articles adressing it are published each year. In addition of being interesting in practical situations, some surprising behaviours were observed in the multistage context: some problems, polynomial solvable in their classical version become \textbf{NP}-hard and/or inapproximable in their multistage version even in very ``easy'' restricted settings; some other problems, \textbf{NP}-hard in their classical version, tend to be easier to approximate in their mulistage version than polynomial solvable problems (in their classical version). Finally are presented some other approaches of the literature dealing with evolving data and sharing some properties with the multistage framework. \\
 
-\chapter{Optimization with temporal aspects, a state of the art}
+Then, in the chapter \ref{chap:multiknap}, the {\sc multistage knapsack} problem is addressed in the offline setting. Note that the studies of this chapter have been presented at MFCS (Mathematical Foundations of Computer Science) 2019 (\cite{BampisET19}). The main contribution is a polynomial time approximation scheme ($PTAS$) for the problem in the offline setting. Up to the best of our knowledge, this is the first $PTAS$ presented for a problem in its multistage version, contrasting with some inapproximability results showed for some polynomial solvable problems in their static version.\\
+
+In the chapter \ref{chap:onlmultista}, the multistage framework is studied for multistage problems in the \textit{online setting}, i.e at time $t$, instances at time $t+1,\ldots,T$ are unknown. When the lack of knowledge of the future has too much (bad) influence on the results one can obtain, the k-lookahead setting was studied, where at time $t$, instances at time $t+1,\ldots,t+k$ are known. The goal of these researches were to measure, in the multistage framework, the impact of the absence of information on the future of data evolution. Contrasting with the multistage literature which mainly focused (at the beginning of the thesis) on minimization problems, we addressed a large family of problems in the multistage setting known as the subset maximization problems (note that the {\sc multistage knapsack} problem is in this family of problems). The main contribution of this chapter was the introduction of a structure for these problems (tackling different kind of models) and almost tight upper and lower bounds on the best-possible competitive ratio for these models. Note that these works have been presented at ESA (European Symposium on Algorithms) 2019 (\cite{BampisEST19}).\\
+
+Finally in the chapter \ref{chap:orche} is presented a direct application of the multistage framework in a musical context. In the first part of this chapter is presented the musical problem studied, i.e the {\sc target-based computed-assisted orchestration} problem, with some basic notions of musical theory and the history behind the researches of the problem. Then our work is presented, which is a theoretical analysis of the {\sc target-based computed-assisted orchestration} problem, with \textbf{NP}-hardness and approximation results as well as some experimentations. Note that these works will be put on arXiv and submitted to a journal by the time of the thesis defense. 
+
+\chapter{Optimization with temporal aspects, a state of the art}\label{chap:overview}
 \chaptermark{}
 \section{Combinatorial optimization preliminaries}
-In the first section of this chapter, we will present some fundamental definitions and notions of combinatorial optimization used during the thesis. We will define a certain terminology and vocabulary for the entire document. First and foremost, we will address the complexity theory with its classes and techniques, then, we will develop the notion of approximation algorithms. 
+In the first section of this chapter, we will present some fundamental definitions and notions of combinatorial optimization used during the thesis. We will define a certain terminology and vocabulary for the entire document. First and foremost, we will address the complexity theory with its main classes, then, we will develop the notion of approximation algorithms. 
 
 
 
 
 \subsection{A brief introduction of the complexity theory}
-In a classical optimization problem, given an instance, one is asked to find a feasible solution optimizing an objective function. The feasibility of a solution is defined by a set of constraints applied to, depending on the nature of the problem, nodes, edges, precedence and so on for graphs, objects for packing problems... \\ 
+As we said in the introduction of the thesis, in a classical optimization problem, given an instance, one is asked to find a feasible solution optimizing an objective function. The feasibility of a solution is defined by a set of constraints applied to, depending on the nature of the problem, nodes, edges, precedence and so on for graphs, objects for packing problems... \\ 
 
 Let us define two types of problems, the decision problems and the combinatorial optimization problems.
 \begin{definition}{\emph{(Decision problem) }}\\
-In a decision problem, given a $k$ and an instance of the problem, one is asked to find whether there exists a solution of value at least (for maximization problem) or at most (for minimization problem) $k$.
+A decision problem is defined as a set $\mathcal{I}$ of instances which is partitioned into $\mathcal{I}^+$ (YES-instances) and $\mathcal{I}^-$ (NO-instances). The goal is to determine if a given $I \in \mathcal{I}$ is a YES-instance or a NO-instance.\\
+%In a decision problem, given a set of instances and a question, one is asked to find if the answer of the question with an instance of the given set is yes or no.
+
 \end{definition}
 
 
 \begin{definition}{\emph{(Combinatorial Optimization problem)}} \label{def:pbopti} A combinatorial optimization problem $A$ is defined by :
 \begin{itemize}
-    \item a given a set of instances $I$
-    \item for each instance $I$, a set $\mathcal{F}(I)$ of feasible solutions
+    \item a given a set of instances $\mathcal{I}$
+    \item for each instance $I \in \mathcal{I}$, a set $\mathcal{F}(I)$ of feasible solutions
     \item for each solution $x \in \mathcal{F}(I)$ a value $c_I(x)$, assumed to be greater or equal to $0$
 \end{itemize}
-One needs to find a subset of feasible solutions in order optimize an objective function $f$
+One needs to find a feasible solution in order to optimize the objective function% $f$
 \end{definition}
 
 
-Note that, any optimization problem can be associated to a decision problem where the problem, less formally, is to determine, given a $k$, whether there exists a solution of value at least (for maximization problem) or at most (for minimization problem) $k$. Those problems are defined this time by a set of instances and a question. Then, given an instance in the whole set of instances, one is asked to find if the answer of the question with this instance is yes or no, often also presented as $1$ and $0$ respectively. \\
+Note that, any optimization problem can be associated to a decision problem where the problem, is to determine, given a $k$, whether there exists a solution of value at least (for maximization problem) or at most (for minimization problem) $k$. \\%Those problems are defined this time by a set of instances and a question. Then, given an instance in the whole set of instances, one is asked to find if the answer of the question with this instance is yes or no, often also presented as $1$ and $0$ respectively. \\
 
-An algorithm, based on Turing machines that we won't present here, is used to solve either the optimization problem or the decision problem. We call the \textit{time complexity} of a problem the number of steps one has to go through in order to run the algorithm in function of the size of the instance : there exists some $c>0$ such that any instance $I$ can be solved in $O(|I|^c)$. Space is another type of resource addressed in complexity theory defined by the \textit{space complexity}, being the space in memory an algorithm needs to run. We focus extensively in the \textit{time complexity} in this thesis (we will sometimes use the term complexity of a problem and will be referring in this case to its \textit{time complexity}).\\
+An algorithm, based on Turing machines that we won't present here, is used to solve either the optimization problem or the decision problem. We call the \textit{time complexity} of an algorithm the number of steps one has to go through in order to run it. We say that a problem is solvable in polynomial time if there exists some $c>0$ such that any instance $I$ of the problem can be solved by an algorithm running in time $O(|I|^c)$. Space is another type of resource addressed in complexity theory defined by the \textit{space complexity}, being the space in memory an algorithm needs to run. We focus extensively in the \textit{time complexity} in this thesis (we will sometimes use the term complexity of a problem and will be referring in this case to its \textit{time complexity}).\\
 
 
 
 
 That being defined, we can introduce two central classes of problem of the complexity theory. 
-The first one is called the class \textbf{P}. (The following definitions of this section are for most of them taken from \cite{escoffier2005approximation} which we reefer the reader to for a more detailed introduction on complexity classes and approximation algorithms and techniques)
+The first one is called the class \textbf{P} (The following definitions of this section are for most of them taken from \cite{escoffier2005approximation} which we refer the reader to for a more detailed introduction on complexity classes and approximation algorithms and techniques).
 \begin{definition}{\emph{(The complexity class of problems \textbf{P}) }}\\
 The complexity class \emph{\textbf{P}} of problems is defined as the set of all decision problems solvable in polynomial time by a deterministic Turing machine.
 \end{definition}
 
-Less formally, the class \textbf{P} is composed by all the problems considered solvable in polynomial time. We will encounter quite a lot of problems belonging to this class in the next sections. It is important to notice that polynomial time is for most of the cases equivalent to "useable" in real world applications. However, a large amount of problems are not known to be in the class \textbf{P}, i.e we don't know any polynomial time algorithm able to solve them.  \\
+We will encounter quite a lot of problems belonging to this class in the next sections. %It is important to notice that polynomial time is for most of the cases equivalent to ``useable'' in real world applications. 
+However, a large amount of problems are not known to be in the class \textbf{P}, i.e we don't know any polynomial time algorithm able to solve them.  \\
 
 This observation leads us to introduce the the second central class of problem, called the complexity class \textbf{NP} of problems.
 \begin{definition}{\emph{(The complexity class of problems \textbf{NP})}} \\
-The complexity class \emph{\textbf{P}} is defined as the set of all decision problems solvable in polynomial time by a non deterministic Turing machine.
+The complexity class \emph{\textbf{NP}} is defined as the set of all decision problems solvable in polynomial time by a non deterministic Turing machine.
 \end{definition}
 
-Roughly speaking, the complexity class \emph{\textbf{NP}} of problems is defined as the set of all decision problems for which it is possible to verify for a given solution if the answer to the decision problem question is yes or no.
+Roughly speaking, the complexity class \textbf{NP} of problems is defined as the set of all decision problems for which it is possible to verify in polynomial time if an answer of a given instance to the decision problem question is yes.
 
 
 The class \textbf{NP} gathers a large amount of problems, in addition to all the problems of the class \textbf{P}, solvable and thus verifiable in polynomial time. \\
@@ -371,7 +410,7 @@ The complexity class \textbf{NP}-hard is defined as the set of all the decision 
 
 \end{definition}
 
-Later in the document, we will also reefer to \textbf{NP}-hard optimization problems, an optimization problem is \textbf{NP}-hard if its decision version is \textbf{NP}-hard.  
+Later in the document, we will also refer to \textbf{NP}-hard optimization problems, an optimization problem is \textbf{NP}-hard if its decision version is \textbf{NP}-hard.  
 %Thus, to show that a decision problem $B$ is \textbf{NP}-hard (i.e is in the complexity class \textbf{NP}-hard, one needs to prove that there exists a Karp reduction, i.e taking polynomial time, from another decision problem $A$ that is \textbf{NP}-hard.  
 Note that a problem can be \textbf{NP}-hard but not in \textbf{NP}.
 
@@ -389,8 +428,8 @@ As said in the previous section, a vast amount of decision problems are known to
 
 Formally, for an optimization problem $P$ and an instance $I$, the quality of an approximation algorithm is given by the ratio:% $\rho(I)$ defined as: 
 $$ \frac{\emph{SOL(I)}}{\emph{OPT(I)}}$$
-with \emph{SOL(I)} the value of the solution returned by the algorithm on the instance $I$ and computed in polynomial time, \emph{OPT(I)} the value of the optimal solution. The value of the ratio has to be less (resp. greater) than one for maximization (resp. minimization) problems. Note that in this document, we only consider problems with positive objective functions.\\
-We say that there is $\rho$-approximation algorithm for an optimization problem if it has been shown that for any instance $I$ of the problem, i.e specially in the worst case scenario, the ratio $\rho(I)$ is verified, i.e if $SOL(I) \leq \rho(I) OPT(I)$ for minimization problems and $SOL(I) \geq \rho(I) OPT(I)$ for maximization problem. One is looking for an approximation algorithm with a ratio as close as possible to 1. \\
+with \emph{SOL(I)} the value of the solution returned by the algorithm on the instance $I$ and computed in polynomial time, \emph{OPT(I)} the value of the optimal solution. The value of the ratio has to be at most (resp. at least) than one for maximization (resp. minimization) problems. Note that in this document, we only consider problems with positive objective functions.\\
+We say that an algorithm is a $\rho$-approximation algorithm for an optimization problem if it has been shown that for any instance $I$ of the problem, i.e especially in the worst case scenario, the ratio $\rho(I)$ is verified, i.e if $SOL(I) \leq \rho(I) OPT(I)$ for minimization problems and $SOL(I) \geq \rho(I) OPT(I)$ for maximization problem. One is looking for an approximation algorithm with a ratio as close as possible to 1. \\
 
 Some problems have a known constant approximation ratio and said to be in a complexity class called \textbf{APX}:
 \begin{definition}{\emph{(The complexity class of problems \textbf{APX})}}\\
@@ -401,12 +440,12 @@ Let us finally introduce two last classes of complexity that we will use in this
 
 The first one is called \textbf{PTAS}.
 \begin{definition}{\emph{(The complexity class problems \textbf{PTAS})}}\\
-The complexity class of problems \emph{\textbf{PTAS}} is defined as the set of all optimization problems admitting a Polynomial Time Approximation Scheme ($PTAS$). A $PTAS$ is an algorithm, that takes as input of an optimization problem and any $\epsilon >0$, outputs a $(1-\epsilon)$-approximate solution with a polynomial complexity in the instance size $|I|$. The dependency in $\epsilon$ can be arbitrary. 
+The complexity class of problems \emph{\textbf{PTAS}} is defined as the set of all optimization problems admitting a Polynomial Time Approximation Scheme ($PTAS$). A $PTAS$ is an algorithm, that takes as input an instance of an optimization problem and any $\epsilon >0$, outputs a $(1-\epsilon)$-approximate solution for maximization problems, ($(1+\epsilon)$-approximate solution for minimization problems) with a complexity polynomial in the instance size $|I|$. The dependency in $\epsilon$ can be arbitrary. 
 
 \end{definition}
 We say that a problem is \textbf{APX}-hard if there is no $PTAS$ under the hypothesis that \textbf{P$\ne$ NP}. 
 
-The other one is more restricted class called \textbf{FPTAS} that is polynomial in both the instance size and $\frac{1}{\epsilon}$.
+The other one is the more restricted class called \textbf{FPTAS} where the complexity of the algorithm is required to be is polynomial in both the instance size and $\frac{1}{\epsilon}$.
 Formally:
 \begin{definition}{\emph{(The complexity class \textbf{FPTAS})}}\\
 The complexity class of problems \emph{\textbf{FPTAS}} is defined as the set of all optimization problems admitting a Fully Polynomial Time Approximation Scheme ($FPTAS$). A $FPTAS$ is a $PTAS$ whose complexity is polynomial both in the instance size $|I|$ and $\frac{1}{\epsilon}$
@@ -415,22 +454,21 @@ The complexity class of problems \emph{\textbf{FPTAS}} is defined as the set of 
 
 A lot of other complexity classes dealing with approximation algorithms are studied in the literature  (see \cite{ausiello2005approximability} for a detailed survey on the approximation preserving reductions). \\
 
-Let us now define the L-reduction, being like the Karp-reduction but nearly preserving the approximation properties between two decision problems.%, i.e preserving the \textbf{PTAS} for all problems and the membership to \textbf{APX} only for minimization problems:
-\begin{definition}{\emph{(The L-reduction)}}\\
-Let $A$ and $B$ two decision problems, $c_A$ and $c_B$ their respective positive cost functions, two polynomial time functions f that associates an instance from $B$ to an instance from $A$ and g that associates a solution from $A$ to a solution from $B$, $\alpha >0$ and $\beta >0 $ such that for all instance $I \in A$ and $x \in S(f(I))$, $S(f(I))$ being the set of all feasible solution of $f(I)$:
-\begin{itemize}
-    \item OPT$_B(f(I))\leq \alpha $OPT$_A(I)$
-    \item for every solution $x$ of $f(I)$:\\ 
-    $|$OPT$_A(I)-c_A(g(x))|\leq \beta|$OPT$_B(f(I))-c_B(x)|$
+% Let us now define the L-reduction, being like the Karp-reduction but nearly preserving the approximation properties between two decision problems.%, i.e preserving the \textbf{PTAS} for all problems and the membership to \textbf{APX} only for minimization problems:
+% \begin{definition}{\emph{(The L-reduction)}}\\
+% Let $A$ and $B$ two decision problems, $c_A$ and $c_B$ their respective positive cost functions, two polynomial time functions f that associates an instance from $B$ to an instance from $A$ and g that associates a solution from $A$ to a solution from $B$, $\alpha >0$ and $\beta >0 $ such that for all instance $I \in A$ and $x \in S(f(I))$, $S(f(I))$ being the set of all feasible solution of $f(I)$:
+% \begin{itemize}
+%     \item OPT$_B(f(I))\leq \alpha $OPT$_A(I)$
+%     \item for every solution $x$ of $f(I)$:\\ 
+%     $|$OPT$_A(I)-c_A(g(x))|\leq \beta|$OPT$_B(f(I))-c_B(x)|$
 
-\end{itemize}
-\end{definition}
+% \end{itemize}
+% \end{definition}
 
-\alex{rq sur pb de minimization??}\\
 
 Let us give the definition of a pseudo polynomial time algorithm:
 \begin{definition}{\emph{(Pseudo polynomial time problem)}}\\
-Let $I$ an instance of a optimization problem $A$ (with its decision version being \textbf{NP}-complete) and $C(I)$ the absolute value of the greatest number in $I$, we say that $A$ is pseudo-polynomial if there exists an algorithm whose complexity is polynomial in the size of the instance, i.e $|I|$, but not necessarily in $C(I)$.  
+Let $I$ an instance of a optimization problem $A$ (with its decision version being \textbf{NP}-complete) and $C(I)$ the absolute value of the largest number in $I$, we say that $A$ is pseudo-polynomial if there exists an algorithm whose complexity is polynomial in the size of the instance, i.e $|I|$, and in $C(I)$.  
 
 \end{definition}
 
@@ -441,7 +479,7 @@ The complexity class strong \textbf{NP}-hard is defined as the set of all decisi
 
 \end{definition}
 
-Results on the complexity classes presented in this section will be presented in the different chapter of this thesis.  
+Results on the complexity classes defined in this section will be presented in the different chapter of this thesis.  
 
 
 
@@ -487,9 +525,9 @@ First, let us illustrate this approach with an example. Consider a company ownin
 \label{statickp}
 \end{figure}
 
-Two distinct instances of the {\sc Knapsack} problem are presented in the Figure \ref{statickp}. To get the optimal solution, one has to take in the left instance the production unit $u_3$, obtaining a profit of $7$ and using all the resources, called also capacity of the knapsack, i.e $2$. Otherwise, the profit would be lower or the amount $w_i$ of resources would exceed the global available resources. In the right instance, one has to take the units $u_1$ and $u_2$, obtaining a profit of $7$ and using again all the of the resources, i.e $3$.\\
+Two distinct instances of the {\sc Knapsack} problem are presented in Figure \ref{statickp}. To get the optimal solution, one has to take in the left instance the production unit $u_3$, obtaining a profit of $7$ and using all the resources, called also capacity of the knapsack, i.e $2$. Otherwise, the profit would be lower or the amount $w_i$ of resources would exceed the global available resources. In the right instance, one has to take the units $u_1$ and $u_2$, obtaining a profit of $7$ and using again all the of the resources, i.e $3$.\\
 
-In a temporal setting and more precisely in the multistage setting we focus on this thesis, a company would have to decide a production plan over a time horizon $t=1,2,\ldots, T$, of, let us say, $T$ days. The company here needs to decide a production plan for each day of the time time horizon, given that data (such as prices, level of resources,...) usually change over time. This a typical situation, for instance, in energy production planning (like electricity production, where units can be nuclear reactors, wind or water turbines,...), or in data centers (where units are machines and the resource corresponds to the available energy). Moreover, in these examples, there is and extra cost to turn ON or OFF a unit like in the case of turning ON/OFF a reactor in electricity production (\cite{rottner2018combinatorial}), or a machine in a data center (\cite{DBLP:conf/spaa/2017}). Obviously, whenever a reactor is in the ON or OFF state, it is beneficial to maintain it at the same state for several consecutive time steps, in order to avoid the overhead costs of states changes (even if it is important to note that the problem in real situations is much more complicated). Therefore, the design of a production plan over a given time horizon has to take into account both the profits generated each day from the operation of the chosen units, as well as the potential \textit{transition profits} from maintaining a unit at the same state for two consecutive days. Thus, in the {\sc Multistage} framework, instead of having only an instance of a problem and seeking a feasible solution optimizing its objective function, we have a sequence of instances of a problem, one for each time step and one is asked to seek a sequence of feasible solutions, one for each time step, reaching a trade-off between the optimality of the solutions and the stability of consecutive solutions.\\
+In a temporal setting and more precisely in the multistage setting we focus on this thesis, a company would have to decide a production plan over a time horizon $t=1,2,\ldots, T$, of, let us say, $T$ days. The company here needs to decide a production plan for each day of the time time horizon, given that data (such as prices, level of resources,...) usually change over time. This a typical situation, for instance, in energy production planning (like electricity production, where units can be nuclear reactors, wind or water turbines,...), or in data centers (where units are machines and the resource corresponds to the available energy). Moreover, in these examples, there is and extra cost to turn ON or OFF a unit like in the case of turning ON/OFF a reactor in electricity production (\cite{rottner2018combinatorial}), or a machine in a data center (\cite{DBLP:conf/spaa/2017}). Obviously, whenever a reactor is in the ON or OFF state, it is beneficial to maintain it at the same state for several consecutive time steps, in order to avoid the overhead costs of states changes (even if it is important to note that the real problem is much more complicated). Therefore, the design of a production plan over a given time horizon has to take into account both the profits generated each day from the operation of the chosen units, as well as the potential \textit{transition profits} from maintaining a unit at the same state for two consecutive days. Thus, in the {\sc Multistage} framework, instead of having only an instance of a problem and seeking a feasible solution optimizing its objective function, we have a sequence of instances of a problem, one for each time step and one is asked to seek a sequence of feasible solutions, one for each time step, reaching a trade-off between the optimality of the solutions and the stability of consecutive solutions.\\
 The problem can be formalized as follows. We have a given time horizon $t=1,2,\ldots,T$, and a sequence of knapsack instances $I_1, I_2, \ldots,I_T$, one for each time step, defined on a set of $n$ productions units, also called objects in the {\sc Knapsack} problem. In every time step $t$ we have to choose a feasible knapsack $S_t$ of $I_t$, which gives a \textit{knapsack profit}. Taking into account transitions costs, we measure the stability/similarity of two consecutive solutions $S_t$ and $S_{t+1}$ by identifying the objects for which the decision, to be picked or not, remains the same in $S_t$ and $S_{t+1}$, giving a \textit{transition profit}. We are asked to produce a sequence of solutions $S_1, S_2, \ldots, S_T$ so that the total \textit{knapsack profit} plus the overall \textit{transition profit} is maximized.\\
 There are a lot of other applications where it is beneficial to use a multistage framework. One of them is the {\sc facility location} problem, which we will develop later in this section. Another one is a musical application called the target-based computer-assisted orchestration. We will focus on this latter application in details in the last chapter of the document.\\
 
@@ -501,9 +539,9 @@ The example introduces the {\sc Knapsack} problem in its multistage configuratio
 Let us now give a formal definition of an optimization problem in its multistage version. 
 \begin{definition}{\emph{(Multistage Optimization problem).}} In a Multistage Optimization problem, given 
 \begin{itemize}
-\item a combinatorial optimization problem $\cal P$ 
+\item a combinatorial optimization problem $\cal P$; 
 \item a number $T \in \mathbb{N}^*$ of time steps;
-\item for any $t \in T$, an instance $I_t$ of the optimization problem $\cal P$ with a feasible set $\mathcal{F}_t\in 2^N$
+\item for any $t \in T$, an instance $I_t$ of the optimization problem $\cal P$ with a feasible set $\mathcal{F}_t$
 
 %\item For each $t$: $C_t$ the capacity of knapsack at time $t$
 
@@ -516,15 +554,14 @@ The goal is to determine a solution sequence of maximum/minimum value for resp. 
 
 \end{definition}
 
-If we look back at the {\sc multistage knapsack} problem example. The \textit{profit} function $p_t(S_t)$ would be the \textit{knapsack profit} for $t=1,2$, with $S_t$ a solution at a time step $t$. The \textit{transition} function, here a \textit{bonus} function, would be $b(S_1,S_{2})=|(S_1\cap S_2) \cup (N\setminus S_1 \cap N\setminus S_2)|$. The goal is then to maximize the sum $p_1(S_1)+p_2(S_2)+b(S_1,S_{2})$.
+If we look back at the {\sc multistage knapsack} problem example. The \textit{profit} function $p_t(S_t)$ would be the \textit{knapsack profit} for $t=1,2$, with $S_t$ a solution at a time step $t$. The \textit{transition} function, here a \textit{bonus} function, would be $b(S_1,S_{2})=|(S_1\cap S_2) \cup (N\setminus S_1 \cap N\setminus S_2)|$. The goal is then to maximize the sum $p_1(S_1)+p_2(S_2)+b(S_1,S_{2})$.\\
 
-The definition presented above is of the few possible ways to define a problem in a multistage version.\\
-
-Indeed, here the global objective function consists of the sum of the \textit{profit/cost} function and the \textit{transition} bonus/cost.\\ This definition is quite arbitrary but seemed relevant for the problems encountered during the thesis. Moreover, it follows the original definition of the multistage framework presented in \cite{Gupta} and in \cite{Eisenstat}. It is in fact possible to define the objective function this way when one is able to compare the profit/cost function value and transition bonus/cost function value. For example, it is possible in the previously introduced applications, energy production planning or in data centers problems, the cost of the production  and turning cost of switching ON/OFF a reactor/server are directly comparable.\\
+The definition presented above is one of the several possible ways to define a problem in a multistage version.\\
+Indeed, here the global objective function consists of the sum of the \textit{profit/cost} function and the \textit{transition} bonus/cost.\\ This definition is debatable but seemed relevant for the problems encountered during the thesis. Moreover, it follows the original definition of the multistage framework presented in \cite{Gupta} and in \cite{Eisenstat}. It is in fact possible to define the objective function this way when one is able to compare the profit/cost function value and transition bonus/cost function value. For example, it is possible in the previously introduced applications, energy production planning or in data centers problems, the cost of the production  and turning cost of switching ON/OFF a reactor/server are directly comparable.\\
 Another way of defining a multistage version is with a multi-objective approach. Indeed, we will see later in this section that for some problems such as the {\sc vertex cover} problem, a multistage version of a problem was introduced where  
 one is asked to minimize a number of selected nodes (the classical {\sc vertex cover} problem objective function) and in the same time to minimize the number of modifications regarding the selected subset of nodes for two consecutive time steps. In some cases it is also relevant to bound the number of changes between two consecutive time steps or even to bound them on the whole time horizon. \\
 
-This latter point on the objective function is one aspect subject to differ between several definition of the framework, depending on the nature of the problem studied. \\
+This latter point on the objective function is one aspect subject to differ between several possible definitions of the framework, depending on the nature of the problem studied. \\
 Another aspect is the way data may evolve during the time horizon. There are indeed different possibilities of data evolution that will be developed later in \ref{chap:onlmultista}.
 % \begin{definition}
 % \emph{(Types of data evolution.)}
@@ -545,16 +582,16 @@ For example, for the {\sc Facility location} problem that we will develop into d
     \item and/or the cost induced by clients switching from different facilities
 \end{itemize} 
 Two kinds of transition bonus, namely the \emph{Intersection Bonus} and the \emph{Hamming Bonus}, will be studied in the third chapter of the thesis. We will see that, depending on the bonus studied, different results are observed.\\
-Another way to evaluate the stability of a sequence of solutions arises when the global objective function is a Multiple-criteria function (for multistage problems seen as multi-objective problems). As said previously one can be asked, depending of the studied problem, to bound the number of changes made between two time steps in its decision or even regarding the whole time period.\\
+%Another way to evaluate the stability of a sequence of solutions arises when the global objective function is a Multiple-criteria function (for multistage problems seen as multi-objective problems). As said previously one can be asked, depending of the studied problem, to bound the number of changes made between two time steps in its decision or even regarding the whole time period.\\
 
 Finally, in order to go further in the development of the multistage framework and present the current state of the art of the multistage framework, we need to present different temporal settings on the knowledge of the data over the time horizon. We will focus on three settings studied in the literature:
 \begin{enumerate}
-    \item the \emph{offline} setting: one has a complete knowledge of the instance over the time horizon (this was the case of the example of Figure \ref{statickp} where we know the whole sequence of instances of the {\sc Multistage Knapsack} problem, it would the case for the electricity planning problem where one is asked to find a solution given a predicted fixed data set, a musical application will be developed in the fourth chapter in this setting when one has a given data set over a time horizon)
-    \item the \emph{online} setting: at a time step $t$, one only knows the data for today, i.e we have no information regarding the instances at time steps $t+1,\ldots,T$. (another definition where one has also the knowledge of the instance at time $t+1$ is present in the literature). In our definition, we also assume that we know the number $T$ of time steps of the time horizon (another version also exists where this latter point is not known). The \emph{online} setting will be develop later in the chapter as it is a extensively studied case of temporal optimization.
-    \item the \emph{k-lookahead} setting: at a time step $t$, one knows the data for today and the next $k$ days. This setting is tightly linked to the \emph{online} case as it is often used when no results can be obtained in the \emph{online} case. In our definition, we again assume that one knows the total number of time steps $T$ of the time horizon. %(As in the \emph{online} setting, different versions regarding the knowledge of either the time step $t+1,\ldots,k$ and $T$ exist in the literature).
+    \item the offline setting: one has a complete knowledge of the instance over the time horizon (this was the case of the example of Figure \ref{statickp} where we know the whole sequence of instances of the {\sc Multistage Knapsack} problem, it would be the case for the electricity planning problem where one is asked to find a solution given a predicted fixed data set, a musical application will be developed in the fourth chapter in this setting when one has a given data set over a time horizon);
+    \item the online setting: at a time step $t$, one only knows the data for today, i.e we have no information regarding the instances at time steps $t+1,\ldots,T$. In our definition, we also assume that we know the number $T$ of time steps of the time horizon. The online setting will be develop later in the chapter as it is a extensively studied case of temporal optimization.
+    \item the k-lookahead setting: at a time step $t$, one knows the data for today and the next $k$ days. This setting is tightly linked to the online case as it is often used when no results can be obtained in the online case. In our definition, we again assume that one knows the total number of time steps $T$ of the time horizon. %(As in the online setting, different versions regarding the knowledge of either the time step $t+1,\ldots,k$ and $T$ exist in the literature).
 \end{enumerate}
 
-The third chapter deals with {\sc Multistage Subset Maximization} problems in the \emph{online} and \emph{k-lookahead} settings, the possible different types of data evolution and transition bonus functions. 
+The third chapter deals with {\sc Multistage Subset Maximization} problems in the online and k-lookahead settings, the possible different types of data evolution and transition bonus functions. 
 
 \subsection{State of the art: the multistage framework}\label{multisota}
 
@@ -563,11 +600,11 @@ The multistage framework defined formally in the previous section follows the di
 
 \subsubsection{Matching and Perfect Matching problems}
 In the static {\emph {matching}} problem, given a graph, we need to find a set of edges with no vertices in common. A {\emph {matching}} is called a {\emph {perfect matching}} if all vertices of a graph are in the set of the selected edges.\\ 
-In its multistage version, the perfection version of the problem is called the {\sc perfect matching maintenance} and consists of keeping the perfect macthing property over the time horizon, i.e at each time step, while the cost function on the edges of the graph and cost value for adding new elements is subject to change during the time horizon.\\
+In its multistage version, the perfection version of the problem is called the {\sc perfect matching maintenance} and consists of keeping the perfect matching property over the time horizon, i.e at each time step, while the cost function on the edges of the graph and cost value for adding new elements is subject to change during the time horizon.\\
 
-In \cite{Gupta}, they showed that the {\sc perfect matching maintenance} problem becomes surprisingly inapproximable, even in the \emph{offline} case. This negative result is the first observation of the hardness induced by the multistage framework. Indeed, the majority of the problems studied for now and considered easy, i.e polynomial solvable or easily approximable, in their static form become really hard in this framework, even for limited restricted instances, in the \emph{offline} case and for a small number of time steps.\\
+In \cite{Gupta}, they showed that the {\sc perfect matching maintenance} problem becomes surprisingly inapproximable, even in the offline case. This negative result is the first observation of the hardness induced by the multistage framework. Indeed, the majority of the problems studied for now and considered easy, i.e polynomial solvable or easily approximable, in their static form become really hard in this framework, even for limited restricted instances, in the offline case and for a small number of time steps.\\
 
-The negative result on the {\sc perfect matching maintenance} was improved a few years later in \cite{Bampis}. Indeed, in \cite{Gupta}, it was shown that the problem was innaproximable for instances with as least $8$ time steps but the question for less time steps and for specific instances such as bipartite graph was left open. \cite{Bampis} addressed this open question and proved that the problem is hard to approximate event for $2$ time steps and in bipartite graphs. Then, they showed other negative results. Even the metric version of the problem where the triangle inequalities are satisfied, called {\sc minimum multistage perfect matching}, is \textbf{APX}-hard, if \textbf{P$\ne$ NP}. However, in the case where the number of time steps it equal to $2$ or $3$, they presented a constant approximation ratio. Finally, they also showed that the problem in its maximization version, with the complementary objective function, was also \textbf{APX}-hard even though it has a constant approximation ratio. \\
+The negative result on the {\sc perfect matching maintenance} was improved a few years later in \cite{Bampis}. Indeed, in \cite{Gupta}, it was shown that the problem was inaproximable for instances with as least $8$ time steps but the question for less time steps and for specific instances such as bipartite graph was left open. \cite{Bampis} addressed this open question and proved that the problem is hard to approximate even for $2$ time steps and in bipartite graphs. Then, they showed other negative results. Even the metric version of the problem where the triangle inequalities are satisfied, called {\sc minimum multistage perfect matching}, is \textbf{APX}-hard. However, in the case where the number of time steps it equal to $2$ or $3$, they presented a constant approximation ratio. Finally, they also showed that the problem in its maximization version, with the complementary objective function, was also \textbf{APX}-hard even though it has a constant approximation ratio. \\
 
 
 Very recently, in \cite{chimani2020approximating}, the authors looked again at the {\sc multistage matching} problem and a variant where the number of overall modifications are as small as possible. They improved the results presented in \cite{Bampis} by showing the NP-hardness of the problem in an even more restricted case than the one presented in \cite{Bampis}. They also presented a new approximation algorithm that does not require the restrictions needed before.
@@ -579,7 +616,7 @@ The multistage version of the problem, called the {\sc Dynamic Facility Location
 
 For both the static and the multistage versions of the problem, there exists a variant in the definition of the opening cost per facility. Indeed, one has to pay either a \textit{fixed} opening cost to open a facility, the facility remains open for the whole time horizon, either a \textit{hourly} opening cost, paying for each facility opened at each time step.\\
 
-In \cite{Eisenstat}, they addressed the {\sc facility location }problem in the multistage framework. The application underlying the study of this problem is another example of a possible application and need of stability in the decisions made among a time horizon. In our era, a huge amount of data are collected on social networks and their studies are more and more important. These networks quickly evolve in time and it is thus important to be able to analyze such data in a dynamic environment. Even though the {\sc facility location} problem have been widely studied in temporal settings, the notion of stability was not really looked at. Taking into account this stability, here represented by clients moving or not between a set of facilities gives the possibility to understand better clients behaviour and highlight the impact of clients moving through different facilities. It thus offers better results in realistic situations giving stable group partition of the network. The authors proposed a logarithmic approximation for the problem and gave a matching inapproximability result in restricted instances respecting the triangle inequalities, with only one client, two possible positions and a fixed opening cost. These instances admit a constant approximation ratio in the static framework. \\
+In \cite{Eisenstat}, they addressed the {\sc facility location }problem in the multistage framework. The application underlying the study of this problem is another example of a possible application and need of stability in the decisions made among a time horizon. In our era, a huge amount of data are collected on social networks and their studies are more and more important. These networks quickly evolve in time and it is thus important to be able to analyze such data in a dynamic environment. Even though the {\sc facility location} problem have been widely studied in temporal settings, the notion of stability was not really looked at. Taking into account this stability, here represented by clients moving or not between a set of facilities gives the possibility to understand better clients behaviour and highlight the impact of clients moving through different facilities. It thus offers better results in realistic situations giving stable group partition of the network. \cite{Eisenstat} proposed a logarithmic approximation for the problem and gave a matching inapproximability result in restricted instances respecting the triangle inequalities, with only one client, two possible positions and a fixed opening cost. These instances admit a constant approximation ratio in the static framework. \\
 
 In \cite{An}, the authors treated one left open question in \cite{Eisenstat} and presented a constant factor approximation algorithm using LP-rounding techniques for the version of the problem where opening cost are paid \textit{hourly}.
 
@@ -589,52 +626,53 @@ In the {\sc spanning tree} problem, one is asked to find a tree $A$ in a graph s
 In its multistage version, given a set of instances of a directed graph and a number $T$ of time steps, we need to find a set of spanning trees $A_t $ for $t \in T$, one for each time step. Indeed, for each time step, we pay the price for the tree, as in the classical static version of the problem and also $|A_t \setminus A_{t-1} |$ for the modification of edges between two consecutive time steps. \\
 
 
-In \cite{Gupta}, they studied the {\sc multistage matroid maintenance} problem, problem with some costs induced by changing decisions at some time steps on some edges and with an application quite similar to the one presented in our example. As a special case, the problem can be seen as a natural multistage version of the {\sc Spanning tree} problem.  They looked at both the \emph{online} and \emph{offline} versions of the problem and gave logarithmic approximation algorithms in both cases using some LP-rounding, randomized algorithms and matroid techniques (see \cite{vazirani2013approximation} for details on approximation algorithms). They improved a result from \cite{Buchbinder} and \cite{Buchbinder+} who looked at a fractional version and later a more general version of the problem. 
+In \cite{Gupta}, they studied the {\sc multistage matroid maintenance} problem, problem with some costs induced by changing decisions at some time steps on some edges and with an application quite similar to the one presented in our example. As a special case, the problem can be seen as a natural multistage version of the {\sc Spanning tree} problem.  They looked at both the online and offline versions of the problem and gave logarithmic approximation algorithms in both cases using some LP-rounding, randomized algorithms and matroid techniques (see \cite{vazirani2013approximation} for details on approximation algorithms). They improved a result from \cite{Buchbinder} and \cite{Buchbinder+} who looked at a fractional version and later a more general version of the problem. 
 
 
 
 
 
 \subsubsection{List Update problem}
-In the {\sc list update} problem, given a set of items with values corresponding to their distances to the head of a track, a set of requests (these requests can be in the \textit{offline} or in the \textit{online} settings) and a constraint on a fixed position for each item at each time step, one has to give for each item an assignment to a position in the track for the whole time horizon minimizing the cost of all the requests. \\
+In the {\sc list update} problem, given a set of items with values corresponding to their distances to the head of a track, a set of requests (these requests can be in the offline or in the online settings) and a constraint on a fixed position for each item at each time step, one has to give for each item an assignment to a position in the track for the whole time horizon minimizing the cost of all the requests. \\
 In a multistage version of a closed variant of the problem, called the {\sc dynamic minimum linear arrangement} problem, there is no constraint on the position of an item at the beginning of each time step and one has to pay a cost for moving an item from one position to another between two time steps, measuring this way the stability of the solution.\\
 
-In \cite{olver2018itinerant}, the authors studied this multistage problem in both the \emph{offline} setting, presenting a polylogarithmic approximation algorithm, and the  \emph{online} setting, giving a logarithmic lower bound on the competitive ratio of any randomized algorithm against an oblivious adversary. 
+In \cite{olver2018itinerant}, the authors studied this multistage problem in both the offline setting, presenting a polylogarithmic approximation algorithm, and the  online setting, giving a logarithmic lower bound on the competitive ratio of any randomized algorithm against an oblivious adversary. 
 
 \subsubsection{Cut, Vertex Cover and some prize-collecting problems}
-Here we won't present the problem in its static and its multistage version as the results concern a lot of different discrete minimization problems. The idea is to highlight the possibility of using some LP-rounding techniques in a multistage framework.\\
-
-Indeed, last year, \cite{bampis2019lp} studied a wide variety of discrete minimization problems in a multistage framework. They presented some surprisingly positive results. Indeed, for some minimization integer programming problems refereed to as \textit{monotone} problems, polynomially solvable in their static version, such as the {\sc min cut} problem, they proved that the problems remain polynomially solvable in their multistage version. These results contrasts with the hardness results presented before on problems solvable by a polynomial algorithm in their static version and becoming \textbf{NP}-hard in the multistage framework.
+% Here we won't present the problem in its static and its multistage version as the results concern a lot of different discrete minimization problems. 
+Indeed, last year, \cite{bampis2019lp} studied a wide variety of discrete minimization problems in a multistage framework.
+The idea was to highlight the possibility of using some LP-rounding techniques in a multistage framework.\\
+They presented some surprisingly positive results. Indeed, for some minimization integer programming problems refereed to as \textit{monotone} problems, polynomially solvable in their static version, such as the {\sc min cut} problem, they proved that the problems remain polynomially solvable in their multistage version. These results contrasts with the hardness results presented before on problems solvable by a polynomial algorithm in their static version and becoming \textbf{NP}-hard in the multistage framework.
 \\
-They also showed that the properties in the static framework assuring both problems to have the semi-integrality and that the {\sc vertex cover} problem is 2-approximable hold in the multistage framework. Finally they introduced a new rounding technique with two-threshold designed specially for multistage problems and proved some constant approximation ratio for multistage version of the {\sc Prize-Collecting Steiner Tree} problem and the {\sc Prize-Collecting Traveling Salesman} problem. 
-
-
+%They also showed that the properties in the static framework assuring both problems to have the semi-integrality and that the {\sc vertex cover} problem is 2-approximable hold in the multistage framework. 
+They also showed that {\sc vertex cover}, as well as some other problems, remain $2$-approximable in the multistage framework.
+Finally they introduced a new rounding technique with two-threshold designed specially for multistage problems and proved some constant approximation ratio for multistage version of the {\sc Prize-Collecting Steiner Tree} problem and the {\sc Prize-Collecting Traveling Salesman} problem. 
 
 \subsubsection{Santa Claus problem}
-In the {\sc santa claus} problem, also called {\sc max min fair allocation} problem, given a set of resources and agents, one is asked to find an allocation of resources to agents such that the value of the \textit{worts-off} agent, i.e with the minimal subset of resources, is maximum. \\
+In the {\sc santa claus} problem, also called {\sc max min fair allocation} problem, given a set of resources and agents, one is asked to find an allocation of resources to agents such that the value of the \textit{worst-off} agent, i.e with the minimal subset of resources, is maximum. \\
 The problem in the multistage framework, called the {\sc over-time max min fair allocation} problem, in addition of sharing the same objective as its static version, has a \textit{transition revenue} evaluating the stability of solutions between two consecutive time steps. Indeed, one has a bonus for keeping the same decision over the time horizion, i.e here corresponding to resources remaining on the a same agent for two consecutive time steps. The global objective function sums these two objectives.\\
 
-In \cite{Bampis+}, the authors addressed this problem. They studied the problem in the \emph{offline}, \emph{online} and \emph{1-lookahead} settings and for different kind of evolving instances. The study of different kind of evolving instances is crucial in temporal optimization and will be developed in the third chapter. They showed that in its \emph{offline} version, the problem is much harder than its static version. It becomes \textbf{NP}-hard even for simple instances without restriction whereas these instances are trivially solved in the static version of the problem (instances where the static set of feasible solutions over the time horizon, i.e in this case instances where the set of resources and agents are the same during the whole time horizon and every resource can be allocated to any agent). Regarding the \emph{online} version of the problem, they proposed a constant competitive ratio for instances without restriction using an approximation algorithm for the static case as a subroutine. For instances where the feasible set of solution can change between different time steps, they showed that the problem has no bounded competitive ratio in the \emph{online} setting. Finally, they looked at the \emph{1-lookahead} version of the problem, in the same instance evolving setting and proposed a constant approximation algorithm using again a approximation algorithm for the static case as a subroutine. \\
+In \cite{Bampis+}, the authors addressed this problem. They studied the problem in the offline, online and \emph{1-lookahead} settings and for different kind of evolving instances. The study of different kind of evolving instances is crucial in temporal optimization and will be developed in the third chapter. They showed that in its offline version, the problem is much harder than its static version. It becomes \textbf{NP}-hard even for simple instances without restriction whereas these instances are trivially solved in the static version of the problem (instances where the static set of feasible solutions over the time horizon, i.e in this case instances where the set of resources and agents are the same during the whole time horizon and every resource can be allocated to any agent). Regarding the online version of the problem, they proposed a constant competitive ratio for instances without restriction using an approximation algorithm for the static case as a subroutine. For instances where the feasible set of solution can change between different time steps, they showed that the problem has no bounded competitive ratio in the online setting. Finally, they looked at the \emph{1-lookahead} version of the problem, in the same instance evolving setting and proposed a constant approximation algorithm using again a approximation algorithm for the static case as a subroutine. \\
 
-The {\sc over-time max min fair allocation} problem is the only multistage problem presented in the literature up to our knowledge addressing a multistage maximization problem, all presented multistage problems are minimization problems. We will develop in the second and third chapter of this document a study on a large class of multistage maximization problems called the {\sc Multistage Subset Maximization} problems and a special \textit{offline} study on the {\sc multistage knapsack problem}.
+The {\sc over-time max min fair allocation} problem is the unique multistage problem presented in the literature up to our knowledge addressing a multistage maximization problem, all presented multistage problems are minimization problems. We will develop in the second and third chapter of this document a study on a large class of multistage maximization problems called the {\sc Multistage Subset Maximization} problems and a special offline study on the {\sc multistage knapsack problem}.
 
 
 \subsection{State of the art: Parameterized multistage optimization studies}
-Let us now develop different definitions on the global objective function of a multistage problem presented in the previous section, i.e where a problem is addressed as a multi-objective problem. In the following problems the global objective function is still a mono-objective function but with some stability constraint. Indeed, whereas the problems presented before share the notion of \textit{transition profit} or \textit{transition cost}, ensuring that the solution does not change too much over the time horizon, here the stability is a represented by a \textit{bound} over the number of changes in a decision one can make between two time steps. Let us illustrate this function more precisely with the {\sc vertex cover} problem.
+Let us now a develop different definition on the global objective function of a multistage problem presented in the previous section, i.e where a problem is addressed as a multi-objective problem. In the following problems the global objective function is still a mono-objective function but with some stability constraint. Indeed, whereas the problems presented before share the notion of \textit{transition profit} or \textit{transition cost}, ensuring that the solution does not change too much over the time horizon, here the stability is a represented by a \textit{bound} over the number of changes in a decision one can make between two time steps. Let us illustrate this function more precisely with the {\sc vertex cover} problem.
 
 \subsubsection{Vertex Cover problem}
 In the classical static version of the {\sc vertex cover} problem, given a undirected graph, one is ask to find the smallest subset of vertices such that all edges contain at least one endpoint in the cover.\\
 In the multistage version of the {\sc vertex cover} problem studied in \cite{FluschnikNRZ19}, one is asked to find a small subset of vertices covering the edges of a temporal graph, i.e a subset of vertices at each time step in a set of graph with a fixed set of vertices but with a set of edges evolving during the time horizon, such that the number of changes between two solutions of two consecutive time steps \textit{does not exceed a given parameter}.\\
-A set of graph, with either the set of vertices or the set of edges changing over a time horizon is called a temporal graph. It is very well studied in the temporal optimization literature and will be presented more into details further in this chapter.\\
+Note that a set of graphs, with either the set of vertices or the set of edges changing over a time horizon is called a temporal graph. It is very well studied in the temporal optimization literature and will be presented more into details further in this chapter.\\
 
 
-Indeed, in \cite{FluschnikNRZ19}, the authors studied the above version of the {\sc multistage vertex cover} problem.  They showed that in the case where the number of time steps of the problem can be anything, i.e not a constant, the {\sc Multistage vertex cover} is \textbf{NP}-hard even for instances with only two vertices and one edge at every time step. Note that these instances are trivial in the static case. They also proved that the problem becomes \textbf{NP}-hard even for two time steps and on restricted instances where the graph of the first time step is a path and the one of the second time step is a tree. Then, they showed that if the parameter corresponding to the number of changes allowed between two time steps is smaller than two times the size of the cover, the problem is not fixed-parameter tractable according to this transition parameter (i.e \textbf{W[1]}-hard). The problem appears to be \textbf{FPT} when parametrized by the same transition parameter otherwise (see \cite{downey2012parameterized} for a survey on parameterized complexity). \\
+In \cite{FluschnikNRZ19}, the authors studied the above version of the {\sc multistage vertex cover} problem.  They showed that in the case where the number of time steps of the problem can be anything, i.e not a constant, the {\sc Multistage vertex cover} is \textbf{NP}-hard even for instances with only two vertices and one edge at every time step. Note that these instances are trivial in the static case. They also proved that the problem becomes \textbf{NP}-hard even for two time steps and on restricted instances where the graph of the first time step is a path and the one of the second time step is a tree. Then, they showed that if the parameter corresponding to the number of changes allowed between two time steps is smaller than two times the size of the cover, the problem is not fixed-parameter tractable according to this transition parameter (i.e \textbf{W[1]}-hard). The problem appears to be \textbf{FPT} when parametrized by the same transition parameter otherwise (see \cite{downey2012parameterized} for a survey on parameterized complexity). \\
 
 In \cite{heeger2019multistage}, the authors also looked at the multistage framework in the parametrized version, with a constraint on the number of allowed modifications in the solutions selected in two consecutive time steps. A contrario to the one presented before where the constraint was local, they introduced a global constraint with a bound on the number total of modifications. They introduced the {\sc global multistage vertex cover} problem and proved that it is \textbf{FPT} when parameterized by both the upperbound of the size of the solution and by the number of time steps but W[1]-hard when only parametrized by the upperbound of the solution size. \\
-The authors also addressed a global multistage version of the {\sc min cut} problem giving some \textbf{W[1]}-harndess results. They finally highlighted that some polynomial-time solvable problems are harder, computationally speaking, in a global multistage framework than global multistage versions of \textbf{NP}-hard problems. 
+The authors also addressed a global multistage version of the {\sc min cut} problem giving some \textbf{W[1]}-hardness results. They finally highlighted that some polynomial-time solvable problems are harder, computationally speaking, in a global multistage framework than global multistage versions of \textbf{NP}-hard problems. 
 
 \subsubsection{s-t Path problem}
-In the {\sc s-t Path} problem, given a directed weighted graph containing two nodes $s$ and $t$, one is asked to find the shortest path between $s$ and $t$.\\
+In the {\sc s-t Path} problem, given a directed weighted graph containing two nodes $s$ and $t$, one is asked to find a shortest path between $s$ and $t$.\\
 In the multistage version of the problem, the {\sc multistage s-t path problem}, given a temporal graph with the same vertex set but with changing edges over the time horizon, one is asked to find a minimum path between $s$ and $t$ in the temporal graph so that it is as stable as possible. The stability here is represented by a bound on the number of authorized modifications between two time steps, either on the vertex or on the edges. 
 
 In \cite{stpath}, the authors proved in this paper 
@@ -645,7 +683,7 @@ In {\sc Committee Election} problems, given a set of agents, a set of candidates
 Two variants of the {\sc Multistage Committee Election}  exist (\cite{multicomm}). In the first one, given a set of agents, a set of candidates, a sequence of voting profiles over a time horizon and an integer $k$, one is asked to find a sequence of small committees, one for each time step, such that the number of approvals is sufficiently large and that the size of the symmetric difference of two consecutive committees in the time horizon is lower than $k$. This version is called the {\sc Conservative Multistage Plurality Voting} problem.\\
 In the other variant called the {\sc Revolutionary Multistage Plurality Voting} problem, the problem is the same as the one presented above but this time the symmetric difference of two consecutive committees in the time horizon has to be greater than the fixed given integer parameter.\\
 
-In \cite{multicomm}, the authors looked at both variants of the multistage problem. They showed \textbf{NP}-hardness of both problems where the number of agents is fixed and gave some parameterized complexity results. Indeed, they showed that again both problems are W[1]-hard when parameterized by the number of stages%, being FPT otherwise.
+In \cite{multicomm}, the authors looked at both variants of the multistage problem. They showed \textbf{NP}-hardness of both problems where the number of agents is fixed and gave some parameterized complexity results. Indeed, they showed that again both problems are W[1]-hard when parameterized by the number of stages. %, being FPT otherwise.
 At last, they presented a polynomial algorithm for the revolutionary problem, while the conservative variant remains \textbf{NP}-hard, when the fixed parameter on the symmetric difference between two consecutive time steps is a constant. 
 
 \subsection{Contributions}
@@ -654,17 +692,16 @@ We presented the current state of the multistage framework. This setting is fair
 At the beginning of the thesis, the vast majority of the problems studied in the framework were minimization multistage problems. This one was of the reason that motivated us to focus ourselves on maximization problems. As said previously, we studied a large class of maximization problems in different settings and this will be detailed in the second and third chapter of this document.
 
 
-\alex{mettre a jour biblio de l'etat de l'art avec dblp}\\
 \section{Some other approaches tackling evolving data} \label{tempsota}
 
-As said in the introduction of this chapter, optimization in dynamic environment gathers a wide variety of researches branches. They were, for most of them, developed in the last 30 years in parallel of a lot of different approaches such as the approximation approach, feeding one another continuously.\\
+As said in the introduction of this chapter, optimization in dynamic environment gathers a wide variety of research branches. They were, for most of them, developed in the last 30 years in parallel of a lot of different approaches such as the approximation framework, feeding one another continuously.\\
 We will develop here different branches of researches taking into account optimization problems with evolving data sets. We will see that some of them are widely studied in the literature and that some others are closely linked to the multistage framework. For each temporal approach presented, we will focus on the similarities and differences from the multistage framework. \\
 
 The design of this section on other temporal approaches was strongly inspired by the survey on temporal optimization presented in \cite{boria2011survey}. 
 
 \subsection{Reoptimization}
-We will first develop the reoptimization paradigm.  The notion was introduced in \cite{Schaffter97} where a scheduling problem was addressed and later developed in \cite{archetti2003reoptimizing} in which the authors addressed the {\sc travelling salesman} problem, a very well know \textbf{NP}-hard problem. In both articles, two distinct steps were considered. In a first step, an algorithm gives an optimal or approximate solution for a \textbf{NP}-hard problem on an initial instance. The reoptimization focuses on the second step where the instance is perturbed, i.e vertex or edge deletions for graph problems, changing values for numerical problems$\ldots$ one is then asked to maintain the optimality/approximation ratio of the solution. Note that the perturbation in the reoptimization context is small, i.e only one vertex or edge is deleted for a graph problem$\ldots$ \\
-These two steps give direct property for problem in their reoptimization version. Indeed, the result of \textbf{NP}-hardness of a problem holds in the reoptimization framework, otherwise one could solve any \textbf{NP}-hard problem using reoptimization algorithms and starting from an empty instance. However, some problems are known to be hard to approximate in their static version and becomes \textbf{APX} or even admits a PTAS in the reoptimization framework (it is the case for example for the {\sc max independ set} problem). This is why the majority of the results presented in this framework concern approximation algorithms. More generally, two kinds of results can be achieved for \textbf{NP}-hard problems in their reoptimization version:
+We will first develop the reoptimization paradigm.  The notion was introduced in \cite{Schaffter97} where a scheduling problem was addressed and later developed in \cite{archetti2003reoptimizing} in which the authors addressed the {\sc travelling salesman} problem, a very well know \textbf{NP}-hard problem. In both articles, two distinct steps were considered. In a first step, an algorithm gives an optimal or approximate solution for a \textbf{NP}-hard problem on an initial instance. The reoptimization focuses on the second step where the instance is perturbed, i.e vertex or edge deletions for graph problems, changing values for numerical problems$\ldots$ One is then asked to maintain the optimality/approximation ratio of the solution. Note that the perturbation in the reoptimization context is small, i.e only one vertex or edge is deleted for a graph problem. \\
+These two steps give a direct property for problem in their reoptimization version. Indeed, the result of \textbf{NP}-hardness of a problem typically holds in the reoptimization framework, otherwise one could solve any \textbf{NP}-hard problem using reoptimization algorithms and starting from an empty instance. However, some problems are known to be hard to approximate in their static version and becomes \textbf{APX} or even admits a PTAS in the reoptimization framework (it is the case for example for the {\sc max independent set} problem). This is why the majority of the results presented in this framework concern approximation algorithms. More generally, two kinds of results can be achieved for \textbf{NP}-hard problems in their reoptimization version:
 \begin{itemize}
     \item the reoptimization algorithm gives with a better running time an optimal or approximate solution as good as the solutions given by the best known algorithm for the problem in its static version; 
     \item the reoptimization algorithm gives in polynomial time a better approximation ratio than the best one known for the problem in its static version.
@@ -686,16 +723,16 @@ In a train station, an algorithm has to find a assignment over a time period for
 Note that in the presented example, both the quality of the reoptimization solutions and the number of modifications matters, as in the multistage framework.
 
 \subsection{Online optimization}
-Let us now address the theory of \emph{online} algorithms. We already discussed it briefly in the previous section and will develop it more into details. A complete survey, which we based ourselves on, is presented in \cite{albers1997ptima}.\\
-The central idea behind a lot of frameworks dealing with evolving environments is the ignorance of the decision maker regarding the behaviour of the problem instances over a future time period. It emphasizes the fact that pure \emph{offline} analysis is often not very realistic and can not be applied directly to a vast amount of real world applications. In an \emph{online} setting, one has only a partial knowledge of the problem instance, the instance will be revealed step by step over a given time horizon and the algorithm needs to build the solution step by step, without the complete knowledge of the data. It is important to notice that once a decision is made by an \emph{online} algorithm it can not be changed when new data is revealed, it contrasts here with reoptimization algorithms for example that are allowed to modify their decisions during the time horizon. \\
-The study of the \emph{online} theory began in the end of the seventies ; in \cite{SleatorT85} the authors addressed the main main criteria used to analyse online algorithms: comparing the \emph{online} solution and the \emph{offline} optimal solution. This analysis was later given the name of competitive analysis in \cite{KarlinMRS88}, with a ratio for the \emph{online algorithm} called the competitive ratio. The \emph{offline} optimal solution is computed with a full knowledge of the instances over the whole time horizon. This ratio is given in the worst case scenario and one is looking for a tight ratio, i.e no competitive algorithms can do better.\\
-In specific cases when only with bad competitive ratios can be obtained (some problems are not competitive in the \emph{online} setting) is the \emph{k-lookahead} setting, introduced previously, where at a time step, one knows the data for today and the next $k$ day.\\
-Another approach leading to better competitive results is the use of randomness. Indeed, random \emph{online} algorithms are very studied in the \emph{online} theory. Their competitive ratio are defined according to an adversary, that does not necessary have a full knowledge of the decisions made by the random \emph{online} algorithm.\\
+Let us now address the theory of online algorithms. We already discussed it briefly in the previous section and will develop it more into details. A complete survey, which we based ourselves on, is presented in \cite{albers1997ptima}.\\
+The central idea behind a lot of frameworks dealing with evolving environments is the ignorance of the decision maker regarding the behaviour of the problem instances over a future time period. It emphasizes the fact that pure offline analysis is often not very realistic and can not be applied directly to a vast amount of real world applications. In an online setting, one has only a partial knowledge of the problem instance, the instance will be revealed step by step over a given time horizon and the algorithm needs to build the solution step by step, without the complete knowledge of the data. It is important to notice that once a decision is made by an online algorithm it can not be changed when new data is revealed, it contrasts here with reoptimization algorithms for example that are allowed to modify their decisions during the time horizon. \\
+The study of the online theory began in the end of the seventies ; in \cite{SleatorT85} the authors addressed the main main criteria used to analyse online algorithms: comparing the online solution and the offline optimal solution. This analysis was later given the name of competitive analysis in \cite{KarlinMRS88}, with a ratio for the \emph{online algorithm} called the competitive ratio. The offline optimal solution is computed with a full knowledge of the instances over the whole time horizon. This ratio is given in the worst case scenario and one is looking for a tight ratio, i.e no competitive algorithms can do better.\\
+In specific cases when only with bad competitive ratios can be obtained (some problems are not competitive in the online setting) is the k-lookahead setting, introduced previously, where at a time step, one knows the data for today and the next $k$ days.\\
+Another approach leading to better competitive results is the use of randomness. Indeed, random online algorithms are very studied in the online theory. Their competitive ratio are defined according to an adversary, that does not necessary have a full knowledge of the decisions made by the random online algorithm.\\
 Three adversary variants are extensively looked at:
 \begin{itemize}
-    \item the oblivious adversary: the adversary knows the random \emph{online} algorithm but has to generate its decisions over the whole time horizon without knowing the decisions made by the random \emph{online} algorithm;
-    \item the adaptive \emph{online} adversary: the adversary knows the random \emph{online} algorithm and has access to the decisions made by the random \emph{online} algorithm in the previous time steps.
-    %\item the adaptive \emph{offline} adversary: the adversary knows the \emph{online} algorithm and will answer optimally against the random \emph{online} algorithm at the end of the time horizon (in this scenario, randomized algorithms do not improve the competitive ratio)  
+    \item the oblivious adversary: the adversary knows the random online algorithm but has to generate its decisions over the whole time horizon without knowing the decisions made by the random online algorithm;
+    \item the adaptive online adversary: the adversary knows the random online algorithm and has access to the decisions made by the random online algorithm in the previous time steps.
+    %\item the adaptive offline adversary: the adversary knows the online algorithm and will answer optimally against the random online algorithm at the end of the time horizon (in this scenario, randomized algorithms do not improve the competitive ratio)  
 \end{itemize}
 \begin{ex}
 Ski rental problem\\
@@ -705,12 +742,11 @@ As a toy example, let us present the {\sc ski rental} problem where one has two 
     \item buy the skis $10$
 \end{itemize}
 The online principle behind this example is that the decision maker can't predict the future conditions or complications he can get during a journey and thus does not know the number of days he will want to rent some skis. If the person is skiing less than $10$ days it would be beneficial to only rent the skis, otherwise it would be best to buy them. This is the optimal algorithm for this problem, in a deterministic setting, getting a competitive ratio equals to $1.9$ in the worst case scenario.  \\ 
-\alex{donner quel algo?? celui de 1.9 ou $\frac{e}{e-1}$}\\
-As we said previously, it is possible to get a better competitive ratio by using some random \emph{online} algorithm. Indeed, using random techniques, one can get a $\frac{e}{e-1}$-competitive algorithm. See \cite{KarlinMMO90} for a detailed presentation of this example. 
+As we said previously, it is possible to get a better competitive ratio by using some random online algorithm. Indeed, using random techniques, one can get a $\frac{e}{e-1}$-competitive algorithm. See \cite{KarlinMMO90} for a detailed presentation of this example. 
 \end{ex}
 
-Let us now, to conclude this \emph{online} presentation, talk about \emph{online} learning algorithms. The study of these algorithms is quite recent and share some concepts with the multistage framework. \\
-An \emph{online} learning algorithm, given a set of feasible decisions and an adversary, makes an action iteratively inducing some loss/reward for each decisions (made either by the algorithm or the adversary). The goal of such an algorithm is to minimize the regrets represented by the difference between the decision made by the algorithm and the optimal constant solution that does not evolve during the time horizon. The similarity with the multistage framework is within the objective functions of such problems, called the regret functions, where one seeks to minimize an accumulative cost step by step. Multiple problems have been studied in this framework such as routing problems in \cite{AwerbuchK08}, some min-max discrete problems in \cite{corr/abs-1907-05944}, in \cite{Buchbinder} that were the first to study a variant of the multistage framework (see previous section) the authors studied some online learning tree problems, $\ldots$, to cite a few of them.
+Let us now, to conclude this online presentation, talk about online learning algorithms. The study of these algorithms is quite recent and share some concepts with the multistage framework. \\
+An online learning algorithm, given a set of feasible decisions and an adversary, makes an action iteratively inducing some loss/reward for each decisions (made either by the algorithm or the adversary). The goal of such an algorithm is to minimize the regrets represented by the difference between the decision made by the algorithm and the optimal constant solution that does not evolve during the time horizon. The similarity with the multistage framework is within the objective functions of such problems, called the regret functions, where one seeks to minimize an accumulative cost step by step. Multiple problems have been studied in this framework such as routing problems in \cite{AwerbuchK08}, some min-max discrete problems in \cite{corr/abs-1907-05944}, in \cite{Buchbinder} that were the first to study a variant of the multistage framework (see previous section) the authors studied some online learning tree problems, $\ldots$, to cite a few of them.
 
 
 
@@ -718,11 +754,11 @@ An \emph{online} learning algorithm, given a set of feasible decisions and an ad
 
 
 \subsection{Dynamic algorithms }
-Let us now present the studies on dynamic algorithms. We chose to present this framework after the \textit{online} and reoptimization ones, the latter being a restrictive case of the more general dynamic setting. \\
+Let us now present the studies on dynamic algorithms. We chose to present this framework after the online and reoptimization ones, the latter being a restrictive case of the more general dynamic setting. \\
 Indeed, in a dynamic setting, that we will present on graph problems (a complete study of the dynamic graph problems are addressed in \cite{99/EppsteinGI99}), one is ask to give an algorithm able to maintain the quality of a solution as the graph evolves locally. The algorithm also has to be more efficient than computing a solution of the new instance from scratch. This local evolution of the graph can be anything, from insertions or deletions of nodes and edges to changes in the edges weights, that can all happen simultaneously. This contrasts with the reoptimization setting, being a restrictive case of the dynamic setting, where only one local modification occurs between two time steps and typically two time steps are being considered.\\
-The graph's evolution in dynamic setting results in the \textit{update} of its underlying data structure. Actually, in dynamic algorithms, one is interesting in being able to \textit{update} and maintain a given data structure on a new instance efficiently, i.e faster than computing a new solution with a static algorithm. A \textit{query}, using this data structure, will then be asked when the decision maker wants to solve the problem. Note that dynamic algorithm always start with trivial instances, i.e cliques or independent set for graph problems $\ldots$ Less formally, one can say that in the dynamic framework, when a solution is taken, the instance is modified and the decision maker has to adapt his solution. \\
+The graph's evolution in dynamic setting results in the \textit{update} of its underlying data structure. Actually, in dynamic algorithms, one is interesting in being able to \textit{update} and maintain a given data structure on a new instance efficiently, i.e faster than computing a new solution with a static algorithm. A \textit{query}, using this data structure, will then be asked when the decision maker wants to solve the problem. Note that dynamic algorithms always start with trivial instances, i.e cliques or independent set for graph problems $\ldots$ Less formally, one can say that in the dynamic framework, when a solution is taken, the instance is modified and the decision maker has to adapt his solution. \\
 %The fact that one needs to build a solution iteratively with the progressive unveiling of the instances, each time a solution is chosen a perturbation occurs, echoes the online setting, being a restrictive case of the dynamic setting. 
-The main difference between the \textit{online} setting and the dynamic one is that in the dynamic setting, one can completely change its decision on previous time steps, which is not allowed in online algorithms where, once a decision is taken, it can not be changed afterwards.\\
+The main difference between the online setting and the dynamic one is that in the dynamic setting, one can completely change its decision on previous time steps, which is not allowed in online algorithms where, once a decision is taken, it can not be changed afterwards.\\
 As a quick example of the \textit{update} and \textit{query} procedures, we can mention the problem of the {\sc minimum spanning tree}. Indeed we will use as an example an algorithm that solve this problem by sorting the list of elements of the instance. The \textit{update} procedure will remove an element of the list or add the element at its sorted position, for insertions or deletions of elements in a new instance respectively, assuring the data structure to be a sorted list of elements. The \textit{query} procedure will then only need to output a solution based on the sorted list with its underlying data structure, which is faster than sorting the list for each new instance and then finding a shortest path using this list. \\
 While presenting the dynamic setting, we need to introduce quickly the notion of amortized complexity. Indeed, in the precedent frameworks and examples and in all the rest of thesis, we present some complexity results that are all in the worst case scenario. In dynamic algorithms, the amortized complexity is often looked at, being the complexity one needs to compute a solution on average over all the different time steps. Indeed, in this framework, it is more relevant to analyze the complexity of the \textit{update} and \textit{query} procedures, on an average at each time step, and not to look at the complexity of solving an instance every time from scratch.\\
 The results one seeks to obtain with dynamic algorithms differ for polynomial solvable and \textbf{NP}-hard problems.
@@ -730,7 +766,7 @@ The results one seeks to obtain with dynamic algorithms differ for polynomial so
     \item for polynomial solvable problems, it is possible to find an optimal solution efficiently. Thus, in the dynamic setting literature, authors did not looked at improving the solution values but presented faster ways of maintaining the optimal solution while the instances were subject to perturbations, improving the complexity. Note that here the complexity is studied in terms of the number of updates and the number of queries one needs to do.  \\
     A lot of work has been done on tree and path problems, with the first results in the dynamic setting presented in (\cite{frederickson1985data}), looking at the {\sc min spanning tree} problem and in (\cite{even1985updating}), addressing the {\sc shortest path} problem.
     
-    \item for \textbf{NP}-hard problems, in a dynamic setting, one seeks an approximation algorithm giving the same ratio as the static approximation one and such that the approximate solution is computed faster than if the static algorithm was used. Less results were found for those problem in a dynamic setting. This negative observation is due to the fact of seeking to obtain an approximation ratio from an approximate solution. Indeed, the data structure is guarantying a certain approximation ratio and thus the \textit{update} procedure is applied to an approximate and not optimal solution, making it hard to hold some properties in most of the cases. \\
+    \item for \textbf{NP}-hard problems, in a dynamic setting, one seeks an approximation algorithm giving the same ratio as the static approximation one and such that the approximate solution is computed faster than if the static algorithm was used. Less results were found for those problems in a dynamic setting. This negative observation is due to the fact of seeking to obtain an approximation ratio from an approximate solution. Indeed, the data structure is guarantying a certain approximation ratio and thus the \textit{update} procedure is applied to an approximate and not optimal solution, making it hard to hold some properties in most of the cases. \\
     The {\sc vertex cover} problem was studied in \cite{IvkovicL93} and the {\sc bin packing} problem in \cite{2IvkovicL93} to name two of them.
     
     
@@ -739,10 +775,10 @@ The results one seeks to obtain with dynamic algorithms differ for polynomial so
 % \begin{ex}
 
 
-% As the \textit{online} and reoptimization settings are restricted cases of the dynamic setting, we will not present any new toy example but illustrate this setting with the previous examples:
+% As the online and reoptimization settings are restricted cases of the dynamic setting, we will not present any new toy example but illustrate this setting with the previous examples:
 % \begin{itemize}
 %     \item regarding the example presented in the  reoptimization introduction, several perturbations can be taken into account between two time steps
-%     \item regarding the example presented in the \textit{online} introduction, one can choose to change its decision after some time steps if some perturbations occur
+%     \item regarding the example presented in the online introduction, one can choose to change its decision after some time steps if some perturbations occur
 % \end{itemize}
 
 % \end{ex}
@@ -753,7 +789,8 @@ The results one seeks to obtain with dynamic algorithms differ for polynomial so
 
 \subsection{Temporal graphs}
 
-To conclude our presentation on different approaches dealing with evolving data in a time horizon, let us introduce the temporal graphs. \\
+%To conclude our presentation on different approaches dealing with evolving data in a time horizon,
+Let us now introduce the temporal graphs. \\
 The concept of temporal graphs was formally introduced rather in \cite{Berman96} and then developed formally in \cite{KempeKK00} where the authors addressed some network problem and presented this new dynamic setting. In temporal graphs, one is given a discrete time horizon and a pair $(G,\lambda)$ where $G$ is a graph with a fixed vertex set over the time horizon and $\lambda$ a function on the edge set of $G$, i.e each edge $e \in G$ has a time label $\lambda(e)$ and is present only at the fixed time step $\lambda(e)$. A more general take on temporal graphs deals with the same pair $(G,\lambda)$ but allowing edges to be present at different time steps, i.e to have several time labels per edge (\cite{MertziosMS19}). Then, one is asked to solve a problem on this temporal graph that can model a lot of different types of real world situations such as networks problem, path problems$\ldots$. 
 
 The main difference with the multistage framework is that here one needs to move on the graph over time in order to build a unique solution and not a sequence of solutions as in the multistage framework.
@@ -763,12 +800,12 @@ On the other hand, it shares a global time property with the multistage framewor
 Most of the studied problems of this framework concern path problem and presented in the survey (\cite{Michail16}).\\
 However, some authors also addressed other types of graph optimization problems.
 In \cite{himmel2017adapting}, a variant of the {\sc clique} problem called {\sc $\Delta-$ clique} was studied where one is ask to find a subset of vertices connected for $\Delta$ consecutive time steps, echoing the multistage framework. \\
-Very recently, in \cite{AkridaMSZ20} two variant of the {\sc vertex problem} were addressed. In a first one, one is asked, given a temporal graph, to find a sequence of the subset of vertices such that it covers the edges of the graph at least once during the time horizon, to be minimized (note that the set of edges changes between consecutive time steps). In a second one, the edges of the graph this time have to be covered once during a small time window and not all the time horizon, assuring thereby a stability in the solution.
+Very recently, in \cite{AkridaMSZ20} two variants of the {\sc vertex problem} were addressed. In a first one, one is asked, given a temporal graph, to find a sequence of the subset of vertices such that it covers the edges of the graph at least once during the time horizon, to be minimized (note that the set of edges changes between consecutive time steps). In a second one, the edges of the graph this time have to be covered once during a small time window and not all the time horizon, assuring thereby a stability in the solution.
 
 \begin{ex}
 The {\sc shortest path} problem\\
-The {\sc shortest path} problem in temporal graphs consist of, given a temporal graph such that at each time step of the time horizon $t=1,\ldots,T$ there is a set $E_T$ of usable edges one needs to find if
-there exists a path from $s$ to $t$, i.e $v_{i1},\ldots,v_{iT}$, such that $v_{i1}=s$ and $v_{iT}=t$ and that $\forall t=1,\ldots,T-1$ either $v_{it}=v_{i(t+1)}$ (no movement) either $(v_{it},v_{i(t+1)})\in E_t$ (we use the edge present at the time step $t$)
+In the {\sc shortest path} problem in temporal graphs, given a temporal graph such that at each time step of the time horizon $t=1,\ldots,T$ there is a set $E_T$ of usable edges one needs to find if
+there exists a path from $s$ to $t$, i.e $v_{i1},\ldots,v_{iT}$, such that $v_{i1}=s$ and $v_{iT}=t$ and that $\forall t=1,\ldots,T-1$ either $v_{it}=v_{i(t+1)}$ (no movement) either $(v_{it},v_{i(t+1)})\in E_t$ (we use the edge present at the time step $t$).
 \end{ex}
 
 
@@ -778,12 +815,11 @@ there exists a path from $s$ to $t$, i.e $v_{i1},\ldots,v_{iT}$, such that $v_{i
 
 
 \subsection{Stochastic Optimization}
-
-In this section, we will present another way to deal with evolving environments with the study of the Stochastic Optimization theory. This approach addresses the uncertainty with the introduction of probabilities in the problems definition. Once again, it is not possible for the decision maker to have a complete knowledge of the problem instances.\\
+To conclude our presentation on different approaches dealing with evolving data in a time horizon we will now present the Stochastic Optimization theory. This approach addresses the uncertainty with the introduction of probabilities in the problems definition. Once again, it is not possible for the decision maker to have a complete knowledge of the problem instances.\\
 The stochastic optimization community first focused on problems with a probability distribution on the problem parameters, i.e the weights of edges for graph problems, the bound constraints for linear problems $\ldots$, but with a fixed structures, i.e with a fixed set of nodes/edges for graph problems, fixed constraints for linear programming problems,$\ldots$. The study of problems with this approach began a long time ago. In \cite{beardwood1959shortest} authors looked at the {\sc TSP} problem where probabilities were applied to the node positions. Later, in \cite{Frieze85}, authors also addressed path problems under this presented configuration, looking at the {\sc spanning tree} problem with probabilities applied to the weights of the edges. Note that in the context of stochastic optimization there is also a literature focused on some multistage problems. However, the multistage term denotes here a different model. Indeed, in \cite{RaviS06}, the authors addressed several optimization problems in the multistage stochastic setting and especially the two-stage stochastic model. In the two stage model, at a first stage, part of the data is known and a probability distribution is characterizing the uncertain future. Then, at a second stage, the data are revealed. One needs to optimize its first stage decisions in order to minimize both the cost at the first stages and the expected cost of the second stage. \\
 
 It was in \cite{jaillet1985probabilistic} that was addressed a new way of using probabilities in optimization problems. This time, the probabilities were not applied on parameters on fixed elements of the problem but on the presence or absence of the elements themselves. Indeed, for example, a probability distribution was applied to the existence or not of nodes, edges for graph problems, of constraints for linear programming problems,$\ldots$ \\%This technique is much more useful in real world situations.\\
-Soon after, in the thesis of \cite{bertsimas1988probabilistic}, again with the same approach, the notion of \textit{a priori} optimization was presented. (See also \cite{BertsimasJO90} for a detailed paper on \textit{a priori} optimization). 
+Soon after, in the thesis of \cite{bertsimas1988probabilistic}, again with the same approach, the notion of \textit{a priori} optimization was presented (see also \cite{BertsimasJO90} for a detailed paper on \textit{a priori} optimization). 
 \\Let us develop this technique on graph problems, we'll see that it shares some properties with the reoptimization techniques presented before. When dealing with \textit{a priori} optimization, one is given a graph with probabilities on its nodes and an \textit{a priori} solution $f$ on an initial instance of the graph. 
 One is ask to find an updating method, that from the \textit{a priori} solution is able to update to any possible feasible solution for all possible instances, i.e instances composed of all the combinations of presence/absence of nodes following the probability distribution, such that the average cost (for minimization problems) on all instances is minimum. This updating method has to be done in reasonable computational time. In this case and in real world applications, it can be beneficial, for the average value to be minimum, and for the solutions to remain as stable as possible over all the feasible solutions, echoing the multistage framework. 
 
@@ -794,7 +830,7 @@ Let us suppose now that the company has some knowledge on the traffic and possib
 Let us this time suppose that the company knows that, sometimes, some products will not need to be delivered in some cities. Thus, the company would associate this time probabilities to cities, corresponding to probabilities on the presence or not of nodes of the graph. To solve this variant, one needs to use the second presented stochastic strategy. Indeed, in order to be as efficient as possible, it is interesting for the company to develop an updating method from \textit{a priori} optimization and thus being sure to adapt efficiently its decisions and deliveries and to remain stable. 
 \end{ex}
 
-Now that we presented the multistage framework and some other approaches tackling evolving data, we will present in the next chapter the first study of the thesis focused on the {\sc Multistage knapsack} problem in the \textit{offline} setting, problem presented in the section \ref{multiintro}.
+Now that we presented the multistage framework and some other approaches tackling evolving data, we will present in the next chapter the first study of the thesis focused on the {\sc Multistage knapsack} problem in the offline setting, problem presented in the section \ref{multiintro}.
 
 
 
@@ -855,12 +891,12 @@ Now that we presented the multistage framework and some other approaches tacklin
 \chaptermark{}
 
 \section{Introduction}
-We presented and motivated the study of the Multistage Knapsack Problem in section \ref{multiintro}. Note that in this chapter, the multistage framework is studied in the \textit{offline} setting.\\
+We presented and motivated the study of the Multistage Knapsack Problem in section \ref{multiintro}. Note that in this chapter, the multistage framework is studied in the offline setting.\\
 
 Briefly, let us define again the problem. We are 
 given a time horizon $t=1,2,\ldots,T$, and a sequence of knapsack instances $I_1,I_2,\ldots,I_T$, one for each time step, defined on a set of $n$ objects. In every time step $t$ we have to choose a feasible knapsack $S_t$ of $I_t$, which gives a \emph{knapsack profit}. Taking into account transition costs, we measure the stability/similarity of two  consecutive solutions  $S_t$ and $S_{t+1}$ by identifying the objects for which the decision, to be picked or not, remains the same in $S_t$ and $S_{t+1}$, giving a \emph{transition profit}. We are asked to produce a sequence of solutions $S_1,S_2,\ldots,S_T$  so that the total knapsack profit plus the overall transition profit is maximized.
 
-Our main contribution is a polynomial time approximation scheme ($PTAS$) for the multistage  version of the {\sc Knapsack} problem. Up to the best of our knowledge, this is the first approximation scheme for a multistage combinatorial optimization problem and its existence contrasts with the inapproximability results for other combinatorial optimization problems that are even polynomial-time solvable in the static case (e.g. the {\sc multistage  Spanning Tree} problem \cite{Gupta}, or the {\sc multistage  Bipartite Perfect Matching} problem \cite{Bampis}).\\
+Our main contribution is a polynomial time approximation scheme ($PTAS$) for the multistage  version of the {\sc Knapsack} problem. As we said earlier, up to the best of our knowledge, this is the first approximation scheme for a multistage combinatorial optimization problem and its existence contrasts with the inapproximability results for other combinatorial optimization problems that are even polynomial-time solvable in the static case (e.g. the {\sc multistage  Spanning Tree} problem (\cite{Gupta}), or the {\sc multistage  Bipartite Perfect Matching} problem (\cite{Bampis})).\\
 
 An extended abstract of this chapter has been presented at MFCS (Mathematical Foundations of Computer Science) 2019 (\cite{BampisET19}).
 
@@ -927,7 +963,7 @@ The value of the solution $S$ is the sum of the knapsack profit and the transiti
 
 \noindent{\bf Knapsack variants.}
 
-Our work builds upon the {\sc Knapsack} literature \cite{Kelerrer}. It is well known that there is a simple 2-approximation algorithm as well as a fully polynomial time (FPTAS) for the static case (see \cite{Ibarra, Lawler, Magazine, Kellerer} for a detailed presentation of the {\sc knapsack} problem). There are two variants that are of special interest for our work: 
+Our work builds upon the {\sc Knapsack} literature (see \cite{Kelerrer}). It is well known that there is a simple 2-approximation algorithm as well as a fully polynomial time (FPTAS) for the static case (see \cite{Ibarra, Lawler, Magazine, Kellerer} for a detailed presentation of the {\sc knapsack} problem). There are two variants that are of special interest for our work: 
 
 (i) The first variant is a  generalization of the {\sc Knapsack} problem known as the $k$-{\sc Dimensional Knapsack} ($k-DKP$) problem:
 %in which each object has $k$ nonnegative integer weights and $k$ positive integer capacities. The objective is to choose a subset of maximum total profit among all subsets whose weight does not exceed the capacity of the $k$ dimensions. 
@@ -980,7 +1016,7 @@ CARDINALITY$(2-KP)$ is \textbf{NP}-complete.
 
 
 \subsection{Our contribution}
-As stated before, our main contribution is to propose a PTAS for the {\sc multistage  Knapsack} problem. Furthermore, we prove that there is no  FPTAS for the problem even in the case where $T=2$, unless \textbf{P=NP}. We also give a pseudopolynomial time algorithm for the case where the number of steps is bounded by a fixed constant and we show that otherwise the problem remains \textbf{NP}-hard even in the case where all the weights, profits and capacities are 0 or 1. The following table summarizes our main result pointing out the impact of the number of time steps on the difficulty of the problem ("no $FPTAS$" means "no $FPTAS$ unless \textbf{P=NP}).
+As stated before, our main contribution is to propose a PTAS for the {\sc multistage  Knapsack} problem. Furthermore, we prove that there is no  FPTAS for the problem even in the case where $T=2$, unless \textbf{P=NP}. We also give a pseudopolynomial time algorithm for the case where the number of steps is bounded by a fixed constant and we show that otherwise the problem remains \textbf{NP}-hard even in the case where all the weights, profits and capacities are 0 or 1. The following table summarizes our main result pointing out the impact of the number of time steps on the difficulty of the problem (``no $FPTAS$'' means ``no $FPTAS$ unless \textbf{P=NP}).
 
 \begin{center}
 \begin{tabular}{|l|c|r|}
@@ -1453,7 +1489,7 @@ g(S) &\geq &  (1-\epsilon')g(S^*)-\frac{g(S^*)}{T_0} \\
 %Due to space constraints, the proof of Theorem~\ref{thptasgen} is deferred to Appendix (section~\ref{appthptasgen}). The underlying idea is to upper bound the loss of the algorithm which corresponds to transition costs between time steps $aT_0$ and $aT_0+1$, for $1\leq a\leq q-1$. 
 
 \section{Pseudo-polynomiality and hardness results}
-\alex{def pseudo poly}\\
+
 We complement the previous result on approximation scheme by showing the following results for {\sc Multistage  Knapsack}:
 \begin{itemize}
 \item First, it does not admit an FPTAS (unless \textbf{P=NP}), even if there are only two times steps (Section~\ref{sec:nofptas}) and the bonus is uniform ($B_{ti}=B$ for all $i$, all $t$);
@@ -1557,7 +1593,7 @@ Conversely, take a solution of {\sc Binary Multistage  Knapsack} of value at lea
 \end{proof}
 Since $B$ is polynomially bounded in the proof, this shows that {\sc Multistage  Knapsack} is strongly \textbf{NP}-hard.
 \section{Conclusion}
-We considered the {\sc Multistage Knapsack} problem in the \textit{offline} setting and we studied the impact of the number of time steps in the complexity of the problem. In the next chapter, we present the study in the \textit{online} setting of the large family of subset maximization problems in the multistage framework, the {\sc multistage knapsack} problem being part of this family, and measure the importance of the knowledge of the future on the quality of the solution.
+We considered the {\sc Multistage Knapsack} problem in the offline setting and we studied the impact of the number of time steps in the complexity of the problem. In the next chapter, we present the study in the online setting of the large family of subset maximization problems in the multistage framework, the {\sc multistage knapsack} problem being part of this family, and measure the importance of the knowledge of the future on the quality of solutions.
 %SFS is studied in Section~\ref{sec:static}, while GE in Section~\ref{sec:general}.
 
 %\subsubsection{On-line competitive analysis and model with lookahead}
@@ -1594,11 +1630,11 @@ We considered the {\sc Multistage Knapsack} problem in the \textit{offline} sett
 % a \emph{multistage} model where given  a time horizon $t = 1, 2, \ldots,T$,  the input is a sequence of instances $I_1,I_2,\ldots,I_T$, (one for each time step), and the goal is to find a sequence of solutions $S_1,S_2,\ldots,S_T$ (one for each time step) reaching  a trade-off between the quality of the solutions in each time step and the stability/similarity of the solutions in consecutive time steps. The addition of the transition cost makes some  classic combinatorial optimization problems much harder. This is the case  for instance  %some problems (e.g. 
  %for the minimum weighted perfect matching problem in the \emph{off-line} case where the whole sequence of instances is known in advance. While the one-step problem is polynomially-time solvable, the multistage problem becomes hard to approximate even for bipartite graphs and for only two time steps \cite{Bampis,Gupta}. 
  
- In this chapter, we focus on the \emph{online}  case, where at time $t$ no knowledge is available for instances at times $t+1, \ldots, T$.  When it is not possible to handle the online case, we turn our attention to the $k$-\emph{lookahead} case, where at time $t$ the instances at times $t+1, \ldots, t+k$ are also known. This case is of interest since in some applications like in  dynamic capacity planning in data centers,
+ In this chapter, we focus on the online  case, where at time $t$ no knowledge is available for instances at times $t+1, \ldots, T$.  When it is not possible to handle the online case, we turn our attention to the $k$-\emph{lookahead} case, where at time $t$ the instances at times $t+1, \ldots, t+k$ are also known. This case is of interest since in some applications like in  dynamic capacity planning in data centers,
  the forecasts of future demands may be very helpful (see \cite{Lin,Liu} for examples of application). 
  Our goal is to measure the impact of the lack of knowledge of the future  on the quality and the stability of the returned solutions. 
  Indeed, our algorithms are limited in their knowledge of the sequence of instances.
-Knowing that the number of time steps is given, we compute the competitive ratio of the algorithm after time step $T$: As we focus on maximization problems, we say that a \finalversion{(deterministic)} algorithm is (strictly) $\alpha$-competitive (with competitive ratio $\alpha$) if its value is at least $\frac1\alpha$ times the optimal value on all instances.
+Knowing that the number of time steps is given, we compute the competitive ratio of the algorithm after time step $T$: As we focus on maximization problems, we say that a \finalversion{(deterministic)} algorithm is $\alpha$-competitive (with competitive ratio $\alpha$) if its value is at least $\frac1\alpha$ times the optimal value on all instances.
 
 As it is usual in the online setting, we consider no limitations in the computational resources available. This implies that at every time step $t$, where instance $I_t$ is known, we assume the existence of an oracle able to compute the optimal solution for that time step.  Notice also that our lower bounds do not rely on any complexity assumptions. 
 Some recent results are already known for the online multistage model (\cite{Bampis+,Gupta}), however all these results are obtained for specific problems.
@@ -1657,7 +1693,7 @@ where $b(S_t,S_{t+1})$ is the transition bonus for the solution between time ste
  If $S_t$ and $S_{t+1}$ denote, respectively, the solutions for time steps $t$ and $t+1$, then we can define the transition bonus as:
 \begin{itemize}
     \item \emph{Intersection Bonus:}  $B$ times $|S_{t}\cap S_{t+1}|$: in this case the bonus is proportional to the number of objects in the solution at time $t$ that remain in it at time $t+1$.
-    \item \emph{Hamming Bonus:} $B$ times $|S_{t}\cap S_{t+1}|+|\overline{S_{t}}\cap \overline{S_{t+1}}|$. Here we get the bonus for each object for which the decision (to be in the solution or not) is the same between time steps $t$ and $t+1$. In other words, the bonus is proportional to $|N|$ minus the number of modifications (Hamming distance) in the solutions. The {\sc multistage knapsack} problem what studied considering \emph{Hamming Bonus} in the chapter \ref{chap:multiknap}. 
+    \item \emph{Hamming Bonus:} $B$ times $|S_{t}\cap S_{t+1}|+|\overline{S_{t}}\cap \overline{S_{t+1}}|$. Here we get the bonus for each object for which the decision (to be in the solution or not) is the same between time steps $t$ and $t+1$. In other words, the bonus is proportional to $|N|$ minus the number of modifications (Hamming distance) in the solutions. The {\sc multistage knapsack} problem was studied considering \emph{Hamming Bonus} in the chapter \ref{chap:multiknap}. 
 \end{itemize}
 \end{definition}
 
@@ -1674,14 +1710,14 @@ In this chapter, we will consider two possible ways for the data to evolve.
 \begin{itemize}
 \item \emph{Static Set of Feasible Solutions (SSFS):}  only profits may change over time, so the structure of feasible solutions remains the same: $\mathcal{F}_t=\mathcal{F}$ for all $t$. 
 
-\item \emph{General Evolution (GE):}  any modification in the input sequence is possible. Both the profits and the set of feasible solutions may change over time. In this latter model, for knapsack, profits and weights of object (and the capacity of the bag) may change over time; for maximum independent set edges in the graph may change,\dots.   
+\item \emph{General Evolution (GE):}  any modification (but the set of objects) in the input sequence is possible. Both the profits and the set of feasible solutions may change over time. In this latter model, for knapsack, profits and weights of object (and the capacity of the bag) may change over time; for maximum independent set edges in the graph may change,\dots.   
 \end{itemize}
 \end{definition}
 
 
 \subsection{Summary of Results and Overview}\label{subsec:results}
 
-The contribution of this chapter is a framework for online multistage maximization problems (comprising different models), a characterization of those models in which a constant competitive ratio is achievable, and almost tight upper and lower bounds on the best-possible competitive ratio for these models. \finalversion{The focus here is on deterministic algorithms.}
+The contribution of this chapter is a framework for online multistage maximization problems (comprising different models) and almost tight upper and lower bounds on the best-possible competitive ratio for these models. \finalversion{The focus here is on deterministic algorithms.}
 
 We increase the complexity of the considered models over the course of the chapter. We start with the arguably simplest model: Considering a static set of feasible solutions clearly restricts the general model of evolution; while such a straightforward comparison between the Hamming and intersection bonus is not possible, the Hamming bonus seems simpler in that, compared to the intersection model, there are (somewhat comparable) extra terms added on the profit of both the algorithm and the optimum. As we show in Subsection~\ref{subsec:static-hamming}, there is indeed a simple $2$-competitive algorithm: At each time $t$, it greedily chooses the set $S_t$ that either maximizes the transition bonus w.r.t.\ $S_{t-1}$ (that is, choosing $S_t=S_{t-1}$, which is possible in this model) or maximizes the value $p_t(S_t)$. We complement this observation with a matching lower bound only involving two time steps.
 
@@ -2077,7 +2113,7 @@ Let $V$ be the set of time steps in which Case (3) occurred. In the proof, intui
 
 Formally, let $u,v$ ($u<v$) be two time steps in $V$ such that $w\not \in V$ for any $u<w<v$. Note that since Case (3) occurred at time $u$, Case (1) occurred at $u+1$, so $u\neq v-1$, and Case (2) occurred at time $u+2,\dots,v-1$. So $z^*_t>2z^*_{t-1}$ for $t=u+2,\dots,v-1$. By an easy recurrence, this means that, for all $t\in\{u+1,\dots,v-1\}$, we have $z^*_t< z^*_{v-1}/2^{v-1-t}$. By taking the sum, we get $\sum_{t=u+1}^{v-1}z^*_t < 2 z^*_{v-1}$. Since Case (3) occurred at $v$, $z^*_v\leq 2z^*_{v-1}$. Finally:
 %$$\sum_{t=u+1}^{v}z^*_t\leq 4 z^*_{v-1}.$$
-\[\sum_{t=u+1}^{v}z^*_t\leq 4 z^*_{v-1}\].
+\[\sum_{t=u+1}^{v}z^*_t\leq 4 z^*_{v-1}\]
 Now, at each time $v$ for which case (3) occurred, we choose $S_v=S^*_{v-1,2}$. As previously said, Case (3) did not occur at $v-1$, so we choose $S_{v-1}=S^*_{v-1,1}$. Then the algorithm gets value at least $z^*_{v-1}$ for these two time steps. In other words
 $f(S_1,\dots,S_T)\geq \sum_{v\in V} z^*_{v-1}$.
 Consider first the case where $T\in V$ (case (3) occurred at time $T$). Then we get a partition of the time steps into subintervals ending in $v\in V$. So
@@ -2143,23 +2179,14 @@ By basic calculus, this proves that there exists a $t$ with $b_t\leq 1$, implyin
 
 \section{Conclusion}\label{sec:conclusion}
 
-In this chapter, we have developed techniques for online multistage subset maximization problems and thereby settled the achievable competitive ratios in the various settings almost exactly. Disregarding asymptotically vanishing terms in the upper bounds, what remains open is the exact ratio in the general-evolution setting with Hamming bonus (shown to be between $1+\sqrt{2}$ and $3$ in this chapter) and exact bounds for the models with Hamming bonus when $T\rightarrow\infty$. Furthermore, it is plausible that the ratios can be improved for (classes of) more specific problems.
+In this chapter, we have developed techniques for online multistage subset maximization problems and thereby settled the achievable competitive ratios in the various settings almost exactly. Disregarding asymptotically vanishing terms in the upper bounds, what remains open is the exact ratio in the general-evolution setting with Hamming bonus (shown to be between $1+\sqrt{2}$ and $3$ in this chapter) and exact bounds for the models with Hamming bonus when $T\rightarrow\infty$. Furthermore, it is plausible that the ratios can be improved for (classes of) more specific problems.\\
 
-We emphasize that we have focussed on deterministic algorithms in this work. Indeed, some of our bounds can be improved by randomization (assuming an oblivious adversary):
-\begin{itemize}
-    \item In the general-evolution model with Hamming bonus assuming \finalversion{sub-additivity} and subset feasibility, there is a simple randomized $(2+o(1))$-competitive algorithm (along the lines of the algorithms in Subsubsection~\ref{subsec:submodular}): Initially partition $N$ uniformly at random into two equal-sized sets (up to possibly one item) $A$ and $B$. At each time, select the optimal solution restricted to $A$. Again, the algorithm is $(2+o(1))$-competitive separately on both profit and bonus.
-    \item While the strong lower bound without lookahead in the general-evolution model with intersection bonus still holds, we can get a simple $2$-competitive algorithm for lookahead $1$: Initially flip a coin to interpret the instance as a sequence of length-$2$ instances either starting at time $1$ or $2$. Thanks to lookahead $1$, the length-2 instances can all be solved optimally. The total value of all these length-2 instances adds up to at least the optimal value, and the expected value obtained by the algorithm is half of that.
-\end{itemize}
-
-While we believe that we have treated various of the most natural ways of defining value in multistage subset maximization problems, other ways can be thought of, to some of which our results extend. For instance, Theorem~\ref{thm:static-hamming-upper} also works for time-dependent or object-dependent bonus without major modifications (whereas, e.g., Theorem~\ref{thm:static-intersection-upper} does not).
-
-We have not worried about computational complexity in this work (and therefore neither about the representation of the set of feasible solutions); indeed, often we use an oracle providing the optimal solution to instances of a potentially hard problem. However, we mention that, if only an approximation algorithm to the problem at hand was known, we would be able to obtain similar online algorithms whose competitive ratio would depend on the approximation guarantee of the approximation algorithm.\\
 
 In the next chapter is presented a direct application of the multistage framework in a musical context.
 
-\chapter{Target-based computer-assisted orchestration problem}
+\chapter{Target-based computer-assisted orchestration problem}\label{chap:orche}
 \chaptermark{}
-We previously presented some theoretical analysis of the multistage framework, both in the \textit{offline} setting studying the {\sc Multistage knapsack} problem in the chapter \ref{chap:multiknap} and in the \textit{online} setting with the study of the large family of the subset maximization problems in the multistage framework in the chapter \ref{chap:onlmultista}. In this chapter, the {\sc Target-based computer-assisted orchestration} problem is addressed, being a direct application of the multistage framework in a musical environment.
+We previously presented some theoretical analysis of the multistage framework, both in the offline setting studying the {\sc Multistage knapsack} problem in the chapter \ref{chap:multiknap} and in the online setting with the study of the large family of the subset maximization problems in the multistage framework in the chapter \ref{chap:onlmultista}. In this chapter, the {\sc Target-based computer-assisted orchestration} problem is addressed, being a direct application of the multistage framework in a musical environment. In the sections \ref{sec:tbmo} and \ref{otargorch}, a global introduction of the musical application is given (note that this introduction is based on the youtube tutorial \cite{youtubecella}). Note that some of the figures of these sections are taken from this video. Then, from section \ref{sec:theor} are presented the problem we focus on and our results.
 
 Note that an extended abstract of this chapter will be put on arXiv and submitted to a journal by the time of the thesis defense. 
 
@@ -2181,7 +2208,7 @@ The notions presented in this definition will be discussed and addressed later i
 
 In a nutshell, target-based computer-assisted orchestration is the fact of making a connection between the symbolic space of music which is the score of a music (note that the score of a music in this section will refer to its music sheet), seeing music as a combination of symbols describing it with notes, pitches, instruments $\ldots$, and the signal space of music which is the timbre of a sound, the sound itself. 
 
-In other words, target-based computer-assisted orchestration can be thought of as the process of searching for combinations of orchestral sounds in a database of sound samples to match a given sound (called \emph{target}) while respecting specific symbolic constraints (such as the instruments to use).
+% In other words, target-based computer-assisted orchestration can be thought of as the process of searching for combinations of orchestral sounds in a database of sound samples to match a given sound (called \emph{target}) while respecting specific symbolic constraints (such as the instruments to use).
 \begin{figure}[h!]
 \centering
 \includegraphics[scale=0.4]{assistedorch.png}
@@ -2216,20 +2243,20 @@ The \textbf{amplitude} of a sound is its volume, measured in dB.\\
 \end{figure}
 
 \textbf{Brief history}
-Let us now present briefly some key points of the assisted orchestration history. The first well known application of assisted orchestration was a piece done by J. Harvey called \textit{Mortuos Plango, Vivos Voco (1981}) who reproduced the audio of a bell and received a warm welcome. "It showed that IRCAM institute's apparently esoteric research program could yield music capable of appealing to a wider audience" said Curtis Roads, a famous composer. It thus gave wider perspectives and motivations of what assisted orchestration can do. Harvey tried in this piece to transcribe the sound of the bell and retranscribe it by synthesis. The transcription was done manually at the time looking at the partials of a sound.\\
+Let us now present briefly some key points of the assisted orchestration history. The first well known application of assisted orchestration was a piece done by J. Harvey called \textit{Mortuos Plango, Vivos Voco (1981}) who reproduced the audio of a bell and received a warm welcome. ``It showed that IRCAM institute's apparently esoteric research program could yield music capable of appealing to a wider audience'' said Curtis Roads, a famous composer. It thus gave wider perspectives and motivations of what assisted orchestration can do. Harvey tried in this piece to transcribe the sound of the bell and retranscribe it by synthesis. The transcription was done manually at the time looking at the partials of a sound.\\
 Later in 2008, in a piece called \textit{Speakings}, J. Harvey used \textit{Orchidee}, an older version of \textit{Orchidea} presented later in the chapter, in order to replicate the sound of a human voice.\\
 
-To write a music score, a composer simply writes symbol in a music sheet. Then, the symbols are "played" generating sound. \\
+To write a music score, a composer simply writes symbol in a music sheet. Then, the symbols are ``played'' generating sound. \\
 Assisted orchestration can be seen as the other way around. Indeed, in this case, given a sound, a composer tries to find its corresponding score. This differs from music transcription, where the sound is someone playing an instrument and then one needs to find the corresponding score often using the same instrument. Indeed, in assisted orchestration the sound can be anything like bells, noise, voices$\ldots$ for which there is no corresponding score. One can say that assisted orchestration is a general case of musical transcription. \\
 
 The assisted orchestration problem can also be seen as the problem corresponding to, given an orchestration, reproducing a target timbre within a computational context. Namely, given specific writing constraints of the composer like an orchestra with a set of chosen instruments, playing styles, dynamics$\ldots$, is it possible to be as close as possible to the target sound. \\
 
-Formally, this problem can be seen as a multi-objective one:
-\begin{itemize}
-    \item a combinatorial optimization problem defined on the description of the timbre
-    \item a constraint solving problem defined on the symbols of musical writing
-\end{itemize}
-This points out the connection between the symbolic space and the signal space.\\
+% Formally, this problem can be seen as a multi-objective one:
+% \begin{itemize}
+%     \item a combinatorial optimization problem defined on the description of the timbre
+%     \item a constraint solving problem defined on the symbols of musical writing
+% \end{itemize}
+% This points out the connection between the symbolic space and the signal space.\\
 
 Let us present an example in order to show the hardness of the problem.
 
@@ -2238,7 +2265,7 @@ Given a target sound, one is ask to reconstruct the sound using instruments of a
 To solve this problem, one has to find the best combination of sounds, being the closest one to the target sound, among the set of possible combinations. Indeed, one can choose to take the first note on the first instrument and on the other instrument, the second note on the first instrument and on the other instrument, the first note on the first instrument and the second note on the other instrument, the first note on the second instrument and the first note on the other instrument.
 For each of the four combinations, one has to compute a distance between the combination and the target sound. Under this specific set of very restricted constraints it is easy to find the best possible solution in a small amount of time. \\
 \end{ex}
-However, in practice the set of feasible solution is way larger: each instrument of an orchestra has the possibility to play around forty notes, several dynamics, articulations, playing styles$\ldots$. The number of different combinations in a basic setting is around $2^{30000}$ making the problem intractable. An analysis of the problem complexity will be presented in the next chapter.\\
+However, in practice the set of feasible solution is way larger: each instrument of an orchestra has the possibility to play around forty notes, several dynamics, articulations, playing styles$\ldots$. The number of different combinations in a basic setting is around $2^{30000}$ making the problem intractable. An analysis of the problem complexity will be presented later in this chapter.\\
 Typical solutions to this problem are orchestral scores that include specific instruments, notes, dynamics and playing styles such that, when played, they sound perceptually similar to the target sound. In principle, to find the combination of orchestral sounds that sounds the closest to the target, it would be enough to compute all possible combinations of the sounds in the database and rank them by a distance measure with the target sound. This approach, while conceptually justified, is normally not computable given the large amount of possible combinations.\\
 
 The intractability of the problem leads to the introduction of heuristics computing forecast. 
@@ -2268,12 +2295,12 @@ Let us say again that the outcome of an assisted orchestration algorithm is a sc
 Note that the choice of the dissimilarity measure and its distance is still an open question in the literature. Indeed, some hypothesis are made on the distance but up to our knowledge there is not one measure being better than the others. The hardness of this choice comes from the fact that the two compared sounds have to be close for example regarding their respective spectrum description (this notion will be defined later) but this does not necessarily imply that the two sounds will be close from the perspective of a composer, or from the human ear. 
 
 \subsection{The search engine: features forecast and dissimilarity measure}
-Let us now develop the search engine and the notion behind the feature forecast and the dissimilarity measure. \\
+Let us now develop the search engine and the notions behind the feature forecast and the dissimilarity measure. \\
 
 The sounds of the database are described by features. 
 %We will develop later the different features existing in the literature, for now it is just relevant to notice that each sound is described by a chosen feature.
-Each feature (a few of them exist in the literature) describes the sound with a specific metric and has a fixed number of dimension. For example, in the figure \ref{fig:searchengine}, each sound is described by a feature of dimension $K$, i.e to each sound is associated a vector value of dimension $K$: $d_1, \ldots, d_K$. In the first assisted orchestration algorithm that we will present, one makes a random combination between the sounds (the techniques used by the algorithm will be develop later in the chapter). Then, with the combination obtained, one needs to find the features of the combination, i.e the features of the sounds selected by the algorithm. However, in practice, it is not possible to compute the exact features of the combination, being too large and taking too much time to compute. This is where the notion of \textbf{features forecast} is introduced. Indeed, features are only predicted and their calculation themselves is a difficult problem, the features being, for most of the cases non linear features (two ways of computing the features will be presented in the chapter). \\
-Once the features forecast of the combination is predicted, one needs to describe the target sound with the same features (note that here, the features of the target sound are its "real" features, the complexity of computing them being small because the calculation is being applied only to one sound). Only then, a distance is made, the \textbf{dissimilarity measure}, between the features of target sound and the features of combination found by the algorithm. \\
+Each feature (a few of them exist in the literature) describes the sound with a specific metric and has a fixed number of dimensions. For example, in Figure \ref{fig:searchengine}, each sound is described by a feature of dimension $K$, i.e to each sound is associated a vector value of dimension $K$: $d_1, \ldots, d_K$ (note that in our analysis presented later in the chapter, we say that, to each sound $i$ is associated a vector value of dimension $M$: $p_{i1}, \ldots, p_{iM}$). In the first assisted orchestration algorithm that we will present, one makes a random combination between the sounds (the techniques used by the algorithm will be develop later in the chapter). Then, with the combination obtained, one needs to find the features of the combination, i.e the features of the sounds selected by the algorithm. However, in practice, it is not possible to compute the exact features of the combination, being too large and taking too much time to compute. This is where the notion of \textbf{features forecast} is introduced. Indeed, features are only predicted and their calculation themselves is a difficult problem, the features being, for most of the cases non linear features (two ways of computing the features will be presented in the chapter). \\
+Once the features forecast of the combination is predicted, one needs to describe the target sound with the same features (note that here, the features of the target sound are its ``real'' features, the complexity of computing them being small because the calculation is being applied only to one sound). Only then, a distance is made, the \textbf{dissimilarity measure}, between the features of target sound and the features of combination found by the algorithm. \\
 
 \begin{figure}[h!]
 \centering
@@ -2282,17 +2309,17 @@ Once the features forecast of the combination is predicted, one needs to describ
 \label{fig:searchengine}
 \end{figure}
 
-We see in the Figure \ref{fig:searchengine} an illustration of the search engine, the set $\mathcal{S}$ of sounds on the left of the figure being the sounds of the database described with $K$ dimension features. A random combination of sounds is then generated and its features description predicted. We see on the right of the figure the target sound $\mathcal{T}$ described also with $K$ dimension features. The two of them are then compared using a distance, the dissimilarity measure $D^k_\mathcal{T}(\mathcal{S}) | k=1,\ldots,K$, applied on the features. The measure will be developed later in the document.\\
+We see in Figure \ref{fig:searchengine} an illustration of the search engine, the set $\mathcal{S}$ of sounds on the left of the figure being the sounds of the database described with $K$ dimension features. A random combination of sounds is then generated and its features description predicted. We see on the right of the figure the target sound $\mathcal{T}$ described also with $K$ dimension features. The two of them are then compared using a distance, the dissimilarity measure $D^k_\mathcal{T}(\mathcal{S}) | k=1,\ldots,K$, applied on the features. The measure will be developed later in the document (note that the choice of the problem parameters notations will be different, for the sake of clarity, in our analysis presented later in this chapter with a different notation for the distance, a number of dimension $M$ and $p_{ij}$ the value of a sound $i$ in dimension $j$).\\
 
 
 \section{An overview of target-based music orchestration}\label{otargorch}
 
-In this section we will present the Target-based computer-assisted orchestration and the software called \textit{Orchidea} doing it. We based this presentation on the youtube tutorial given in \cite{youtubecella}. Note that some of the figures of this section are taken from this video.\\
+In this section we will present the Target-based computer-assisted orchestration and the software called \textit{Orchidea} doing it. \\
 %Therefore, not being an expert in the musical and orchestration domains, all definitions, observations and figures are directly taken from this presentation . \\ 
 
 
 The main reference page is www.orch-idea.org where are presented the software, the system and the information.\\
-The \textit{Orchidea} software is an assisting tool that does not orchestrate but helps the composer to orchestrate. It was developed by a few researchers including Carmine Cella, currently teaching at Berkley university and that is accountable for the latest version of the software. He worked with IRCAM (Institut de recherche et coordination acoustique/musique), Berkeley and the HEM (Haute Ecole de musique de Geneve). \\
+The \textit{Orchidea} software is an assisting tool that does not orchestrate but helps the composer to orchestrate. It was developed by a few researchers including Carmine Cella, currently teaching at Berkeley university and that is accountable for the latest version of the software. He worked with IRCAM (Institut de recherche et coordination acoustique/musique), Berkeley and the HEM (Haute Ecole de musique de Geneve). \\
 
 
 
@@ -2308,8 +2335,14 @@ The approach implemented in \textit{Orchidea} works as follows and will be devel
 
 
 
-The approach discussed above is depicted in figure \ref{fig:orchidea_overview}.
+The approach discussed above is depicted in figure \ref{fig:orchidea_overview} in the subsection presenting the \textit{Orchidea} software.
 
+\begin{figure}[ht!]
+\centering
+\includegraphics[scale=0.6]{Orchidea_overview.pdf}
+\caption{An overview of \textit{Orchidea}, the state-of-the-art system for dynamic target-based orchestration. The three main stages of the algorithm implemented in \textit{Orchidea} are the segmentation of the target, the timbral match and the temporal modelling of the solutions.}
+\label{fig:orchidea_overview}
+\end{figure}
 
 
 
@@ -2317,7 +2350,7 @@ The approach discussed above is depicted in figure \ref{fig:orchidea_overview}.
 \subsection{The original software: \textit{Orchidee}}%idea behind the assisted orchestration problem}
 
 Let us now present the idea behind the assisted orchestration software called \textit{Orchidee}.\\
-Indeed, a solution to the target-based music orchestration problem proposed in \cite{carpentier2007evolutionary}, consists in using a multi-objective genetic heuristics and a constraint solver that are jointly optimized. The target sound and the sounds in the database are embedded in a low-dimensional feature space and each generated combination of sounds is evaluated with a distance metric. 
+Indeed, a solution to the target-based music orchestration problem proposed in \cite{carpentier2007evolutionary}, consists in using a multi-objective genetic heuristics and a constraint solver that are jointly optimized. The target sound and the sounds in the database are embedded in a low-dimensional feature space (in contrasts with the high-dimensional one for \textit{Orchidea}) and each generated combination of sounds is evaluated with a distance metric. 
 This approach is solely focused on the so-called \emph{static} aspect of the problem: the target sound is considered as time-invariant and the algorithm does not consider any timbral change over time.
 
 Let us now develop it more into details.\\
@@ -2331,8 +2364,8 @@ Indeed, each solution on the Pareto front would be better according to a given f
 This approach was very useful for the composers that could choose between the set of all the Pareto dominating solutions according to their personal listening preferences between the features. The assisted orchestration problem was implemented this way around 2007 in the \textit{Orchidee} software.\\
 This approach was developed and presented in the thesis by Carpentier in 2008 (\cite{carpentier2008approche}).\\
 
-In order to address the problem of computing a forecast on a combination of sounds, a genetic algorithm was developed to thwart the impossibility of computing all the combinations of sounds. The genetic algorithm indeed generates a random combinations of sounds "good enough", i.e not optimal but close to it. \\
-Let us now present informally the genetic algorithm used in the \textit{Orchidee} software. It starts with a random combinations of sounds, for example $500$ random combinations of sounds, and then the \textit{fitness} of the combination is calculated, ranking it in comparison to the target. Then, genetic transformations called crossover and mutation are applied to the best found combination of sounds. The crossover transformation takes, given two combinations, part of one combination and part of the other combination. Then, the algorithm generates a new combination of sound being a mix of the two combinations. Next, the algorithm applies a mutation on the produced combination of sound, i.e altering the combination of sounds by a random factor. Finally, the fitness of this last combination is computed again, being able to rank again the solutions found. Then, the mutation and the crossover operations are applied again on the best found solution generating a new solution on which the \textit{fitness} is computed again. The algorithm does these series of operations over and over again until the solutions found converged, i.e the value of the solution does not change too much between two series of genetic operations. The solution found at the end is "good enough". To be more precise, the genetic algorithm of \textit{Orchidee} works as follows:\\
+In order to address a risk of combinatory explosion, a genetic algorithm was developed to thwart the impossibility of computing all the combinations of sounds. The genetic algorithm indeed generates a random combinations of sounds ``good enough'', i.e not optimal but close to it. \\
+Let us now present informally the genetic algorithm used in the \textit{Orchidee} software. It starts with a random combinations of sounds, for example $500$ random combinations of sounds, and then the \textit{fitness} of the combination is calculated, ranking it in comparison to the target. Then, genetic transformations called crossover and mutation are applied to the best found combination of sounds. The crossover transformation takes, given two combinations, part of one combination and part of the other combination. Then, the algorithm generates a new combination of sound being a mix of the two combinations. Next, the algorithm applies a mutation on the produced combination of sounds, i.e altering the combination of sounds by a random factor. Finally, the fitness of this last combination is computed again, being able to rank again the solutions found. Then, the mutation and the crossover operations are applied again on the best found solution generating a new solution on which the \textit{fitness} is computed again. The algorithm does these series of operations over and over again until the solutions found converged, i.e the value of the solution does not change too much between two series of genetic operations. The solution found at the end is ``good enough''. To be more precise, the genetic algorithm of \textit{Orchidee} works as follows:\\
 
 \textbf{Genetic assisted orchestration algorithm}
 \begin{enumerate}
@@ -2351,7 +2384,7 @@ Let us now present informally the genetic algorithm used in the \textit{Orchidee
     \item Output the solution
 \end{enumerate}
 
-This algorithm was developed in 2008 and is the foundation of the actual assisted orchestration tool that we are going to present now.
+This algorithm was developed in 2008 and is the foundation of the current assisted orchestration tool that we are going to present now.
 
 \subsection{\textit{Orchidea}}\label{sec:orchidea}
 
@@ -2360,7 +2393,7 @@ This approach, that requires many more parameters and has a greater computationa
 \cite{Cella2020b} and is implemented in the \textit{Orchidea} toolbox for assisted orchestration ({www.orch-idea.org}), currently considered the state-of-the-art system for target-based computer-assisted dynamic and static orchestration.
 
 
-\textit{Orchidea} is the assisted orchestration tool on which our theoretical studies presented in the next chapter were based on. Until \textit{Orchidea}, the assisted orchestration mainly dealt with static target sound, i.e with a single sound like a note of an instrument, a bell, $\ldots$. \textit{Orchidea} focuses on both static and dynamic/temporal target sounds. Indeed, the target sounds can now be dynamic, like a whole piece of music, a series of sounds, $\ldots$ To deal with the temporal aspect of assisted orchestration, \textit{Orchidea} introduces two new approaches in the assisted orchestration framework, a joint time-target optimization and connection models. These two approaches will be developed later in the section. \\
+\textit{Orchidea} is the assisted orchestration tool on which our theoretical studies presented later in the document were based on. Until \textit{Orchidea}, the assisted orchestration mainly dealt with static target sound, i.e with a single sound like a note of an instrument, a bell, $\ldots$. \textit{Orchidea} focuses on both static and dynamic/temporal target sounds. Indeed, the target sounds can now be dynamic, like a whole piece of music, a series of sounds, $\ldots$ To deal with the temporal aspect of assisted orchestration, \textit{Orchidea} introduces two new approaches in the assisted orchestration framework, a joint time-target optimization and connection models. These two approaches will be developed later in the section. \\
 The implementation of \textit{Orchidea} began in 2017 and is still in development, a first public and usable version with a modular interface was presented in 2019 on the visual programming language MAX/MSP (see \ref{fig:max}) as well as a standalone application. \\
 
 \begin{figure}[!ht]
@@ -2372,25 +2405,20 @@ The implementation of \textit{Orchidea} began in 2017 and is still in developmen
 
 The current architecture of the \textit{Orchidea} software can be described as:
 \begin{itemize}
-    \item an high-dimensional mono-objective optimization function with dynamic symbolic constraints. This contrasts with the previous approach that was multi-objective with  low-dimensional description. The choice of this new approach, increasing the abstraction level, was motivated by being closer to composers, to what they are looking for when they are using the assisted orchestration tool and less focused on sound analysis itself
-    \item a greedy strategy is used to generate the initial population of sounds. This contrasts also with the existing approach where random combinations were used. The greedy strategy, called stochastic pursuit strategy, finds the closest best solution and generates the initial combination of sounds 
-    \item a neural network to predict the features of the sound combinations contrasting with the previous genetic approach developed
-    \item an asymmetric distance for the evaluation of the solutions (the dissimilarity measure). This new distance uses two new variables called positive and negative penalization. This will developed later in the document 
-    \item a joint time-frequency optimization called hysteresis of the orchestration where the solutions found on previous time steps are weighted in order to connect the solutions of the current time step with the previous ones. This will also be developed later in the document
-    \item temporal modeling graph: a representation of the dynamic orchestration problem as a graph and the introduction of the continuity model
+    \item an high-dimensional mono-objective optimization function with dynamic symbolic constraints. This contrasts with the previous approach that was multi-objective with  low-dimensional description. The choice of this new approach, increasing the abstraction level, was motivated by being closer to composers, to what they are looking for when they are using the assisted orchestration tool and less focused on sound analysis itself;
+    \item a greedy strategy is used to generate the initial population of sounds. This contrasts also with the existing approach where random combinations were used. The greedy strategy, called stochastic pursuit strategy, finds the closest best solution and generates the initial combination of sounds;
+    \item a neural network to predict the features of the sound combinations contrasting with the previous genetic approach developed in \textit{Orchidee};
+    \item an asymmetric distance for the evaluation of the solutions (the dissimilarity measure). This new distance uses two new variables called positive and negative penalizations. This will developed later in the document;
+    \item a joint time-frequency optimization called hysteresis of the orchestration where the solutions found on previous time steps are weighted in order to connect the solutions of the current time step with the previous ones. This will also be developed later in the document;
+    \item temporal modeling graph: a representation of the dynamic orchestration problem as a graph and the introduction of the continuity model.
 \end{itemize}
 
 Let us now introduce the notion of segmentation of a dynamic sound target. Indeed, a dynamic sound target is decomposed into slices respecting the temporal variations and generates a segmentation of the target with a fixed number of time steps. To be more precise, to each time step is associated a static target sound on which calculations are applied.
 
 
-\begin{figure}[ht!]
-\centering
-\includegraphics[scale=0.6]{Orchidea_overview.pdf}
-\caption{An overview of \textit{Orchidea}, the state-of-the-art system for dynamic target-based orchestration. The three main stages of the algorithm implemented in \textit{Orchidea} are the segmentation of the target, the timbral match and the temporal modelling of the solutions.}
-\label{fig:orchidea_overview}
-\end{figure}
 
-The figure \ref{fig:orchidea_overview} represents an overview of \textit{Orchidea}.\\
+
+% The figure \ref{fig:orchidea_overview} represents an overview of \textit{Orchidea}.\\
 First, a dynamic target is segmented and decomposed into static target sounds, i.e the temporal target is cut into slices. Then, the features of sound combinations are forecast using a neural network. Next, the forecast is matched with the target sounds using the stochastic matching pursuit and the evolutionary optimization algorithms subject to a set of symbolic constraints. Finally, temporal modeling is calculated with a joint time-frequency optimization algorithm and taking into account the continuity of the solutions, i.e the continuity model. \\
 
 \begin{figure}[ht!]
@@ -2400,10 +2428,10 @@ First, a dynamic target is segmented and decomposed into static target sounds, i
     \label{fig:tempmodel}
 \end{figure}
 
-The figure \ref{fig:tempmodel} presents the way temporality is addressed in the \textit{Orchidea} software.
-Given a temporal target sound, a segmentation is generated according to a novelty measure, i.e each time the sound is "new" a new slice/time step is generated. On each time step/segment generated is applied stochastic pursuit and high-dimensional optimization. Each solutions are represented as a graph (we use the same technique in the next chapter, the construction of the graph will be detailed then) and joint-optimization is applied on both paths of the graph and the target of the next time step in the instance of dynamic orchestration. Indeed, a best-path connection is done connecting the different segment/time steps of the dynamic orchestration in order to both minimize the distance to the target sound and the changes in the solution between two consecutive time temps, i.e for the solution to be as stable as possible across the time horizon. This stability echoes the multistage framework.\\
+Figure \ref{fig:tempmodel} presents the way temporality is addressed in the \textit{Orchidea} software.
+Given a temporal target sound, a segmentation is generated according to a novelty measure, i.e each time the sound is ``new'' a new slice/time step is generated. On each time step/segment generated is applied stochastic pursuit and high-dimensional optimization. All solutions are represented as a graph (we use the same technique in the next chapter, the construction of the graph will be detailed then) and joint-optimization is applied on both paths of the graph and the target of the next time step in the instance of dynamic orchestration. Indeed, a best-path connection is done connecting the different segment/time steps of the dynamic orchestration in order to both minimize the distance to the target sound and the changes in the solution between two consecutive time temps, i.e for the solution to be as stable as possible across the time horizon. This stability echoes the multistage framework.\\
 
-The stability of a solution in a dynamic orchestration problem is evaluated using a so called continuity model, limiting as much as possible the movements in the solution. This means that when a sound is taken it is best to keep it at the next time step. Indeed, if a sound is kept for two consecutive time steps, the solution will "connect" the different time steps together. This connection implies better results acoustically as the sound generated by the instrument will be continuous. (See figure \ref{fig:contmodel}).
+The stability of a solution in a dynamic orchestration problem is evaluated using a so called continuity model, limiting as much as possible the movements in the solution. This means that when a sound is taken it is best to keep it at the next time step. Indeed, if a sound is kept for two consecutive time steps, the solution will ``connect'' the different time steps together. This connection implies better results acoustically as the sound generated by the instrument will be continuous. (See figure \ref{fig:contmodel}).
 
 \begin{figure}[ht!]
     \centering
@@ -2412,12 +2440,10 @@ The stability of a solution in a dynamic orchestration problem is evaluated usin
     \label{fig:contmodel}
 \end{figure}
 
-
-We presented the musical problem {\sc Target-based computer-assisted orchestration} and its applications. In the next section, we will address the problem with a theoretical point of view, being closely related to the multistage framework and compare results obtained with an ILP formulation to the \textit{Orchidea} ones.
-
-\section{Target-based computer-assisted orchestration: a theoretical analysis}
+\section{Target-based computer-assisted orchestration: a theoretical analysis}\label{sec:theor}
 \sectionmark{Theoretical analysis}
 
+We presented in the previous section the musical problem {\sc Target-based computer-assisted orchestration} and its applications. Now we will address the problem with a theoretical point of view, being closely related to the multistage framework and compare results obtained with an ILP formulation to the \textit{Orchidea} ones.
 
 \subsection{Problems definition and results}\label{sec:def}
 %\subsection{Problems definition}
@@ -2434,7 +2460,7 @@ We also have  target sound $G$, typically not in the database $N$. As any sound,
 
 Let $S\subset N$ denotes a non empty subset of sounds. The value of $S$ on dimension $j$ is the average value of each sound in $S$ on this dimension. Formally, writing $p_j(S)=\sum_{s_i\in S}p_{ij}$, the value of $S$ on dimension $j$ is $\frac{p_j(S)}{|S|}$. 
 
-{\bf Distances.} As explained in Section~\ref{sec:1dnoc} the value of (a subset of) sounds on the dimensions allows to define a distance between them, measuring how different they are. Formally, let $S,S'$ be two non empty subset of sounds. The {\it distance} between these two subsets is defined as $$d(S,S')=\sum_{j=1}^M \left| \frac{p_j(S)}{|S|} - \frac{p_j(S')}{|S'|}\right|$$
+{\bf Distances.} As explained before the value of (a subset of) sounds on the dimensions allows to define a distance between them, measuring how different they are (also called before the dissimilarity measure). Formally, let $S,S'$ be two non empty subset of sounds. The {\it distance} between these two subsets is defined as $$d(S,S')=\sum_{j=1}^M \left| \frac{p_j(S)}{|S|} - \frac{p_j(S')}{|S'|}\right|$$
 Note that $d(S,S')=0$ if and only if $S$ and $S'$ have the same value on each dimension.
 
 {\bf Orchestration constraints.} As explained in Section~\ref{sec:tbmo}, in the target-based orchestration problem, we want to reproduce with an orchestra a given target sound. Then, the sounds we select in the database (to be played by the orchestra) must respect some constraints based on the orchestra composition (if there are two transverse flute, then we cannot select more than two sounds played by a transverse flute). Formally, we can have:
@@ -2451,13 +2477,13 @@ Now we are able to define the static target-based orchestration problem \stat.
 In the problem \stat, we are given a set $N$ of sounds, a target sound $G$, and a set of orchestration constraints. The goal is to find a nonempty set $S$ of sounds which minimizes $d(S,G)$, while fulfilling the orchestration constraints.
 \end{definition}
 
-In the theoretical analysis of \stat, we will first focus on a simple version of the problem, where there is one instrument, no orchestration constraints, and only one dimension. We will denote this problem as \statoned.  
+In the theoretical analysis of \stat, we will first focus on a simple version of the problem, where there is one instrument, no orchestration constraints, and only one dimension. We will denote this problem as \statoned.\\  
 
 \noindent {\bf Dynamic target-based orchestration problem.}
 
-Now let us look at the Dynamic Target-based Orchestration Problem \dyn. Think for instance that we want to reproduce a human pronouncing a sentence (the target). As explained in Section~\ref{sec:orchidea}, the target is first cut into segments, say $T$ segments, and each segment $t$ corresponds to a target sound $G^t$. The sentence can be for instance cut into syllables, giving a sequence of syllables/tagets $G^t$. 
+Now let us look at the Dynamic Target-based Orchestration Problem \dyn. Think for instance that we want to reproduce a human pronouncing a sentence (the target). As explained in Section~\ref{otargorch}, the target is first cut into segments, say $T$ segments, and each segment $t$ corresponds to a target sound $G^t$. The sentence can be for instance cut into syllables, giving a sequence of syllables/tagets $G^t$. 
 
-Then, we shall select in each time step (segment) $t$ a subset of sounds $S_t\subset N$ to reproduce $G^t$. The distance $d(S_t,G^t)$, measuring how far $S_t$ is from $G_t$, should be minimized. Besides, from musical perspective, it is also interesting to select subset of sounds that do not differ two much in consecutive time steps, i.e., $d(S_t,S_{t+1})$ should be also small. Typically, if selected subsets are similar, use the same instruments and/or notes, the solution sounds more melodious. 
+Then, we shall select in each time step (segment) $t$ a subset of sounds $S_t\subset N$ to reproduce $G^t$. The distance $d(S_t,G^t)$, measuring how far $S_t$ is from $G_t$, should be minimized. Besides, from musical perspective, it is also interesting to select subset of sounds that do not differ two much in consecutive time steps, i.e., $d(S_t,S_{t+1})$ should be also small. Typically, if selected subsets are similar, use the same instruments and/or notes, the solution sounds more melodious (see Section \ref{otargorch}). 
 
 In the model we consider, we linearly aggregate these distances, and get the following problem.
 
@@ -2496,14 +2522,14 @@ We then show that \stat is solvable in pseudo-polynomial time (when the number o
 We also perform some experiments to generate orchestrations on specific targets. We evaluate our results both in a qualitative and a quantitative manner. 
 The qualitative evaluation is performed by acoustic inspection of the solution and direct comparison with the solutions of the same target generated by \textit{Orchidea}. The quantitative evaluation uses the objective function of the considered model to compare solutions.
 
-The chapter is organized as follows. In Section~\ref{sec:1dnoc} we focus on the restricted static problem \statoned. We tackle the general static problem \stat in Section~\ref{sec:static}, and the dynamic problems \dyn in Section~\ref{sec:dyn}. Experimental results are given in Section~\ref{sec:expe}. 
+The remainder of the chapter is organized as follows. In Section~\ref{sec:1dnoc} we focus on the restricted static problem \statoned. We tackle the general static problem \stat in Section~\ref{sec:static}, and the dynamic problems \dyn in Section~\ref{sec:dyn}. Experimental results are given in Section~\ref{sec:expe}. 
 
 
 \subsection{Related works in the {\sc multistage} framework}
 
 As explained in Section~\ref{sec:def}, in the problem with temporality \dyn, we build a sequence of subset sounds $S_1,\dots,S_T$, which induces two costs: the orchestration cost $\sum_t d(S_t,G^t)$, which measures how close we are from the target, and the transition cost $\sum_t d(S_t,S_{t+1})$ which should be minimize from an acoustic viewpoint to get solution sequences that can be connected in a melodious way.
 
-This situation, where we have a time horizon, a solution sequence to build, and an objective function mixing quality of individual solutions and transition cost, echos several recent works in the so-called multistage framework.
+This situation, where we have a time horizon, a solution sequence to build, and an objective function mixing quality of individual solutions and transition cost corresponds to the multistage framework studied in the thesis.
 
 
 
@@ -2532,9 +2558,9 @@ QUESTION: Is there a subset $A' \subseteq A$ of size $q/2$ such that $\sum_{a \i
 Note that $q$ and $B$ are assumed to be even. 
 
 
-\begin{theorem}
+\begin{theorem}\label{theo:nphardd}
 $\text{\sc{Decision} \statoned}$ is \textbf{NP}-Complete, even with $K=0$.
-\end{theorem}\label{theo:nphard}
+\end{theorem}
 
 \begin{proof}
 The problem is obviously in \textbf{NP}. 
@@ -2608,7 +2634,7 @@ the overall complexity of $O(n^3p_{max})$.
 
 
 Now, we consider approximation algorithms.
- The problem consisting of knowing whether the optimal value is 0 or not is \textbf{NP}-hard (Theorem~\ref{theo:nphard}). Thus it is not possible to get any $c$-approximation polynomial time algorithm, as any such algorithm allows to detect when the optimal value is 0 or not. Thus, an additive term is mandatory in the approximation result. Here, we show that by standard rounding technique, one can use the previous dynamic algorithm to get a polytime algorithm with only {\it additive} error - and no multiplicative error. More precisely, we have the following result (where {\sc OPT} is the optimal value and $p_{max}=\max p_i$).
+ The problem consisting of knowing whether the optimal value is 0 or not is \textbf{NP}-hard (Theorem~\ref{theo:nphardd}). Thus it is not possible to get any $c$-approximation polynomial time algorithm, as any such algorithm allows to detect when the optimal value is 0 or not. Thus, an additive term is mandatory in the approximation result. Here, we show that by standard rounding technique, one can use the previous dynamic algorithm to get a polytime algorithm with only {\it additive} error - and no multiplicative error. More precisely, we have the following result (where {\sc OPT} is the optimal value and $p_{max}=\max p_i$).
 
 \begin{theorem}\label{th:approx1d}
 For any $\epsilon>0$, \statoned admits an algorithm which outputs a solution of value at most ${\sc OPT}+\epsilon p_{max}$ in time $O(\frac{n^3}{\epsilon})$.
@@ -2652,8 +2678,8 @@ Then, we have:
 
 Thus, using equations~(\ref{eq2}) and~(\ref{eq3}) we can bound the loss incurred by the scaling technique when considering $S'$ as a solution of the initial distance:
 \begin{eqnarray}
-|m(S')-G|-|m(S^*)-G| & \leq & \lambda \left|m'(S') - \frac{G}{\lambda}\right| + \lambda - ( \lambda( \left|m'(S^*)-\frac{G}{\lambda}\right|) - \lambda) \\
-& \leq  & \lambda (\left|m'(S') - \frac{G}{\lambda}\right| - \left|m'(S^*)-\frac{G}{\lambda}\right|) + 2\lambda \label{eq:bound}
+|m(S')-G|-|m(S^*)-G| & \leq & \lambda \left|m'(S') - \frac{G}{\lambda}\right| -  \lambda \left|m'(S^*)-\frac{G}{\lambda}\right|  + 2\lambda \\
+& \leq  & \lambda (\left|m'(S') - \frac{G}{\lambda}\right| - \left|m'(S^*)-\frac{G}{\lambda}\right|) + 2\lambda %\label{eq:bound}
 \end{eqnarray}
 
 By optimality of $S'$ on $I'$, we have
@@ -2729,7 +2755,6 @@ d(S',G)-d(S^*,G) \leq\lambda \left(d'(S',G') - d'(S^*,G')\right) + 2M\lambda
 As $S'$ is optimal on $I'$, we deduce $d(S',G)\leq d(S^*,G)+2M\lambda$. By choosing $\lambda=\frac{\epsilon p_{max}}{2M}$ we get the claimed bound on the value of the solution.
 
 As $p'_{max}\leq p_{max}/\lambda=2M/\epsilon$, the algorithm has complexity $O\left(L^2n\left(\frac{2nM}{\epsilon}\right)^M\right)$.
-
 
 \end{proof}
 
@@ -2872,7 +2897,7 @@ As for \dynoned, we first use the static dynamic programming algorithm to fill t
 
 Let $\Omega$ be a set of such feasible solutions, one for each $(\vec{v},k)$ with such a solution. $\Omega$ has size at most $O((np_{max})^ML)$. The shortest path procedure takes time $O(T\Omega^2)$, ie $O(TL^2(np_{max})^{2M})$. 
 
-The global complexity is $O(L^2n^{M+1}p_{max}^M)+O(TL^2(np_{max})^{2M})$, which is $O(TL^2(np_{max})^{2M})$.
+The global complexity is $O(L^2n^{M+1}p_{max}^M)+O(TL^2(np_{max})^{2M})$, which is\\  $O(TL^2(np_{max})^{2M})$.
 \end{proof}
 
 
@@ -2965,7 +2990,7 @@ However, this is not yet a linear formulation as the left hand side of the first
 \end{itemize}
 This adds $nM$ variables and $\Theta(nM)$ constraints. 
 
-A second way to linearize is to fix the number of sounds $\sum_{i=1}^n x_i$ selected, by adding a constraint $\sum_{i=1}^n x_i=C$ (and use $C$ in the fist two constraints), and to solve several ILPs, one for each value of $C$, from 1 to the total number $L$ of instruments in the orchestra, ie $L=...$ in our case. This  does not increase the size of the formulation but we have to solve several ILPs (in fact, $L$ of them). 
+A second way to linearize is to fix the number of sounds $\sum_{i=1}^n x_i$ selected, by adding a constraint $\sum_{i=1}^n x_i=C$ (and use $C$ in the fist two constraints), and to solve several ILPs, one for each value of $C$, from 1 to the total number $L$ of instruments in the orchestra, i.e $L=23$ in our case. This  does not increase the size of the formulation but we have to solve several ILPs (in fact, $L$ of them). 
 
 We use this latter solution in our experiments as it turned out to be much more efficient, avoiding the introduction of $nM>10^6$ variables $y_{ij}$.
 
@@ -2974,7 +2999,7 @@ We use this latter solution in our experiments as it turned out to be much more 
 
 
 The aim of these tests were (1) to test whether the ILP formulation is efficient to solve real-world instances or not, and (2) to compare and evaluate the ILP model with the current \textit{Orchidea} software which uses an evolutionary algorithm.\\
-In the software two specific ingredients were used:
+In the software two specific ingredients are used:
 \begin{figure}[!h]
     \centering
     \includegraphics[scale=0.3]{harmofilter.png}
@@ -2984,12 +3009,12 @@ In the software two specific ingredients were used:
 
 (1) An \textbf{harmonic filter}. It is a filter that reduces the set of sounds in order to apply algorithms on smaller database and running faster. Looking at the spectral envelope of the static target sound, it is possible to extract the fundamental harmonic (the first partial) and its corresponding note as well as the other present harmonics and notes. The partials and their specific notes are represented by peaks in the spectral envelope. The partial filtering, i.e the harmonic filter, uses then a threshold applied on the spectral envelop and only keep in the database the notes corresponding to the peaks above the threshold. \\
 
-The figure \ref{fig:harmofilter} illustrates the harmonic filter. In the example, the peaks above the threshold have corresponding notes/partials A3, A4 and E4. This implies that in the database will be present only sounds with the notes A3, A4 and E4, removing all the other notes for all instrument and reducing considerably the size of the database to use. \\
+Figure \ref{fig:harmofilter} illustrates the harmonic filter. In the example, the peaks above the threshold have corresponding notes/partials A3, A4 and E4. This implies that in the database will be present only sounds with the notes A3, A4 and E4, removing all the other notes for all instrument and reducing considerably the size of the database to use. \\
 
 
-(2) \textbf{Upper and lower penalties} The distance measure $d(S,G)$ used in the software is actually not symmetric. For musical purpose, it is less problematic on a dimension to be lower to the target than higher to it regarding the amplitude of the spectral envelopes of both sounds. This induces a slight modification in the objective function.\\
+(2) \textbf{Upper and lower penalties} The distance measure $d(S,G)$ used in the software is actually not symmetric. For musical purpose, it is less problematic on a dimension to be lower than the target than higher than it regarding the amplitude of the spectral envelopes of both sounds. This induces a slight modification in the objective function.\\
 
-The figure \ref{fig:penalt} is a representation of the penalties. The blue curve represents the spectral envelop of the target sound and the red one the solution envelop. Positive penalties (+) are applied when the solution curve peaks are below the target ones and negative penalties (-) when they are above the target spectral envelop. 
+Figure \ref{fig:penalt} is a representation of the penalties. The blue curve represents the spectral envelop of the target sound and the red one the solution envelop. Positive penalties (+) are applied when the solution curve peaks are below the target ones and negative penalties (-) when they are above the target spectral envelop. 
 
 \begin{figure}[h!]
     \centering
@@ -3009,7 +3034,7 @@ For illustrative purpose Figure~\ref{fig:claA3} represents the target Clarinet A
     \label{fig:claA3}
 \end{figure}
 
-In Tabular \ref{tab:resultstat} are presented our results on some static targets sounds. The ILP was able to solve optimally all instances. Concerning the solutions themselves, it is noticeable that for some instances the two algorithms chose disjoint sets of sounds. Concerning the values, ILP gives optimal solutions so the values are of course better, but we note that the improvements with respect to the solutions computed by the evolutionary algorithm are significant. These elements indicate that an LP approach is certainly interesting for the static orchestration problem. Even if the solution were better according to their values (calculated on the objective function of the ILP), some solutions of the evolutionary algorithm seemed to "sound" better. This is due to the hardness of the dissimilarity measure choice and to the ILP formulation being a simpler modelization than the evolutionary one. 
+In Tabular \ref{tab:resultstat} are presented our results on some static targets sounds. The ILP was able to solve optimally all instances. Concerning the solutions themselves, it is noticeable that for some instances the two algorithms (note that \textbf{Evolutionnary} refers to the algorithm used in \textit{Orchidea}) chose disjoint sets of sounds. Concerning the values, ILP gives optimal solutions so the values are of course better, but we note that the improvements with respect to the solutions computed by the evolutionary algorithm are significant. These elements indicate that an LP approach is certainly interesting for the static orchestration problem. Even if the solution were better according to their values (calculated on the objective function of the ILP), some solutions of the evolutionary algorithm seemed to ``sound'' better. This is due to the hardness of the dissimilarity measure choice and to the ILP formulation being a simpler modelization than the evolutionary one. 
  
 
 \begin{figure}[ht!]
@@ -3086,15 +3111,16 @@ For the dynamic case, we now need to minimize $\sum_{t=1}^T d(S_t,G^t)+\sum_{t=1
 %     \end{eqnarray*}
 %     \end{center}
 
-We see that the function can be seen as a multistage framework function. \\
+As said before, the function can be seen as a multistage framework function. \\
 Indeed, one needs to seek a trade-off between:
 \begin{itemize}
     \item the quality of the solution: on each of the $T$ time steps of the time horizon is computed a distance between the solution and the target sound
-    \item the stability of the solution for consecutive time steps: for all consecutive time steps is computed the distance between the consecutive time steps solutions
-\end{itemize}. 
+    \item the stability of the solution for consecutive time steps: for all consecutive time steps is computed the distance between the consecutive time steps solutions.
+\end{itemize} 
 
-Note that in our formulation of the problem, the distance to the target sound and the distance between consecutive time steps solutions is the same. The fact of using the same distance for the two ingredients of the objective function differs with the approach used in \textit{Orchidea} software. Indeed, a lot of different functions could be considered in order to evaluate the stability of a given solution to the problem. It could be interesting for example to seek a solution that minimizes: the instruments modifications (if an instrument is played at a time step $t$, a bonus is obtained for taking the same instrument at the next time step), the note modifications (keeping the same note on any instrument) or a combination of the two. This is interesting if a composer is according importance to the continuity of its solutions (see \ref{fig:contmodel}) that is represented in the continuity model. Our choice of using the same distance measure gives us the possibility to model the problem as an ILP problem and not as a multi-objective problem, the two elements of our function being comparable. \\
-Note that in some cases, if the target pitch, i.e its note, change a lot between two consecutive steps, it is not relevant to keep the same note as the result would be certainly far from the target sound. This possibility has been taken into account and model with bonus weighted in function of each target sound at each time step, i.e if the target does not change too much, the bonus is significant, if it does change a lot, the bonus would be less important.\\
+Note that in our formulation of the problem, the distance to the target sound and the distance between consecutive time steps solutions is the same. The fact of using the same distance for the two ingredients of the objective function differs with the approach used in \textit{Orchidea} software. Indeed, a lot of different functions could be considered in order to evaluate the stability of a given solution to the problem. It could be interesting for example to seek a solution that minimizes: the instruments modifications (if an instrument is played at a time step $t$, a bonus is obtained for taking the same instrument at the next time step), the note modifications (keeping the same note on any instrument) or a combination of the two. This is interesting if a composer is giving importance to the continuity of its solutions (see \ref{fig:contmodel}) that is represented in the continuity model. Our choice of using the same distance measure gives us the possibility to model the problem as an ILP problem and not as a multi-objective problem, the two elements of our function being comparable. \\
+Note also that in some cases, if the target pitch, i.e its notes, change a lot between two consecutive steps, it is not relevant to keep the same note as the result would be certainly far from the target sound. \\
+%This possibility has been taken into account and model with bonus weighted in function of each target sound at each time step, i.e if the target does not change too much, the bonus is significant, if it does change a lot, the bonus would be less important.\\
 
 
 
@@ -3223,9 +3249,9 @@ Both approaches were not able to solve our instances (recall that $n$ and $M$ ar
     
 The number of variables of the linear program is very large, in fact there are: $NT$ variables $x$,$N^2T$ variables $y$,$MT$ variables $\delta$,$M(T-1)$ variables $\gamma$, $NMT$ variables $\alpha$, $N(T-1)$ variables $\beta$, $N(T-1)$ variables $\lambda$, $N^2(T-1)M$ variables $\theta$.
 
-In practice, we apply the harmonic filter on the TinySol dataset and apply the algorithm on around $1400$ sounds, i.e $N=1400$, of dimension $M$ equal to $1024$ and it is possible to have around $20$ timesteps, i.e $T=20$. The number of variables is thus extremly large. For exemple, only for the $\theta$ variable we have $1400^2 \times 20 \times 1024 = 40140800000 = 40$ billion $\theta$ variables. So it is impossible to run the program, even on powerful engines.  
+In practice, we apply the harmonic filter on the TinySol dataset and apply the algorithm on around $1400$ sounds, i.e $N=1400$, of dimension $M$ equal to $1024$ and it is possible to have around $20$ time steps, i.e $T=20$. The number of variables is thus extremly large. For exemple, only for the $\theta$ variable we have $1400^2 \times 20 \times 1024 = 40140800000 = 40$ billion $\theta$ variables. So it is impossible to run the program, even on powerful engines.  
 
-However, to verify it, we runned the algorithm on a very restrictive instance with only $T=2$ timesteps, a hard filter on the dataset, allowing only one note to be picken and thus around $N=250$ sounds, a small metric called moments with $M=4$. Even is this special case, the number of variables is quite large with around $2*250^2*4=500000$ $\theta$ variables. 
+However, to verify it, we runned the algorithm on a very restrictive instance with only $T=2$ time steps, a hard filter on the dataset, allowing only one note to be picken and thus around $N=250$ sounds, a small metric called moments with $M=4$. Even is this special case, the number of variables is quite large with around $2*250^2*4=500000$ $\theta$ variables. 
 
 
 
@@ -3344,6 +3370,7 @@ Also, we were interested in evaluating the choice of sets $\Omega_t=A_t$ in SPH.
 \centering
 \begin{tabular}{c||c|c|c|c|c}%{c|c|c|c|c}
      \textbf{target sound}&$\Omega_t=A_t$&$\Omega_t=A_t\cup E_t$&$\Omega_t=E_t$  &\textit{Orchidea}&$T$\\
+     \hline
 A Minor&5354&5354&7236&8316&16\\
 Brahms&3446&3446&4235&4845&8\\
 Drops&5902&5902&8270&8925&12\\
@@ -3363,14 +3390,39 @@ Figure~\ref{tab:resultstat3} shows the results we obtained for the dynamic insta
 
 \section{Conclusion}
 
-We provide in this chapter the first, to our knowledge, theoretical analysis of the static and dynamic target-based orchestration problems \stat and \dyn, showing both \textbf{NP}-hardness, pseudo-polynomial and approximation results. [en dire plus?]
+We provide in this chapter the first, to our knowledge, theoretical analysis of the static and dynamic target-based orchestration problems \stat and \dyn, showing both \textbf{NP}-hardness, pseudo-polynomial and approximation results. 
+%[en dire plus?]
 
-The experiments we conducted give hope for possible practical improvements using ILP and shortest path formulations. As said previously, this is only a first step in this direction - there is probably a gap between a good solution for the abstract model we consider and what a composer would consider as a harmonious solution - but a promising step.
+
+
+
+
 
 \chapterToc{Conclusion and outlook}
 
+In this thesis we presented a wide variety of results for maximization optimization problems in the multistage framework and study a direct application of the multistage setting.\\ 
+
+In the chapter \ref{chap:multiknap}, we presented a $PTAS$ for the {\sc multistage knapsack} problem in the offline setting. As an outlook, it would be interesting to address other maximization optimization problems in the offline setting, as the presence of an approximation scheme for the \textbf{NP}-hard {\sc knapsack} problem contrasts with inapproximability results for polynomial solvable problems in their classical version. Furthermore, we could try to understand the origin of the contrasts between optimization problems in their classical versions and in the multistage setting in order to be able to give a global characterization of multistage problems in the offline setting. \\
+
+In the chapter \ref{chap:onlmultista}, we presented a framework of multistage subset maximization problems in the online setting looking at different models with different types of data evolution and transition bonus. An outlook would be to look at the family of multistage subset minimization problems and see if similar results are findable or not. \\
+We also emphasize that we have focused on deterministic algorithms in this chapter. Indeed, some of our bounds can be improved by randomization (assuming an oblivious adversary):
+\begin{itemize}
+    \item In the general-evolution model with Hamming bonus assuming \finalversion{sub-additivity} and subset feasibility, there is a simple randomized $(2+o(1))$-competitive algorithm (along the lines of the algorithms in subsection~\ref{subsec:submodular}): Initially partition $N$ uniformly at random into two equal-sized sets (up to possibly one item) $A$ and $B$. At each time, select the optimal solution restricted to $A$. Again, the algorithm is $(2+o(1))$-competitive separately on both profit and bonus.
+    \item While the strong lower bound without lookahead in the general-evolution model with intersection bonus still holds, we can get a simple $2$-competitive algorithm for lookahead $1$: Initially flip a coin to interpret the instance as a sequence of length-$2$ instances either starting at time $1$ or $2$. Thanks to lookahead $1$, the length-2 instances can all be solved optimally. The total value of all these length-2 instances adds up to at least the optimal value, and the expected value obtained by the algorithm is half of that.
+\end{itemize}
+
+While we believe that we have treated various of the most natural ways of defining value in multistage subset maximization problems, other ways can be thought of, to some of which our results extend. For instance, Theorem~\ref{thm:static-hamming-upper} also works for time-dependent or object-dependent bonus without major modifications (whereas, e.g., Theorem~\ref{thm:static-intersection-upper} does not).
+
+We have not considered computational complexity in the is work assuming (and therefore neither about the representation of the set of feasible solutions); indeed, often we use an oracle providing the optimal solution to instances of a potentially hard problem. However, we mention that, if only an approximation algorithm to the problem at hand was known, we would be able to obtain similar online algorithms whose competitive ratio would depend on the approximation guarantee of the approximation algorithm.\\
+
+
+Finally in the chapter \ref{chap:orche}, we gave the first theoretical analysis of the static and dynamic target-based orchestration problems. 
+The experiments we conducted give hope for possible practical improvements using ILP and shortest path formulations. As said previously, this is only a first step in this direction - there is probably a gap between a good solution for the abstract model we consider and what a composer would consider as a harmonious solution - but a promising step. Also, if one manages to understand better the problem itself and especially to find a unique best dissimilarity measure between different sounds, it would be possible to decrease the difference between the abstract solution given by our model and the best solution from a composer standpoint.   
+
+
+
 %\sectionToc{Contenu de ce document}
-\chapterToc{Bibliography}
+\chapterToc{BIBLIOGRAPHY}
 \bibliographystyle{apalike}
 \bibliography{biblio}
 
